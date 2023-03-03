@@ -28,5 +28,5 @@
 
 </br>
 
-<img src="https://img.shields.io/badge/#000000?style=for-the-badge&logo=Notion&logoColor=white">
+<img src="https://img.shields.io/badge/000000?style=for-the-badge&logo=Notion&logoColor=white">
 
