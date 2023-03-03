@@ -9,14 +9,11 @@
 - 프로젝트 배포 : {url}
 </br>
 ## 🧑‍🤝‍🧑 팀원
-
+</br>
 |김병무|강민규|김영임|이은지|김대현|조주연|
-|--------------|------------|-------------|--------------|-------------|-------------|
-|:BE(팀장):|:FE(부팀장):|:FE:|:FE:|:BE:|:BE:|
-|:KimByoungMoo:|:MinGyuKang:|:KimYeongIm0:|:EunjiLee1997:|:legendpaino:|:chojuyeon94:|
+|:--------------:|:------------:|:-------------:|:--------------:|:-------------:|:-------------:|
+|BE(팀장)|FE(부팀장)|FE|FE|BE|BE|
+|KimByoungMoo|:MinGyuKang|KimYeongIm0|EunjiLee1997|legendpaino|chojuyeon94|
 
 
-| First Header | Second Header |
-| ------------ | ------------- |
-| Content Cell | Content Cell  |
-| Content Cell | Content Cell  |
+
