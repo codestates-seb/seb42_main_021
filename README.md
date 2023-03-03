@@ -27,5 +27,6 @@
 ### 공통
 
 </br>
-<img src="https://simpleicons.org/icons/notion.svg">
+
+<img src="https://img.shields.io/badge/#000000?style=for-the-badge&logo=Notion&logoColor=white">
 
