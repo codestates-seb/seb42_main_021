@@ -19,7 +19,7 @@
 |김병무|강민규|김영임|이은지|김대현|조주연|
 |:--------------:|:------------:|:-------------:|:--------------:|:-------------:|:-------------:|
 |BE(팀장)|FE(부팀장)|FE|FE|BE|BE|
-|KimByoungMoo|:MinGyuKang|KimYeongIm0|EunjiLee1997|legendpaino|chojuyeon94|
+|KimByoungMoo|MinGyuKang|KimYeongIm0|EunjiLee1997|legendpaino|chojuyeon94|
 
 </br>
 
