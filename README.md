@@ -19,5 +19,12 @@
 |BE(팀장)|FE(부팀장)|FE|FE|BE|BE|
 |KimByoungMoo|:MinGyuKang|KimYeongIm0|EunjiLee1997|legendpaino|chojuyeon94|
 
+</br>
 
+## 🛠️ 기술스택
+
+</br>
+
+### 
+#000000
 
