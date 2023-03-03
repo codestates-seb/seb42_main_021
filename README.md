@@ -24,7 +24,6 @@
 ## 🛠️ 기술스택
 
 </br>
-
-### 
-#000000
+### 공통
+<img src="https://img.shields.io/badge/#000000?style=for-the-badge&logo=notion&logoColor=white">
 
