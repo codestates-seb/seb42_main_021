@@ -18,3 +18,7 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
+
+mail:
+  address:
+    admin: admin@gmail.com
