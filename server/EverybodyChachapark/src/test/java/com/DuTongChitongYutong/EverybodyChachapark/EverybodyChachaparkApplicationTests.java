@@ -1,10 +1,10 @@
-package seb42.main1;
+package com.DuTongChitongYutong.EverybodyChachapark;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Team021ApplicationTests {
+class EverybodyChachaparkApplicationTests {
 
 	@Test
 	void contextLoads() {
