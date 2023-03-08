@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
 body {
@@ -12,6 +13,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
 a,
 input,
 textarea,
@@ -29,7 +31,7 @@ input,
 textarea {
   padding: 0;
   outline: none;
-  border: 1px solid #000000;
+  border: 1px solid var(--black);
   border-radius: 0;
   box-shadow: none;
 }
@@ -41,4 +43,16 @@ button {
   box-shadow: none;
   background-color: inherit;
   cursor: pointer;
+}
+
+:root {
+  /* border-radius */
+  --bd-rd: 10px;
+
+  /* color */
+  --blue: #61a0ff;
+  --white: #ffffff;
+  --whitegray: #f6f6f6;
+  --gray: #4e4e4e;
+  --black: #000000;
 }
