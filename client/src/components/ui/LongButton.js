@@ -1,7 +1,7 @@
 import React from 'react';
 
-const LongBtn = () => {
+const LongButton = () => {
   return <div></div>;
 };
 
-export default LongBtn;
+export default LongButton;

@@ -7,6 +7,8 @@ const Container = styled.div`
   background-color: green;
   position: fixed;
   top: 0;
+  border: 1px solid black;
+  border-radius: var(--bd-rd);
 `;
 
 const MainHeader = () => {

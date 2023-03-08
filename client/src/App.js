@@ -10,7 +10,7 @@ import Login from './pages/Login';
 import Mypage from './pages/Mypage';
 import ShoppingCart from './pages/ShoppingCart';
 import SignUp from './pages/SignUp';
-import Nav from './components/main/Nav';
+import Navigation from './components/main/Navigation';
 import MainHeader from './components/main/MainHeader';
 
 const MainLayout = styled.div`
@@ -45,31 +45,35 @@ const TitleContainerBox = styled.div`
 `;
 const MainContainer = styled.div`
   width: 50%;
+  margin: 0 auto;
+  padding: 0 10px;
 `;
 
 const MainBox = styled.div`
   width: 530px;
   height: 100%;
   margin: 0 auto;
+  border: 1px solid black;
+  border-radius: var(--bd-rd);
 `;
 
 function App() {
   return (
-    <MainLayout>
-      <TitleContainer>
-        <TitleContainerBox>
-          <div className="MainTitle">Everybody chachapark</div>
-          <div className="SubTitle">
-            나에게 맞는 차박 용품을 한 눈에!
-            <br /> 차박 장소까지 한 번에 결정하세요.
-            <br /> 다함께 차차박
-          </div>
-        </TitleContainerBox>
-      </TitleContainer>
-      <MainContainer>
-        <MainBox>
-          <MainHeader />
-          <BrowserRouter>
+    <BrowserRouter>
+      <MainLayout>
+        <TitleContainer>
+          <TitleContainerBox>
+            <div className="MainTitle">Everybody chachapark</div>
+            <div className="SubTitle">
+              나에게 맞는 차박 용품을 한 눈에!
+              <br /> 차박 장소까지 한 번에 결정하세요.
+              <br /> 다함께 차차박
+            </div>
+          </TitleContainerBox>
+        </TitleContainer>
+        <MainContainer>
+          <MainBox>
+            <MainHeader />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/curation/:id" element={<CuratingDetail />} />
@@ -81,11 +85,11 @@ function App() {
               <Route path="/mypage/:id" element={<Mypage />} />
               <Route path="/admin-item/:id" element={<AdminNewItem />} />
             </Routes>
-          </BrowserRouter>
-          <Nav />
-        </MainBox>
-      </MainContainer>
-    </MainLayout>
+            <Navigation />
+          </MainBox>
+        </MainContainer>
+      </MainLayout>
+    </BrowserRouter>
   );
 }
 
