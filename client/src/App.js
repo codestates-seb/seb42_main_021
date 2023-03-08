@@ -17,23 +17,30 @@ const MainLayout = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: row;
 `;
 const TitleContainer = styled.div`
-  display: flex;
   width: 50%;
-  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+`;
 
+const TitleContainerBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 530px;
+  height: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  color: white;
   .MainTitle {
-    margin-top: 130px;
-    margin-left: 100px;
-    /* position: absolute;
-    top: 100px;
-    left: 100px; */
+    margin-bottom: 500px;
+    margin-left: 130px;
+    font-size: 35px;
+    font-weight: bold;
   }
   .SubTitle {
-    margin-top: 500px;
-    margin-left: 100px;
+    font-size: 20px;
+    margin-left: 120px;
   }
 `;
 const MainContainer = styled.div`
@@ -42,6 +49,7 @@ const MainContainer = styled.div`
 
 const MainBox = styled.div`
   width: 530px;
+  height: 100%;
   margin: 0 auto;
 `;
 
@@ -49,17 +57,18 @@ function App() {
   return (
     <MainLayout>
       <TitleContainer>
-        <div className="MainTitle">Everybody chachapark</div>
-        <div className="SubTitle">
-          나에게 맞는 차박 용품을 한 눈에!
-          <br /> 차박 장소까지 한 번에 결정하세요.
-          <br /> 다함께 차차박
-        </div>
+        <TitleContainerBox>
+          <div className="MainTitle">Everybody chachapark</div>
+          <div className="SubTitle">
+            나에게 맞는 차박 용품을 한 눈에!
+            <br /> 차박 장소까지 한 번에 결정하세요.
+            <br /> 다함께 차차박
+          </div>
+        </TitleContainerBox>
       </TitleContainer>
       <MainContainer>
         <MainBox>
           <MainHeader />
-
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
