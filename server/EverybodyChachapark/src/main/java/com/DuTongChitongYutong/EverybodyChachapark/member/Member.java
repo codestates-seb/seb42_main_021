@@ -33,4 +33,24 @@ public class Member {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    public Member(String email) {
+        this.email = email;
+    }
+
+    public Member(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    /*@Override
+    public String getName() {
+        return getEmail();
+    }*/
+
+    public enum MemberRole {
+        ROLE_USER,
+        ROLE_ADMIN
+    }
 }

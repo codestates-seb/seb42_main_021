@@ -27,49 +27,47 @@ public class MemberDetailsService implements UserDetailsService {
         Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member findMember = optionalMember.orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
-        Collection<? extends GrantedAuthority> authorities = userAuthorityUtils.createAuthorities(findMember.getEmail());
-
-        return new User(findMember.getEmail(), findMember.getPassword(), authorities);
+        return new MemberDetails(findMember);
     }
 
-//    private final class MemberDetails extends Member implements UserDetails {
-//        MemberDetails(Member member) {
-//            setMemberId(member.getMemberId());
-//            setEmail(member.getEmail());
-//            setPassword(member.getPassword());
-//            setRoles(member.getRoles());
-//        }
-//
-//        @Override
-//        public Collection<? extends GrantedAuthority> getAuthorities() {
-//            return userAuthorityUtils.createAuthorities(this.getRoles());
-//        }
-//
-//        @Override
-//        public String getUsername() {
-//            return getEmail();
-//        }
-//
-//        @Override
-//        public boolean isAccountNonExpired() {
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean isAccountNonLocked() {
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean isCredentialsNonExpired() {
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean isEnabled() {
-//            return true;
-//        }
-//
+    private final class MemberDetails extends Member implements UserDetails {
+        MemberDetails(Member member) {
+            setMemberId(member.getMemberId());
+            setEmail(member.getEmail());
+            setPassword(member.getPassword());
+            setRoles(member.getRoles());
+        }
 
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return userAuthorityUtils.createAuthorities(this.getRoles());
+        }
+
+        @Override
+        public String getUsername() {
+            return getEmail();
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+    }
 
 }

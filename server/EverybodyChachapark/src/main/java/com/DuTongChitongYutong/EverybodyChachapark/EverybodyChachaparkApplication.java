@@ -8,6 +8,6 @@ public class EverybodyChachaparkApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EverybodyChachaparkApplication.class, args);
-	}
 
+	}
 }
