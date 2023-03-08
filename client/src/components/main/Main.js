@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-  height: 100vh;
+  /* position: relative; */
+  height: 850px;
   width: 100%;
   max-width: 530px;
   background-color: var(--white);
-  position: fixed;
+  position: sticky;
   top: 80px;
 `;
 

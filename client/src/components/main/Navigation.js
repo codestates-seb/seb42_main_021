@@ -5,13 +5,15 @@ const Container = styled.nav`
   width: 100%;
   max-width: 530px;
   height: 80px;
-  background-color: white;
+  background-color: blue;
   position: fixed;
   bottom: 0;
+  border: 1px solid black;
+  border-radius: var(--bd-rd);
 `;
 
-const Nav = () => {
+const Navigation = () => {
   return <Container></Container>;
 };
 
-export default Nav;
+export default Navigation;
