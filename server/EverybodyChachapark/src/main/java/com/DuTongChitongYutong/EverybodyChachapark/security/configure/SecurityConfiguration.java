@@ -1,5 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.configure;
 
+import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAccessDeniedHandler;
+import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationEntryPoint;
 import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationFailureHandler;
 import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationSuccessHandler;
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtAuthenticationFilter;
@@ -50,6 +52,11 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+
+                .and()
                 .apply(new CustomFilterConfigurer())
 
                 .and()

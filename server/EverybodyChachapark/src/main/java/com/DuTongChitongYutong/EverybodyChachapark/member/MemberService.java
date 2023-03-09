@@ -4,10 +4,12 @@ import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicExcept
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,18 @@ public class MemberService {
         return savedMember;
     }
 
+    public Member updateMember(Member member) {
+        Member findMember = findByEmail();
+
+        Optional.ofNullable(passwordEncoder.encode(member.getPassword()))
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
+        Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
+        /*findMember.setPassword(passwordEncoder.encode(member.getPassword()));
+        findMember.setNickname(member.getNickname());*/
+
+        return memberRepository.save(findMember);
+    }
+
     @Transactional(readOnly = true)
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
@@ -59,6 +73,23 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    public Member findByEmail() {
+        String email = getCurrentMemberEmail();
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    public String getCurrentMemberEmail() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public void deleteMember(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization").substring(7);
+        Member findMember = findByEmail();
+
+        memberRepository.delete(findMember);
     }
 
 
