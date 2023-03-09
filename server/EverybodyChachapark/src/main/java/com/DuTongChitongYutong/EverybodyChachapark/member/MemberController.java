@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.member;
 
+import com.DuTongChitongYutong.EverybodyChachapark.dto.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,12 @@ public class MemberController {
         this.mapper = mapper;
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity postMember (@RequestBody MemberDto.Post post) {
 
         Member createdMember = memberService.createMember(mapper.memberToMemberPostDto(post));
 
-        return new ResponseEntity(mapper.memberToMemberResponseDto(createdMember),HttpStatus.CREATED);
-
+        return new ResponseEntity(new ResponseDto<>(mapper.memberToMemberResponseDto(createdMember), 201, "회원 가입 되었습니다.", null),HttpStatus.CREATED);
+        //return new ResponseEntity(ResponseDto.success(createdMember, "회원 가입 되었습니다.", HttpStatus.CREATED), HttpStatus.CREATED);
     }
 }

@@ -1,9 +1,9 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security;
+package com.DuTongChitongYutong.EverybodyChachapark.security.service;
 
 import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.member.MemberRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,16 +15,16 @@ import java.util.Optional;
 @Component
 public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
-    private final UserAuthorityUtils userAuthorityUtils;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public MemberDetailsService(MemberRepository memberRepository, UserAuthorityUtils userAuthorityUtils) {
+    public MemberDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
-        this.userAuthorityUtils = userAuthorityUtils;
+        this.authorityUtils = authorityUtils;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
         Member findMember = optionalMember.orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
         return new MemberDetails(findMember);
@@ -40,7 +40,7 @@ public class MemberDetailsService implements UserDetailsService {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return userAuthorityUtils.createAuthorities(this.getRoles());
+            return authorityUtils.createAuthorities(this.getRoles());
         }
 
         @Override

@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security;
+package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Component
 public class JwtTokenizer {
     @Getter
-    @Value("{jwt.key}")
+    @Value("${jwt.key}")
     private String secretKey;
 
     @Getter
@@ -49,7 +49,7 @@ public class JwtTokenizer {
                 .compact();
     }
 
-    public String generateRefreshToken (String subject, Date expiration, String base64EncodedSecretKey) {
+    public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.builder()
@@ -70,7 +70,7 @@ public class JwtTokenizer {
         return claims;
     }
 
-    public void verifySignature (String jws, String base64EncodedSecretKey) {
+    public void verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         Jwts.parserBuilder()

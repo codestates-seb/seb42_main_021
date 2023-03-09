@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security;
+package com.DuTongChitongYutong.EverybodyChachapark.security.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class UserAuthorityUtils {
+public class CustomAuthorityUtils {
     @Value("${mail.address.admin}")
     private String adminMailAddress;
 
