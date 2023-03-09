@@ -1,6 +1,14 @@
 // import useStore from '../components/useStore';
 import Main from '../components/main/Main';
 
+import React from 'react';
+
+const Home = () => {
+  return <Main></Main>;
+};
+
+export default Home;
+
 // const Home = () => {
 //   const { bears, increasePopulation, removeAllBears } = useStore();
 //   return (
@@ -12,11 +20,3 @@ import Main from '../components/main/Main';
 // };
 
 // export default Home;
-
-import React from 'react';
-
-const Home = () => {
-  return <Main></Main>;
-};
-
-export default Home;

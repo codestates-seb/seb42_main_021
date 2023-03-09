@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 const Container = styled.div`
-  /* position: relative; */
-  height: 850px;
-  width: 100%;
+  height: 100%;
+  width: 530px;
   max-width: 530px;
   background-color: var(--white);
-  position: sticky;
-  top: 80px;
+  border-radius: var(--bd-rd);
+  padding-top: 90px;
+  padding-bottom: 90px;
 `;
 
 const Main = ({ children }) => {

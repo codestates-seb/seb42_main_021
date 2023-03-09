@@ -46,14 +46,13 @@ const TitleContainerBox = styled.div`
 const MainContainer = styled.div`
   width: 50%;
   margin: 0 auto;
-  padding: 0 10px;
 `;
 
 const MainBox = styled.div`
   width: 530px;
   height: 100%;
   margin: 0 auto;
-  border: 1px solid black;
+  border: 1px solid var(--border);
   border-radius: var(--bd-rd);
 `;
 
