@@ -2,6 +2,8 @@ package com.DuTongChitongYutong.EverybodyChachapark.member;
 
 import org.mapstruct.Mapper;
 
+import java.time.LocalDateTime;
+
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
@@ -26,6 +28,7 @@ public interface MemberMapper {
             String email = null;
             String nickname = null;
             Member.MemberStatus memberStatus = null;
+            LocalDateTime createDate = null;
             if (member.getMemberId() != null) {
                 memberId = member.getMemberId();
             }
@@ -33,7 +36,8 @@ public interface MemberMapper {
             email = member.getEmail();
             nickname = member.getNickname();
             memberStatus = member.getMemberStatus();
-            MemberDto.Response response = new MemberDto.Response(memberId, email, nickname, memberStatus);
+            createDate = member.getCreatedAt();
+            MemberDto.Response response = new MemberDto.Response(memberId, email, nickname, memberStatus,createDate);
             return response;
         }
     }
