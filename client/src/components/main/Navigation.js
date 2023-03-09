@@ -5,10 +5,10 @@ const Container = styled.nav`
   width: 100%;
   max-width: 530px;
   height: 80px;
-  background-color: blue;
+  background-color: var(--whitegray);
   position: fixed;
   bottom: 0;
-  border: 1px solid black;
+  border: none;
   border-radius: var(--bd-rd);
 `;
 
