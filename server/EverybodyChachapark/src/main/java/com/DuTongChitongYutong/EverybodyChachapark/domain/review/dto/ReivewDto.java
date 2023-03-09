@@ -12,30 +12,60 @@ public class ReivewDto {
     @AllArgsConstructor
     @Getter
     public static class Post {
-        /* Todo
-        *   1. 작성 식별자
-        *   2. 상품 식별자
-        *   3. 리뷰 내용
-        *   4. 별점
-        *   5. 첨부파일(이미지)? */
-        private Long memberId;
         private Long productId;
+        private Long memberId;
+        private Long imageId;
         private String content;
         private int score;
     }
 
+    /* Todo: MultiPart로 Post
     @AllArgsConstructor
     @Getter
-    public static class Response {
-        /* Todo
-         *   1. 리뷰 식별자
-         *   2. 작성 식별자
-         *   3. 리뷰 내용
-         *   4. 별점
-         *   5. 첨부파일(이미지)? */
+    public static class Post {
+        private Long memberId;
+        private Long productId;
+        private String content;
+        private int score;
+    }*/
+
+    @AllArgsConstructor
+    @Getter
+    public static class Patch {
         private Long reviewId;
+        private Long memberId;
+        private Long imageId;
+        private String content;
+        private int score;
+    }
+
+    /* Todo: MultiPart로 Patch
+    @AllArgsConstructor
+    @Getter
+    public static class Post {
+        private Long reivewId;
         private Long memberId;
         private String content;
         private int score;
+    }*/
+
+
+    @AllArgsConstructor
+    @Getter
+    public static class Response {
+        private Long reviewId;
+        private Long imageId; // response는 상관이 없음: image Controller가 관여하기 때문
+        private String content;
+        private int score;
+        private ReivewMember answerMember;
+
+        @AllArgsConstructor
+        @Getter
+        public static class ReivewMember {
+            private Long memberId;
+            private Long memberImgId; // response는 상관이 없음: image Controller가 관여하기 때문
+            private String userName;
+
+        }
     }
 }
