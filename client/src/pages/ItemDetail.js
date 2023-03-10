@@ -2,8 +2,6 @@ import Main from '../components/main/Main';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 const ItemDetailContainer = styled.div`
   display: flex;
@@ -129,8 +127,15 @@ const WriteReviewButton = styled.button`
   color: var(--white);
 `;
 
-const WriteReviewContainer = styled.div`
+const WriteReviewContainer = styled.form`
+  display: flex;
+  flex-direction: column;
   padding: 0 16px;
+  > textarea {
+    height: 150px;
+    resize: none;
+    margin: 10px 0;
+  }
   #reviewButtonBox {
     margin-top: 100px;
   }
@@ -168,58 +173,58 @@ const Modal = styled.div`
   }
 `;
 
-const Review = styled(ReactQuill)`
-  height: 200px;
-  margin: 16px 0;
-`;
-
 const ItemDetail = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [rating, setRating] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [text, setText] = useState('');
+  const [image, setImage] = useState(null);
 
-  const writeButtonHandler = () => {
+  const handleTextChange = (event) => {
+    setText(event.target.value);
+  };
+
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('rating', rating);
+    formData.append('text', text);
+    formData.append('image', image);
+    setIsClicked(!isClicked);
+    // try {
+    //   const response = await axios.post('/api/review', formData);
+    //   console.log(response.data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  };
+
+  const handleDismiss = (event) => {
+    event.preventDefault();
+    setRating(0);
+    setText('');
+    setImage(null);
     setIsClicked(!isClicked);
   };
 
-  const RatingHandler = (rate) => {
+  const handleWriteButton = () => {
+    setIsClicked(!isClicked);
+  };
+
+  const handleRating = (rate) => {
     setRating(rate);
   };
 
-  const purchaseHandler = () => {
+  const handlePurchase = () => {
     setIsModalOpen(true);
   };
 
-  const ModalHandler = () => {
+  const handleModal = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const modules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ font: [] }],
-        [{ align: [] }],
-        ['image'],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, 'link'],
-        [
-          {
-            color: [
-              '#000000',
-              '#e60000',
-              '#ff9900',
-              '#ffff00',
-              '#008a00',
-              '#0066cc',
-              '#9933ff',
-              'custom-color',
-            ],
-          },
-          { background: [] },
-        ],
-      ],
-    },
   };
 
   return (
@@ -234,13 +239,13 @@ const ItemDetail = () => {
               <div id="productName">상품명</div>
               <div id="productPrice">39,0000원</div>
             </div>
-            <PurchaseButton onClick={purchaseHandler}>장바구니</PurchaseButton>
+            <PurchaseButton onClick={handlePurchase}>장바구니</PurchaseButton>
             {isModalOpen && (
               <Modal>
                 <div>
                   <div>장바구니에 추가되었습니다.</div>
                   <div>
-                    <button onClick={ModalHandler}>확인</button>
+                    <button onClick={handleModal}>확인</button>
                   </div>
                 </div>
               </Modal>
@@ -283,26 +288,29 @@ const ItemDetail = () => {
         </ReviewContainer>
         <div className="buttonBox">
           {!isClicked && (
-            <WriteReviewButton onClick={writeButtonHandler}>
+            <WriteReviewButton onClick={handleWriteButton}>
               리뷰 작성하기
             </WriteReviewButton>
           )}
         </div>
         {isClicked && (
-          <WriteReviewContainer>
+          <WriteReviewContainer onSubmit={handleSubmit}>
             <Rating
               size="25px"
               fillColor="#61a0ff"
               emptyColor="#C9C9C9"
-              onClick={RatingHandler}
+              onClick={handleRating}
               initialValue={rating}
             />
-            <Review modules={modules} />
+            <textarea value={text} onChange={handleTextChange} />
+            <input type="file" accept="image/*" onChange={handleImageChange} />
             <div id="reviewButtonBox" className="buttonBox">
-              <WriteReviewButton onClick={writeButtonHandler}>
-                등록하기
-              </WriteReviewButton>
-              <WriteReviewButton id="cancelButton" onClick={writeButtonHandler}>
+              <WriteReviewButton type="submit">등록하기</WriteReviewButton>
+              <WriteReviewButton
+                id="cancelButton"
+                type="button"
+                onClick={handleDismiss}
+              >
                 취소
               </WriteReviewButton>
             </div>
