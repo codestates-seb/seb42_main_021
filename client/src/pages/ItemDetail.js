@@ -2,6 +2,7 @@ import Main from '../components/main/Main';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
+import { useProduct } from '../components/store';
 
 const ItemDetailContainer = styled.div`
   display: flex;
@@ -179,6 +180,7 @@ const ItemDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
+  const { product, addProduct } = useProduct((state) => state);
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -227,6 +229,19 @@ const ItemDetail = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleShoppingBag = () => {
+    //if 중복되지 않게 하기
+    addProduct({
+      id: 1,
+      item: '상품명',
+      price: '39,000원',
+      img: 'img',
+    });
+    handlePurchase();
+  };
+
+  console.log(product);
+
   return (
     <Main>
       <ItemDetailContainer>
@@ -239,7 +254,9 @@ const ItemDetail = () => {
               <div id="productName">상품명</div>
               <div id="productPrice">39,0000원</div>
             </div>
-            <PurchaseButton onClick={handlePurchase}>장바구니</PurchaseButton>
+            <PurchaseButton onClick={handleShoppingBag}>
+              장바구니
+            </PurchaseButton>
             {isModalOpen && (
               <Modal>
                 <div>

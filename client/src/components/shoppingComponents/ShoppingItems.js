@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import shoppingCartItem from '../../img/shoppingCartItem.png';
+import { useCount } from '../store';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
@@ -101,10 +102,7 @@ const CheckBox = ({ id }) => {
 const goodsName = '팅탱동캠핑아이템 어쩌구 저쩌구 이거 짱 좋은데 웨 않 삼?';
 
 const ShoppingItems = () => {
-  const [number, setNumber] = useState(1);
-
-  const itemPlus = () => {};
-  const itemMinus = () => {};
+  const { count, increaseCount, decreaseCount } = useCount((state) => state);
 
   return (
     <ShoppingItemLayout>
@@ -131,17 +129,11 @@ const ShoppingItems = () => {
         </EachItemContainer>
 
         <ItemNumberChangeContainer>
-          <button
-            className="itemPlus"
-            onClick={(e) => itemPlus(e.target.value)}
-          >
+          <button className="itemPlus" onClick={increaseCount}>
             +
           </button>
-          <div className="itemNumber">{number}</div>
-          <button
-            className="itemMinus"
-            onClick={(e) => itemMinus(e.target.value)}
-          >
+          <div className="itemNumber">{count}</div>
+          <button className="itemMinus" onClick={decreaseCount}>
             -
           </button>
         </ItemNumberChangeContainer>
