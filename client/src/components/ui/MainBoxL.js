@@ -7,22 +7,16 @@ const MainPageBox = styled.div`
   align-items: center;
   width: ${(props) => (props.width === 'width' ? '100%' : '353px')};
   height: 100px;
-  /* background-color: var(--whitegray200); */
   background-image: ${(props) =>
     props.width === 'width' ? `url(${camping2})` : ''};
   background-size: cover;
-  /* border-radius: var(--bd-rd); */
   /* vertical-align: center; */
   /* line-height: 100px; */
 `;
 const MainPageContent = styled.p`
   text-align: center;
-  /* vertical-align: center; */
   font-size: 6px;
   font-weight: bold;
-  /* width: 100%;
-  height: 100%; */
-  /* overflow: auto; */
   font-size: 12px;
   line-height: 1.5;
   text-align: left;
