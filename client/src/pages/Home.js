@@ -1,6 +1,6 @@
 // import useStore from '../components/useStore';
 import styled from 'styled-components';
-import { useState } from 'react';
+// import { useState } from 'react';
 import MainCarousel from '../components/ui/MainCarousel';
 import MainBoxL from '../components/ui/MainBoxL';
 import MainBoxS from '../components/ui/MainBoxS';

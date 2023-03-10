@@ -9,12 +9,8 @@ import {
 } from 'react-icons/io5';
 import camping from '../../img/camping.jpg';
 import camping1 from '../../img/camping1.jpg';
-import camping2 from '../../img/camping2.jpg';
-import camping4 from '../../img/camping4.jpg';
 import camping5 from '../../img/camping5.jpg';
-import camping6 from '../../img/camping6.jpg';
 import island from '../../img/island.jpg';
-import sea from '../../img/sea.jpg';
 import { Link } from 'react-router-dom';
 
 const StyledSlider = styled(Slider)`
