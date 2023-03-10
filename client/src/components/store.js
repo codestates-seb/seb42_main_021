@@ -10,4 +10,12 @@ export const useProduct = create((set) => ({
   product: [],
   addProduct: (newProduct) =>
     set((state) => ({ product: [...state.product, newProduct] })),
+  removeProduct: (deleteProduct) =>
+    set((state) => ({
+      product: state.product.filter((el) => el.id !== deleteProduct),
+    })),
 }));
+// export const useTotalPrice = create((set) => ({
+//   total: 0,
+//   totalItemPrice: () => set((state) => ({ total: state })),
+// }));
