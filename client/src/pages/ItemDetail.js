@@ -1,8 +1,11 @@
-import Main from '../components/main/Main';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
 import { useProduct } from '../components/store';
+import { useNavigate } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
+import Footer from '../components/main/Footer';
+import Main from '../components/main/Main';
 
 const ItemDetailContainer = styled.div`
   display: flex;
@@ -44,6 +47,9 @@ const ImageBox = styled.div`
 const ProductInformation = styled.div`
   display: flex;
   flex-direction: row;
+  > button {
+    width: 20%;
+  }
   > div {
     width: 80%;
     #productName {
@@ -138,7 +144,7 @@ const WriteReviewContainer = styled.form`
     margin: 10px 0;
   }
   #reviewButtonBox {
-    margin-top: 100px;
+    margin-top: 50px;
   }
 `;
 
@@ -180,7 +186,8 @@ const ItemDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
-  const { product, addProduct } = useProduct((state) => state);
+  const { addProduct } = useProduct((state) => state);
+  const navigate = useNavigate();
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -227,6 +234,7 @@ const ItemDetail = () => {
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
+    navigate('/shoppingcart/1');
   };
 
   const handleShoppingBag = () => {
@@ -234,13 +242,11 @@ const ItemDetail = () => {
     addProduct({
       id: 1,
       item: '상품명',
-      price: '39,000원',
+      price: '39000',
       img: 'img',
     });
     handlePurchase();
   };
-
-  console.log(product);
 
   return (
     <Main>
@@ -252,10 +258,10 @@ const ItemDetail = () => {
           <ProductInformation>
             <div>
               <div id="productName">상품명</div>
-              <div id="productPrice">39,0000원</div>
+              <div id="productPrice">39,000원</div>
             </div>
             <PurchaseButton onClick={handleShoppingBag}>
-              장바구니
+              <FaShoppingCart size="40px" />
             </PurchaseButton>
             {isModalOpen && (
               <Modal>
@@ -333,6 +339,7 @@ const ItemDetail = () => {
             </div>
           </WriteReviewContainer>
         )}
+        <Footer />
       </ItemDetailContainer>
     </Main>
   );
