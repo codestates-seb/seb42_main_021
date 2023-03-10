@@ -32,7 +32,8 @@ public class Product {
     private int productScore;
 
     @Column(name = "product_category")
-    private String productCategory;
+    @Enumerated(value = EnumType.STRING)
+    private ProductCategory productCategory;
 
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
@@ -40,20 +41,5 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
-    // member
 
-    public enum ProductStatus{
-        PRODUCT_FOR_SALE("판매중"),
-        PRODUCT_SOLD_OUT("재고 없음"),
-        PRODUCT_STOP("판매 일시 중지");
-
-        @Getter
-        private String productStatus;
-
-        ProductStatus(String productStatus){
-            this.productStatus = productStatus;
-        }
     }
-
-
-}
