@@ -1,6 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.hendler;
 
-import com.DuTongChitongYutong.EverybodyChachapark.dto.ResponseDto;
+import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,8 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(gson.toJson(
-                ResponseDto.success(null, "로그인 되었습니다.", HttpStatus.OK),
-                ResponseDto.class
+                SingleResponseDto.success(null, "로그인 되었습니다.", HttpStatus.OK),
+                SingleResponseDto.class
         ));
     }
 }

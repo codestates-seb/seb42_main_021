@@ -1,17 +1,14 @@
 package com.DuTongChitongYutong.EverybodyChachapark.slice.review;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.controller.ReviewController;
-import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReivewDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReviewDto;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -21,7 +18,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.swing.text.Document;
 import java.util.List;
 
 import static com.DuTongChitongYutong.EverybodyChachapark.util.ApiDocumentUtils.getRequestPreProcessor;
@@ -52,7 +48,7 @@ public class ReviewControllerTest {
     @Test
     public void postReviewTest() throws Exception {
         // given
-        ReivewDto.Post createReview = new ReivewDto.Post(1L, 1L, 1L, "Stub 리뷰 작성합니다!", 5);
+        ReviewDto.Post createReview = new ReviewDto.Post(1L, 1L, 1L, "Stub 리뷰 작성합니다!", 5);
         String content = gson.toJson(createReview);
 
         // when
@@ -89,11 +85,11 @@ public class ReviewControllerTest {
     @Test
     public void patchReivewTest() throws Exception {
         // given
-        ReivewDto.Patch updateReview = new ReivewDto.Patch(1L, 1L, 1L, "Stub 리뷰 수정합니다!", 2);
+        ReviewDto.Patch updateReview = new ReviewDto.Patch(1L, 1L, 1L, "Stub 리뷰 수정합니다!", 2);
         String content = gson.toJson(updateReview);
 
-        ReivewDto.Response response =  new ReivewDto.Response(1L, 1L, "Stub 리뷰 수정합니다!", 2,
-                new ReivewDto.Response.ReivewMember(1L, 1L, "profileStubData1"));
+        ReviewDto.Response response =  new ReviewDto.Response(1L, 1L, "Stub 리뷰 수정합니다!", 2,
+                new ReviewDto.Response.ReivewMember(1L, 1L, "profileStubData1"));
 
         // when
         ResultActions patchAction =
