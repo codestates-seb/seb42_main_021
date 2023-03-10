@@ -5,6 +5,8 @@ import com.DuTongChitongYutong.EverybodyChachapark.product.entity.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -19,6 +21,7 @@ public class ProductPostDto {
     private int price;
 
     private ProductCategory productCategory;
+
 
     private ProductStatus productStatus;
 

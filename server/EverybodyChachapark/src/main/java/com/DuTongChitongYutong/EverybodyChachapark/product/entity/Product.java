@@ -1,13 +1,14 @@
 package com.DuTongChitongYutong.EverybodyChachapark.product.entity;
 
 import com.DuTongChitongYutong.EverybodyChachapark.order.entity.OrderProduct;
+import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+
 
 @Entity
 @NoArgsConstructor
@@ -33,13 +34,23 @@ public class Product {
 
     @Column(name = "product_category")
     @Enumerated(value = EnumType.STRING)
-    private ProductCategory productCategory;
+    private ProductCategory productCategory = ProductCategory.NO_CATEGORY;
 
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
 
-    @OneToMany(mappedBy = "product")
-    private List<OrderProduct> orderProducts = new ArrayList<>();
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
+    public Product(String productName, int price){
+        this.productName = productName;
+        this.price = price;
+    }
+
+    public ProductDto toDto(){
+        return new ProductDto(productId, productName, price, productView, productScore,productCategory, productStatus, getCreatedAt(), getModifiedAt());
+    }
 
 
     }
