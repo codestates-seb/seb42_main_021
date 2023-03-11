@@ -13,6 +13,7 @@ public interface MemberMapper {
         member.setEmail(post.getEmail());
         member.setPassword(post.getPassword());
         member.setNickname(post.getNickname());
+        member.setProfileImg(member.getRandomProfileImageUrl());
 
         return member;
     }
@@ -34,14 +35,16 @@ public interface MemberMapper {
             long memberId = 0L;
             String email = null;
             String nickname = null;
+            String profileImg = null;
             LocalDateTime createDate = null;
             if (member.getMemberId() != null) {
                 memberId = member.getMemberId();
             }
             email = member.getEmail();
             nickname = member.getNickname();
+            profileImg = member.getProfileImg();
             createDate = member.getCreatedAt();
-            MemberDto.CreateResponse response = new MemberDto.CreateResponse(memberId, email, nickname, createDate);
+            MemberDto.CreateResponse response = new MemberDto.CreateResponse(memberId, email, nickname, profileImg, createDate);
             return response;
         }
     }
@@ -55,6 +58,7 @@ public interface MemberMapper {
             long memberId = 0L;
             String email = null;
             String nickname = null;
+            String profileImg = null;
             Member.MemberStatus memberStatus = null;
             LocalDateTime createDate = null;
             if (member.getMemberId() != null) {
@@ -63,8 +67,9 @@ public interface MemberMapper {
             email = member.getEmail();
             nickname = member.getNickname();
             memberStatus = member.getMemberStatus();
+            profileImg = member.getProfileImg();
             createDate = member.getCreatedAt();
-            MemberDto.Response response = new MemberDto.Response(memberId, email, nickname, memberStatus, createDate);
+            MemberDto.Response response = new MemberDto.Response(memberId, email, nickname, profileImg, memberStatus, createDate);
             return response;
         }
     }

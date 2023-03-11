@@ -14,6 +14,7 @@ public class MemberDto {
         private String email;
         private String password;
         private String nickname;
+        private String profileImg;
     }
 
     @Getter
@@ -29,6 +30,7 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String nickname;
+        private String profileImg;
         private Member.MemberStatus memberStatus;
         private LocalDateTime createDate;
 
@@ -40,6 +42,7 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String nickname;
+        private String profileImg;
         private LocalDateTime createDate;
     }
 }
