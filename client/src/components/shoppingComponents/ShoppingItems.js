@@ -93,11 +93,14 @@ const ItemNumberChangeContainer = styled.div`
     font-size: 20px;
   }
 `;
-const TotlaPrice = styled.div`
-  background-color: aliceblue;
-`;
 
-const ShoppingItems = () => {
+const ShoppingItems = ({ setOrderPrice }) => {
+  //마이페이지에 주문 이력을 보내줘야함
+  //상품명 , 수량 , 가격 ,아이디
+  //id가 1이 체크드아이템에 존재 한다면
+  //for(let i of checkdItem)
+  //product.filter((el) => el.id === i)) 상품이름 가격 아이디값추출
+  //counts[i]+1 수량 추출
   const { product, removeProduct } = useProduct((state) => state);
   const [counts, setCounts] = useState({});
   const [checkdItem, setCheckedItem] = useState(product.map((el) => el.id));
@@ -139,17 +142,21 @@ const ShoppingItems = () => {
 
   const totalPrice = () => {
     const itemArr = product.map((el) => el.id);
-    let newTotal = 0;
+    let newTotalPrice = 0;
     for (let i of itemArr) {
       if (checkdItem.includes(i)) {
         let quantity = counts[i] || 1;
         let price = product.filter((el) => el.id === i)[0].price;
-        newTotal += quantity * price;
+        newTotalPrice += quantity * price;
       }
     }
-    return newTotal;
+    return newTotalPrice;
   };
   const total = totalPrice();
+
+  useEffect(() => {
+    setOrderPrice(total);
+  }, [total]);
 
   return (
     <ShoppingItemLayout>
@@ -216,7 +223,6 @@ const ShoppingItems = () => {
             </ItemNumberChangeContainer>
           </ShoppingItemContainer>
         ))}
-      <TotlaPrice>{total}</TotlaPrice>
     </ShoppingItemLayout>
   );
 };
