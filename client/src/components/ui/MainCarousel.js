@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -63,7 +63,7 @@ const TextBox = styled.div`
 `;
 const TextLink = styled(Link)`
   position: absolute;
-  top: 20px;
+  top: 16px;
   width: 100px;
   height: 50px;
   color: black;
@@ -80,10 +80,10 @@ const Image = styled.img`
 
 export default function MainCarousel(props) {
   const navigate = useNavigate();
-  const [nav1, setNav1] = useState();
+  const [nav1] = useState();
   const [nav2, setNav2] = useState();
-  const slider1 = useRef();
-  const slider2 = useRef();
+  // const slider1 = useRef();
+  // const slider2 = useRef();
   const settings = {
     dots: false,
     infinite: true,

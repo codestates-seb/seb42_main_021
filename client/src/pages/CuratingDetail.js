@@ -5,17 +5,9 @@ import locationImg from '../img/location.png';
 import Footer from '../components/main/Footer';
 import Navigation from '../components/main/Navigation';
 import { curationList } from '../assets/curationState';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-// import background from '../img/background.png';
-// import camping from '../img/camping.jpg';
-import camping1 from '../img/camping1.jpg';
-// import camping2 from '../img/camping2.jpg';
-// import camping4 from '../img/camping4.jpg';
-// import camping5 from '../img/camping5.jpg';
+import { useParams } from 'react-router-dom';
 import Location from '../components/mapApi/Location';
-import { useEffect, useState } from 'react';
-// const images = [background, camping, camping1, camping2, camping4, camping5];
-// const curatingDetailList = [];
+import { useState } from 'react';
 
 const CuratingDetailLayout = styled.div`
   width: 100%;
@@ -40,7 +32,7 @@ const Main = styled.div`
 
 const CuratingTitleContainer = styled.div`
   margin: 0 10px;
-  margin-top: 20px;
+  margin-top: 35px;
   img {
     width: 100%;
     height: 100%;
@@ -48,12 +40,17 @@ const CuratingTitleContainer = styled.div`
   h3 {
     font-size: 24px;
   }
+  p {
+    text-align: right;
+    color: var(--midgray);
+  }
 `;
 const LocationApiContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   h4 {
     margin: 0 10px;
     font-size: 20px;
+    margin-bottom: 10px;
   }
   img {
     width: 25px;
@@ -125,11 +122,16 @@ const BodyContentImgBox = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  .width {
+    width: 350px;
+  }
   img {
     width: 450px;
     height: 200px;
     background-size: cover;
     margin: 10px;
+    border: 1px solid gray;
+    border-radius: var(--bd-rd);
   }
   p {
     text-align: center;
@@ -138,7 +140,7 @@ const BodyContentImgBox = styled.div`
 `;
 const ContainerBorderTop = styled.p`
   margin-top: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   background-color: #e8dcdc;
   width: 100%;
   height: 3px;
@@ -150,8 +152,8 @@ const CuratingDetail = () => {
   const ID = Number(id);
 
   const [carousel] = useState([curationList.SubCarouselImg[ID - 1]]);
-  const [location] = useState([curationList.mapLocation[ID - 1]]); // 배열 []
-  const [curatingContent] = useState(curationList.curatingContent);
+  const [location] = useState([curationList.mapLocation[ID - 1]]);
+  const [curatingContent] = useState([curationList.curatingContent[ID - 1]]);
   console.log(location[0].title);
   return (
     <CuratingDetailLayout>
@@ -160,6 +162,7 @@ const CuratingDetail = () => {
         <SubCarousel carousel={carousel} />
         <CuratingTitleContainer>
           <h3>{location[0].title}</h3>
+          <p>출처: {curatingContent[0].subText} </p>
           <ContainerBorderTop />
         </CuratingTitleContainer>
         <LocationApiContainer>
@@ -173,30 +176,32 @@ const CuratingDetail = () => {
         </LocationApiContainer>
         <CuratingBodyContainer>
           <CuratingBodyImgBox>
-            <img src={camping1} alt="" />
+            <img src={curatingContent[0].img} alt="" />
           </CuratingBodyImgBox>
           <CuratingBodyTitleBox>
             <h4>기본정보</h4>
             <BodyTitleTextBox>
               <li>환경</li>
-              <li>{curatingContent[ID - 1].titleText1}</li>
+              <li>{curatingContent[0].titleText1}</li>
             </BodyTitleTextBox>
             <BodyTitle2TextBox>
               <li>매너타임</li>
-              <li>{curatingContent[ID - 1].titleText2}</li>
+              <li>{curatingContent[0].titleText2}</li>
             </BodyTitle2TextBox>
           </CuratingBodyTitleBox>
           <CuratingBodyCotentBox>
             <h4>캠핑장 소개</h4>
             <BodyContentTextBox>
-              <p>{curatingContent[ID - 1].contentText}</p>
+              <p>{curatingContent[0].contentText}</p>
             </BodyContentTextBox>
             <ContainerBorderTop />
             <BodyContentImgBox>
-              <p>{curatingContent[ID - 1].contentText2}</p>
-              <img src={curatingContent[ID - 1].contentImg1} alt="" />
-              <p>{curatingContent[ID - 1].contentText3}</p>
-              <img src={curatingContent[ID - 1].contentImg2} alt="" />
+              <p>{curatingContent[0].contentText2}</p>
+              <ContainerBorderTop className="width" />
+              <img src={curatingContent[0].contentImg1} alt="" />
+              <p>{curatingContent[0].contentText3}</p>
+              <ContainerBorderTop className="width" />
+              <img src={curatingContent[0].contentImg2} alt="" />
             </BodyContentImgBox>
             <ContainerBorderTop />
           </CuratingBodyCotentBox>

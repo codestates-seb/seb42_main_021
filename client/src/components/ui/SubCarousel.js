@@ -1,4 +1,3 @@
-import { useState, useRef } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -7,12 +6,6 @@ import {
   IoChevronBackCircleOutline,
   IoChevronForwardCircleOutline,
 } from 'react-icons/io5';
-import camping from '../../img/camping.jpg';
-import camping1 from '../../img/camping1.jpg';
-import camping5 from '../../img/camping5.jpg';
-import island from '../../img/island.jpg';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 const StyledSlider = styled(Slider)`
   height: 100%;
@@ -49,27 +42,6 @@ const NextTo = styled.div`
   }
 `;
 
-const TextBox = styled.div`
-  position: absolute;
-  width: 50px;
-  height: 20px;
-  border-radius: var(--bd-rd);
-  font-size: 12px;
-  font-weight: bold;
-  background: var(--whitegray200);
-  opacity: 0.8;
-  text-align: center;
-  top: 95px;
-`;
-const TextLink = styled(Link)`
-  position: absolute;
-  top: 20px;
-  width: 100px;
-  height: 50px;
-  color: black;
-  margin-top: 10px;
-  transform: translate(-50%, -50%);
-`;
 const ImageBox = styled.div``;
 
 const Image = styled.img`
@@ -80,7 +52,6 @@ const Image = styled.img`
 
 export default function SubCarousel({ carousel }) {
   console.log(carousel);
-  const navigate = useNavigate();
   const settings = {
     dots: true,
     infinite: true,
@@ -103,42 +74,22 @@ export default function SubCarousel({ carousel }) {
     <div>
       <StyledSlider {...settings}>
         <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product">
-              호수
-            </TextLink>
-          </TextBox>
-          <ImageBox onClick={() => navigate('/curation/1')}>
+          <ImageBox>
             <Image src={carousel[0].img1} />
           </ImageBox>
         </div>
         <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product">
-              섬
-            </TextLink>
-          </TextBox>
-          <ImageBox onClick={() => navigate('/curation/2')}>
+          <ImageBox>
             <Image src={carousel[0].img2} />
           </ImageBox>
         </div>
         <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product/3">
-              산·숲
-            </TextLink>
-          </TextBox>
-          <ImageBox onClick={() => navigate('/curation/3')}>
+          <ImageBox>
             <Image src={carousel[0].img3} />
           </ImageBox>
         </div>
         <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product">
-              바다
-            </TextLink>
-          </TextBox>
-          <ImageBox onClick={() => navigate('/curation/4')}>
+          <ImageBox>
             <Image src={carousel[0].img4} />
           </ImageBox>
         </div>
