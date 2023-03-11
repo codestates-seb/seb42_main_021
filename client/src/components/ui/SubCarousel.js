@@ -78,14 +78,11 @@ const Image = styled.img`
   background-size: cover;
 `;
 
-export default function MainCarousel(props) {
+export default function SubCarousel({ carousel }) {
+  console.log(carousel);
   const navigate = useNavigate();
-  const [nav1, setNav1] = useState();
-  const [nav2, setNav2] = useState();
-  const slider1 = useRef();
-  const slider2 = useRef();
   const settings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -104,11 +101,7 @@ export default function MainCarousel(props) {
   };
   return (
     <div>
-      <StyledSlider
-        {...settings}
-        asNavFor={nav2}
-        ref={(slider1) => setNav2(slider1)}
-      >
+      <StyledSlider {...settings}>
         <div>
           <TextBox>
             <TextLink className="textLink" to="/product">
@@ -116,7 +109,7 @@ export default function MainCarousel(props) {
             </TextLink>
           </TextBox>
           <ImageBox onClick={() => navigate('/curation/1')}>
-            <Image src={camping1} />
+            <Image src={carousel[0].img1} />
           </ImageBox>
         </div>
         <div>
@@ -126,7 +119,7 @@ export default function MainCarousel(props) {
             </TextLink>
           </TextBox>
           <ImageBox onClick={() => navigate('/curation/2')}>
-            <Image src={island} />
+            <Image src={carousel[0].img2} />
           </ImageBox>
         </div>
         <div>
@@ -136,7 +129,7 @@ export default function MainCarousel(props) {
             </TextLink>
           </TextBox>
           <ImageBox onClick={() => navigate('/curation/3')}>
-            <Image src={camping5} />
+            <Image src={carousel[0].img3} />
           </ImageBox>
         </div>
         <div>
@@ -146,55 +139,7 @@ export default function MainCarousel(props) {
             </TextLink>
           </TextBox>
           <ImageBox onClick={() => navigate('/curation/4')}>
-            <Image src={camping} />
-          </ImageBox>
-        </div>
-      </StyledSlider>
-
-      <StyledSlider
-        {...settings}
-        asNavFor={nav1}
-        ref={(slider2) => setNav2(slider2)}
-        slidesToShow={3}
-        swipeToSlide={true}
-        focusOnSelect={true}
-      >
-        <div>
-          <TextBox>
-            <TextLink to="/product">호수</TextLink>
-          </TextBox>
-          <ImageBox>
-            <Image src={camping1} />
-          </ImageBox>
-        </div>
-        <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product">
-              섬
-            </TextLink>
-          </TextBox>
-          <ImageBox>
-            <Image src={island} />
-          </ImageBox>
-        </div>
-        <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product">
-              산·숲
-            </TextLink>
-          </TextBox>
-          <ImageBox>
-            <Image src={camping5} />
-          </ImageBox>
-        </div>
-        <div>
-          <TextBox>
-            <TextLink className="textLink" to="/product">
-              강
-            </TextLink>
-          </TextBox>
-          <ImageBox>
-            <Image src={camping} />
+            <Image src={carousel[0].img4} />
           </ImageBox>
         </div>
       </StyledSlider>

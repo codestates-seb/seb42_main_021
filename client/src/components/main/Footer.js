@@ -11,7 +11,7 @@ import subLogo from '../../img/subLogo.svg';
 
 const FooterLayout = styled.footer`
   width: 530px;
-  height: 100%;
+  /* height: 100%; */
   padding: 0 16px;
   margin-top: 100px;
 `;

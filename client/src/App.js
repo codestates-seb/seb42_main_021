@@ -10,8 +10,7 @@ import Login from './pages/Login';
 import Mypage from './pages/Mypage';
 import ShoppingCart from './pages/ShoppingCart';
 import SignUp from './pages/SignUp';
-import Navigation from './components/main/Navigation';
-import MainHeader from './components/main/MainHeader';
+// import MainHeader from './components/main/MainHeader';
 
 const MainLayout = styled.div`
   width: 100vw;
@@ -72,7 +71,7 @@ function App() {
         </TitleContainer>
         <MainContainer>
           <MainBox>
-            <MainHeader />
+            {/* <MainHeader /> */}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/curation/:id" element={<CuratingDetail />} />
@@ -84,7 +83,7 @@ function App() {
               <Route path="/mypage/:id" element={<Mypage />} />
               <Route path="/admin-item/:id" element={<AdminNewItem />} />
             </Routes>
-            <Navigation />
+            {/* <Navigation /> */}
           </MainBox>
         </MainContainer>
       </MainLayout>
