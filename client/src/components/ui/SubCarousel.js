@@ -73,8 +73,8 @@ const TextLink = styled(Link)`
 const ImageBox = styled.div``;
 
 const Image = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 530px;
+  height: 350px;
   background-size: cover;
 `;
 
@@ -135,7 +135,7 @@ export default function SubCarousel({ carousel }) {
         <div>
           <TextBox>
             <TextLink className="textLink" to="/product">
-              강
+              바다
             </TextLink>
           </TextBox>
           <ImageBox onClick={() => navigate('/curation/4')}>

@@ -5,6 +5,7 @@ import locationImg from '../img/location.png';
 import Footer from '../components/main/Footer';
 import Navigation from '../components/main/Navigation';
 import { curationList } from '../assets/curationState';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 // import background from '../img/background.png';
 // import camping from '../img/camping.jpg';
 import camping1 from '../img/camping1.jpg';
@@ -12,7 +13,7 @@ import camping1 from '../img/camping1.jpg';
 // import camping4 from '../img/camping4.jpg';
 // import camping5 from '../img/camping5.jpg';
 import Location from '../components/mapApi/Location';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // const images = [background, camping, camping1, camping2, camping4, camping5];
 // const curatingDetailList = [];
 
@@ -143,26 +144,30 @@ const ContainerBorderTop = styled.p`
   height: 3px;
   border-radius: var(--bd-rd);
 `;
+
 const CuratingDetail = () => {
-  const [carousel] = useState(curationList.SubCarouselImg);
-  const [location] = useState(curationList.mapLocation);
+  const { id } = useParams();
+  const ID = Number(id);
+
+  const [carousel] = useState([curationList.SubCarouselImg[ID - 1]]);
+  const [location] = useState([curationList.mapLocation[ID - 1]]); // 배열 []
   const [curatingContent] = useState(curationList.curatingContent);
-  console.log(location);
+  console.log(location[0].title);
   return (
     <CuratingDetailLayout>
       <MainHeader />
       <Main>
         <SubCarousel carousel={carousel} />
         <CuratingTitleContainer>
-          <h3>{location[1].title}</h3>
+          <h3>{location[0].title}</h3>
           <ContainerBorderTop />
         </CuratingTitleContainer>
         <LocationApiContainer>
           <h4>위치</h4>
-          <Location />
+          <Location location={location} />
           <LocationTextBox>
             <img src={locationImg} alt="" />
-            <p>{location[1].locationTitle}</p>
+            <p>{location[0].location}</p>
           </LocationTextBox>
           <ContainerBorderTop />
         </LocationApiContainer>
@@ -174,24 +179,24 @@ const CuratingDetail = () => {
             <h4>기본정보</h4>
             <BodyTitleTextBox>
               <li>환경</li>
-              <li>{curatingContent[2].titleText1}</li>
+              <li>{curatingContent[ID - 1].titleText1}</li>
             </BodyTitleTextBox>
             <BodyTitle2TextBox>
               <li>매너타임</li>
-              <li>{curatingContent[2].titleText2}</li>
+              <li>{curatingContent[ID - 1].titleText2}</li>
             </BodyTitle2TextBox>
           </CuratingBodyTitleBox>
           <CuratingBodyCotentBox>
             <h4>캠핑장 소개</h4>
             <BodyContentTextBox>
-              <p>{curatingContent[2].contentText}</p>
+              <p>{curatingContent[ID - 1].contentText}</p>
             </BodyContentTextBox>
             <ContainerBorderTop />
             <BodyContentImgBox>
-              <p>{curatingContent[2].contentText2}</p>
-              <img src={curatingContent[2].contentImg1} alt="" />
-              <p>{curatingContent[2].contentText3}</p>
-              <img src={curatingContent[2].contentImg2} alt="" />
+              <p>{curatingContent[ID - 1].contentText2}</p>
+              <img src={curatingContent[ID - 1].contentImg1} alt="" />
+              <p>{curatingContent[ID - 1].contentText3}</p>
+              <img src={curatingContent[ID - 1].contentImg2} alt="" />
             </BodyContentImgBox>
             <ContainerBorderTop />
           </CuratingBodyCotentBox>

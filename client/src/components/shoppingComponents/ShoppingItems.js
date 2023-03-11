@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import shoppingCartItem from '../../img/shoppingCartItem.png';
-import { useCount } from '../store';
+import { useProduct } from '../store';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
@@ -29,7 +29,7 @@ const CheckBoxContainer = styled.div`
   }
 `;
 
-const ShoppingItemContainerWrap = styled.div`
+const ShoppingItemContainer = styled.div`
   height: 200px;
   margin-bottom: 30px;
 `;
@@ -43,6 +43,7 @@ const EachItemContainer = styled.div`
     margin-left: 20px;
     font-size: 25px;
     color: var(--gray);
+    cursor: pointer;
   }
 `;
 
@@ -92,54 +93,144 @@ const ItemNumberChangeContainer = styled.div`
     font-size: 20px;
   }
 `;
-const CheckBox = ({ id }) => {
-  return (
-    <CheckBoxContainer>
-      <input type={'checkbox'} id={id} />
-    </CheckBoxContainer>
-  );
-};
-const goodsName = '팅탱동캠핑아이템 어쩌구 저쩌구 이거 짱 좋은데 웨 않 삼?';
 
-const ShoppingItems = () => {
-  const { count, increaseCount, decreaseCount } = useCount((state) => state);
+const ShoppingItems = ({ setOrderPrice }) => {
+  //마이페이지에 주문 이력을 보내줘야함
+  //상품명 , 수량 , 가격 ,아이디
+  //id가 1이 체크드아이템에 존재 한다면
+  //for(let i of checkdItem)
+  //product.filter((el) => el.id === i)) 상품이름 가격 아이디값추출
+  //counts[i]+1 수량 추출
+  const { product, removeProduct } = useProduct((state) => state);
+  const [counts, setCounts] = useState({});
+  const [checkdItem, setCheckedItem] = useState(product.map((el) => el.id));
+
+  function handleIncreaseCount(id) {
+    setCounts((prevCounts) => ({
+      ...prevCounts,
+      [id]: (prevCounts[id] || 1) + 1,
+    }));
+  }
+  const handleDecreaseCount = (id) => {
+    if (counts[id] > 1) {
+      setCounts((prevCounts) => ({
+        ...prevCounts,
+        [id]: (prevCounts[id] || 0) - 1,
+      }));
+    }
+  };
+
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      setCheckedItem(product.map((el) => el.id));
+    } else {
+      setCheckedItem([]);
+    }
+  };
+
+  const handleSingleCheck = (checked, id) => {
+    if (checked) {
+      setCheckedItem([...checkdItem, id]);
+    } else {
+      setCheckedItem(checkdItem.filter((el) => el !== id));
+    }
+  };
+
+  const handleDelte = (id) => {
+    removeProduct(id);
+  };
+
+  const totalPrice = () => {
+    const itemArr = product.map((el) => el.id);
+    let newTotalPrice = 0;
+    for (let i of itemArr) {
+      if (checkdItem.includes(i)) {
+        let quantity = counts[i] || 1;
+        let price = product.filter((el) => el.id === i)[0].price;
+        newTotalPrice += quantity * price;
+      }
+    }
+    return newTotalPrice;
+  };
+  const total = totalPrice();
+
+  useEffect(() => {
+    setOrderPrice(total);
+  }, [total]);
 
   return (
     <ShoppingItemLayout>
       <AllCheckContainer>
-        <CheckBox id="allCheckBox" />
+        <CheckBoxContainer>
+          <input
+            type={'checkbox'}
+            id={'allCheckBox'}
+            checked={product.length === checkdItem.length ? true : false}
+            onChange={(e) => handleAllCheck(e.target.checked)}
+          />
+        </CheckBoxContainer>
         <label className="allCheckText" htmlFor={'allCheckBox'}>
           {'전체선택'}
         </label>
       </AllCheckContainer>
 
       <h2 className="item">배송상품</h2>
-      <ShoppingItemContainerWrap>
-        {/* map으로 뿌려주기 */}
-        <EachItemContainer>
-          <CheckBox id={'1'} />
-          <ItemImgBox alt={'shoppingItem'} src={shoppingCartItem} />
-          <ItemInformationBox>
-            <label className="singleCheckText" htmlFor={'1'}>
-              {goodsName}
-            </label>
-            <div className="itemPrice">{'35,000'}</div>
-          </ItemInformationBox>
-          <div className="cancel">x</div>
-        </EachItemContainer>
 
-        <ItemNumberChangeContainer>
-          <button className="itemPlus" onClick={increaseCount}>
-            +
-          </button>
-          <div className="itemNumber">{count}</div>
-          <button className="itemMinus" onClick={decreaseCount}>
-            -
-          </button>
-        </ItemNumberChangeContainer>
-      </ShoppingItemContainerWrap>
+      {product &&
+        product.map((el) => (
+          <ShoppingItemContainer>
+            <EachItemContainer>
+              <CheckBoxContainer>
+                <input
+                  type={'checkbox'}
+                  id={el.id}
+                  checked={checkdItem.includes(el.id) ? true : false}
+                  onChange={(e) => {
+                    handleSingleCheck(e.target.checked, el.id);
+                  }}
+                />
+              </CheckBoxContainer>
+              <ItemImgBox alt={'shoppingItem'} src={shoppingCartItem} />
+              <ItemInformationBox>
+                <label className="singleCheckText" htmlFor={el.id}>
+                  {el.item}
+                </label>
+                <div className="itemPrice">{el.price}원</div>
+              </ItemInformationBox>
+              <div
+                className="cancel"
+                onClick={() => {
+                  handleDelte(el.id);
+                }}
+              >
+                x
+              </div>
+            </EachItemContainer>
+            <ItemNumberChangeContainer>
+              <button
+                className="itemPlus"
+                onClick={() => handleIncreaseCount(el.id)}
+              >
+                +
+              </button>
+              <div className="itemNumber">{counts[el.id] || 1}</div>
+              <button
+                className="itemMinus"
+                onClick={() => handleDecreaseCount(el.id)}
+              >
+                -
+              </button>
+            </ItemNumberChangeContainer>
+          </ShoppingItemContainer>
+        ))}
     </ShoppingItemLayout>
   );
 };
 
 export default ShoppingItems;
+
+//첫 화면에서 모두 체크박스는 표시되어 있다
+//checkitem 에 아이디 값이 저장
+//allcheck는 체크값이 프로덕트 길이 === 체크아이템 길이 참
+
+//개별체크박스는

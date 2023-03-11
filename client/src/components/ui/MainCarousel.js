@@ -142,7 +142,7 @@ export default function MainCarousel(props) {
         <div>
           <TextBox>
             <TextLink className="textLink" to="/product">
-              강
+              바다
             </TextLink>
           </TextBox>
           <ImageBox onClick={() => navigate('/curation/4')}>
@@ -190,7 +190,7 @@ export default function MainCarousel(props) {
         <div>
           <TextBox>
             <TextLink className="textLink" to="/product">
-              강
+              바다
             </TextLink>
           </TextBox>
           <ImageBox>

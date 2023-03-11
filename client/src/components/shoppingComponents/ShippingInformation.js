@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import DaumPostCode from './DaumPostCode';
 
-const ShippingContainerWrap = styled.form`
+const ShippingLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,11 +44,70 @@ const WriteAddressContainer = styled.div`
     color: var(--white);
   }
 `;
+const OrderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  width: 450px;
+  padding: 10px 0 10px 0;
+  background-color: var(--blue);
+  border-radius: var(--bd-rd);
 
-const ShippingInformation = () => {
+  .orderPrice {
+    font-size: 25px;
+    font-weight: 500;
+    color: var(--white);
+  }
+  &:hover {
+    background-color: pink;
+    .orderPrice {
+      color: var(--black);
+    }
+  }
+`;
+
+const Popup = styled.div`
+  position: absolute;
+  top: 50%;
+  width: 300px;
+  padding: 7px;
+  z-index: 200;
+  border-radius: var(--bd-rd);
+  background-color: var(--gray);
+`;
+
+const PopupContent = styled.div`
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: var(--bd-rd);
+`;
+
+const PopupButton = styled.button`
+  background-color: var(--blue);
+  color: var(--white);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+const PopupText = styled.p`
+  font-size: 18px;
+  margin-bottom: 30px;
+`;
+
+const ShippingInformation = ({ orderPrice }) => {
+  //form으로 만들면 랜더링 되면서 장바구니 목록이 사라짐 (zustand내용이 날아감)
+  //서버에게 보내줄게 아니라면  그냥 페이지전환만 되도록 ??
+
   const [receiver, setReceiver] = useState('');
   const [address, setAddress] = useState('');
   const [popAddress, setPopAddress] = useState(false);
+  const [alarmPop, setAlarmPop] = useState(false);
+  const [popContent, setPopContent] = useState(null);
 
   const handleReceiver = (e) => {
     e.preventDefault();
@@ -60,10 +119,34 @@ const ShippingInformation = () => {
     setAddress(e.target.value);
   };
 
+  const popupOpen = (content) => {
+    setAlarmPop(true);
+    setPopContent(
+      <>
+        <PopupText>{content}</PopupText>
+        <PopupButton onClick={() => setAlarmPop(false)}>확인</PopupButton>
+      </>
+    );
+  };
+
+  const handleSubmit = () => {
+    if (!address && !receiver) {
+      popupOpen('받는 사람과 주소를 입력해주세요');
+    } else if (address && !receiver) {
+      popupOpen('받는 사람을 입력해주세요');
+    } else if (!address && receiver) {
+      popupOpen('주소를 입력해주세요');
+    } else {
+    }
+    if (orderPrice === 0) {
+      popupOpen('주문할 상품이 없습니다');
+    }
+  };
   return (
     <>
       <h2 className="wirteInformation"> 배송지 정보</h2>
-      <ShippingContainerWrap>
+
+      <ShippingLayout>
         <WriteNameContainer>
           <h3 className="receiver"> 받는 사람</h3>
           <input
@@ -94,7 +177,18 @@ const ShippingInformation = () => {
             </div>
           )}
         </WriteAddressContainer>
-      </ShippingContainerWrap>
+
+        <OrderContainer>
+          <button className="orderPrice" onClick={handleSubmit}>
+            {orderPrice}원 주문하기
+          </button>
+        </OrderContainer>
+        {alarmPop && (
+          <Popup>
+            <PopupContent>{popContent}</PopupContent>
+          </Popup>
+        )}
+      </ShippingLayout>
     </>
   );
 };

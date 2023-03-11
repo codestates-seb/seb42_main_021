@@ -71,9 +71,11 @@ li {
   /* color */
   --blue: #61a0ff;
   --blue200: #b8cbd9;
+  --grayblue: #83a6c4;
   --white: #ffffff;
   --whitegray: #f6f6f6;
   --whitegray200: #ece7e7;
+  --graywhite: #e0eaf6;
   --midgray: #8e8e8e;
   --gray: #4e4e4e;
   --black: #000000;

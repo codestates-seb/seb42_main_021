@@ -6,34 +6,19 @@ import { useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import Footer from '../components/main/Footer';
 import Main from '../components/main/Main';
+import MainLayout from '../components/main/MainLayout';
 
-const ItemDetailContainer = styled.div`
+const ButtonBox = styled.div`
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  .buttonBox {
-    display: flex;
-    justify-content: right;
-    margin: 10px 0;
-    padding: 0 16px;
-    > button {
-      margin-left: 10px;
-    }
-    #cancelButton {
-      background-color: var(--red);
-    }
-  }
-`;
-
-const ContentContainer = styled.div`
+  justify-content: right;
+  margin: 10px 0;
   padding: 0 16px;
+  > button {
+    margin-left: 10px;
+  }
+  #cancelButton {
+    background-color: var(--red);
+  }
 `;
 
 const ImageBox = styled.div`
@@ -250,39 +235,37 @@ const ItemDetail = () => {
 
   return (
     <Main>
-      <ItemDetailContainer>
-        <ContentContainer>
-          <ImageBox>
-            <img alt="텐트1"></img>
-          </ImageBox>
-          <ProductInformation>
-            <div>
-              <div id="productName">상품명</div>
-              <div id="productPrice">39,000원</div>
-            </div>
-            <PurchaseButton onClick={handleShoppingBag}>
-              <FaShoppingCart size="40px" />
-            </PurchaseButton>
-            {isModalOpen && (
-              <Modal>
+      <MainLayout>
+        <ImageBox>
+          <img alt="텐트1"></img>
+        </ImageBox>
+        <ProductInformation>
+          <div>
+            <div id="productName">상품명</div>
+            <div id="productPrice">39,000원</div>
+          </div>
+          <PurchaseButton onClick={handleShoppingBag}>
+            <FaShoppingCart size="40px" />
+          </PurchaseButton>
+          {isModalOpen && (
+            <Modal>
+              <div>
+                <div>장바구니에 추가되었습니다.</div>
                 <div>
-                  <div>장바구니에 추가되었습니다.</div>
-                  <div>
-                    <button onClick={handleModal}>확인</button>
-                  </div>
+                  <button onClick={handleModal}>확인</button>
                 </div>
-              </Modal>
-            )}
-          </ProductInformation>
-          <ProductDescription>
-            ABC 캠핑 텐트는 캠핑, 하이킹 등 야외활동에 적합한 2인용 텐트입니다.
-            경량으로 제작되어 휴대가 용이하며, 내구성이 뛰어나므로 장기간 사용
-            가능합니다. 방수 처리가 되어 비오는 날에도 사용 가능합니다. 쉽게
-            설치할 수 있으며, 설치 도구가 필요하지 않습니다. 2개의 출입구가 있어
-            편리하게 이용할 수 있습니다. 내부에 수납공간이 있어 소품 등을 보관할
-            수 있습니다. 안정성이 높아 바람이 강한 날에도 사용 가능합니다.
-          </ProductDescription>
-        </ContentContainer>
+              </div>
+            </Modal>
+          )}
+        </ProductInformation>
+        <ProductDescription>
+          ABC 캠핑 텐트는 캠핑, 하이킹 등 야외활동에 적합한 2인용 텐트입니다.
+          경량으로 제작되어 휴대가 용이하며, 내구성이 뛰어나므로 장기간 사용
+          가능합니다. 방수 처리가 되어 비오는 날에도 사용 가능합니다. 쉽게
+          설치할 수 있으며, 설치 도구가 필요하지 않습니다. 2개의 출입구가 있어
+          편리하게 이용할 수 있습니다. 내부에 수납공간이 있어 소품 등을 보관할
+          수 있습니다. 안정성이 높아 바람이 강한 날에도 사용 가능합니다.
+        </ProductDescription>
         <ReviewContainer>
           <ReviewBox>
             <div id="reviewContents">
@@ -309,13 +292,13 @@ const ItemDetail = () => {
             <img alt="리뷰사진"></img>
           </ReviewBox>
         </ReviewContainer>
-        <div className="buttonBox">
+        <ButtonBox>
           {!isClicked && (
             <WriteReviewButton onClick={handleWriteButton}>
               리뷰 작성하기
             </WriteReviewButton>
           )}
-        </div>
+        </ButtonBox>
         {isClicked && (
           <WriteReviewContainer onSubmit={handleSubmit}>
             <Rating
@@ -327,7 +310,7 @@ const ItemDetail = () => {
             />
             <textarea value={text} onChange={handleTextChange} />
             <input type="file" accept="image/*" onChange={handleImageChange} />
-            <div id="reviewButtonBox" className="buttonBox">
+            <ButtonBox>
               <WriteReviewButton type="submit">등록하기</WriteReviewButton>
               <WriteReviewButton
                 id="cancelButton"
@@ -336,11 +319,11 @@ const ItemDetail = () => {
               >
                 취소
               </WriteReviewButton>
-            </div>
+            </ButtonBox>
           </WriteReviewContainer>
         )}
         <Footer />
-      </ItemDetailContainer>
+      </MainLayout>
     </Main>
   );
 };
