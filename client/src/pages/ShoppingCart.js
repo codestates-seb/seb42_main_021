@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Main from '../components/main/Main';
 import ShoppingItems from '../components/shoppingComponents/ShoppingItems';
 import ShippingInformation from '../components/shoppingComponents/ShippingInformation';
+import Footer from '../components/main/Footer';
 
 const ShoppingCartLayout = styled.div`
   height: 100%;
@@ -10,6 +11,7 @@ const ShoppingCartLayout = styled.div`
   overflow-y: scroll;
   padding-left: 16px;
   padding-right: 16px;
+
   ::-webkit-scrollbar {
     display: none;
   }
@@ -24,11 +26,13 @@ const ShoppingCartLayout = styled.div`
 `;
 
 const ShoppingCart = () => {
+  const [orderPrice, setOrderPrice] = useState(0);
   return (
     <Main>
       <ShoppingCartLayout>
-        <ShoppingItems />
-        <ShippingInformation />
+        <ShoppingItems setOrderPrice={setOrderPrice} />
+        <ShippingInformation orderPrice={orderPrice} />
+        <Footer />
       </ShoppingCartLayout>
     </Main>
   );
