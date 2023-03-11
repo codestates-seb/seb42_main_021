@@ -4,25 +4,13 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import Main from '../components/main/Main';
+import MainLayout from '../components/main/MainLayout';
 
-const NewItemLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  padding: 0 16px;
-  h1 {
-    margin-bottom: 40px;
-    padding-bottom: 5px;
-    height: 10%;
-    border-bottom: 3px solid var(--border);
-  }
+const PageName = styled.h1`
+  margin-bottom: 40px;
+  padding-bottom: 5px;
+  height: 10%;
+  border-bottom: 3px solid var(--border);
 `;
 
 const ItemInformationContainer = styled.form`
@@ -195,8 +183,8 @@ const AdminNewItem = () => {
 
   return (
     <Main>
-      <NewItemLayout>
-        <h1>상품 등록하기</h1>
+      <MainLayout>
+        <PageName>상품 등록하기</PageName>
         <ItemInformationContainer onSubmit={handleSubmit}>
           <ItemInformationBox>
             <div>
@@ -250,7 +238,7 @@ const AdminNewItem = () => {
             <button type="submit">등록하기</button>
           </ButtonBox>
         </ItemInformationContainer>
-      </NewItemLayout>
+      </MainLayout>
     </Main>
   );
 };
