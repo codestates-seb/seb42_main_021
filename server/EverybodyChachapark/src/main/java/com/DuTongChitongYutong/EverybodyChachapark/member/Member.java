@@ -1,6 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.member;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,9 @@ public class Member extends BaseTime {
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+//    @OneToMany(mappedBy = "member")
+//    private List<Review> reviews = new ArrayList<>();
 
     public Member(String email) {
         this.email = email;

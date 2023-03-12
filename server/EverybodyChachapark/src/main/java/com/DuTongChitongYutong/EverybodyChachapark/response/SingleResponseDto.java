@@ -14,7 +14,7 @@ public class SingleResponseDto <T> {
     private T data;
     private ResponseInfo responseInfo;
 
-    public SingleResponseDto(T data, String message, HttpStatus httpStatus, ExceptionCode exceptionCode) {
+    public SingleResponseDto(@Nullable T data, @Nullable String message, HttpStatus httpStatus, ExceptionCode exceptionCode) {
         this.data = data;
         this.responseInfo = new ResponseInfo(httpStatus.value(), message, exceptionCode);
     }
