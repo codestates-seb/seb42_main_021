@@ -23,14 +23,11 @@ public class Review extends BaseTime {
     @Column(nullable = false)
     private int score;
 
-    private String nickname;
-    private int memberId;
-
     //    private String imageURL;  // Todo: 이미지 식별자
 
     @ManyToOne(fetch = FetchType.LAZY)  // No mapping으로 해본다
     @JoinColumn(name = "MEMBER_ID")
-    private Member membera;
+    private Member member;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "PRODUCT_ID")

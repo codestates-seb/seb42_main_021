@@ -21,7 +21,7 @@ public interface ReviewMapper {
 //        Product product = new Product();
 //        product.setProductId(reviewPostDto.getProductId());
 
-        review.setMembera(member);
+        review.setMember(member);
 //        review.setProduct(product);
 
         return review;
@@ -36,7 +36,7 @@ public interface ReviewMapper {
         Member member = new Member();
         member.setMemberId(reviewPatchDto.getMemberId());
 
-        review.setMembera(member);
+        review.setMember(member);
 
         return review;
     }
