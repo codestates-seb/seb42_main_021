@@ -1,7 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.mapper;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReviewDto;
-import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Product;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
 import org.mapstruct.Mapper;
@@ -19,11 +18,11 @@ public interface ReviewMapper {
 
         Member member = new Member();
         member.setMemberId(reviewPostDto.getMemberId());
-        Product product = new Product();
-        product.setProductId(reviewPostDto.getProductId());
+//        Product product = new Product();
+//        product.setProductId(reviewPostDto.getProductId());
 
         review.setMembera(member);
-        review.setProduct(product);
+//        review.setProduct(product);
 
         return review;
     }

@@ -32,9 +32,9 @@ public class Review extends BaseTime {
     @JoinColumn(name = "MEMBER_ID")
     private Member membera;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "PRODUCT_ID")
+//    private Product product;
 
 //    public void setMember(Member member) { // 양방향 매핑
 //        this.member = member;
