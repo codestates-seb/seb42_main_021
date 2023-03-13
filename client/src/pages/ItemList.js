@@ -4,8 +4,9 @@ import { FaSistrix } from 'react-icons/fa';
 import CategoryContainer from '../components/itemList/CategoryContainer';
 import { useState } from 'react';
 import ItemListItem from '../components/itemList/ItemListItem';
-import { useStore } from 'zustand';
-import SubHeader from '../components/main/SubHeader';
+// import { useStore } from 'zustand';
+import MainHeader from '../components/main/MainHeader';
+import { Link } from 'react-router-dom';
 
 const ItemListContainerWrap = styled.div`
   padding: 0 16px;
@@ -52,9 +53,9 @@ const ItemHeaderContainer = styled.div`
     margin-left: 15px;
     font-size: 20px;
   }
-  button {
+  a {
     padding: 10px;
-    margin-left: 380px;
+    margin-left: 390px;
     width: 100px;
     height: 50px;
     background-color: var(--blue);
@@ -108,7 +109,6 @@ const ItemList = () => {
 
   const [items, setItems] = useState(itemList);
   const [searchValue, setSearchValue] = useState('');
-
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setSearchValue(event.target.value);
@@ -123,7 +123,7 @@ const ItemList = () => {
   });
   return (
     <>
-      <SubHeader />
+      <MainHeader />
       <Main>
         <ItemListContainerWrap>
           <SearchContainer>
@@ -138,7 +138,8 @@ const ItemList = () => {
           <CategoryContainer />
           <ItemHeaderContainer>
             <h3>전체 상품</h3>
-            <button>상품 등록하기</button>
+            {/* 토큰여부로 보이는 거 설정하기. */}
+            <Link to="/admin-item/:id">상품 등록하기</Link>
           </ItemHeaderContainer>
           <ItemBodyContainer>
             {filterItemList.length > 0
