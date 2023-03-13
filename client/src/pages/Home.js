@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import MainCarousel from '../components/ui/MainCarousel';
 import MainBoxL from '../components/ui/MainBoxL';
 import MainBoxS from '../components/ui/MainBoxS';
-import MainHeader from '../components/main/MainHeader';
 import Footer from '../components/main/Footer';
-import Navigation from '../components/main/Navigation';
 
 const Main = styled.div`
   height: 100%;
@@ -61,7 +59,6 @@ const ContainerBorderTop = styled.p`
 const Home = () => {
   return (
     <>
-      <MainHeader />
       <Main>
         <MainCarousel />
         <MainCarouselContentBox>
@@ -120,7 +117,6 @@ const Home = () => {
         </ExplainLayout>
         <Footer />
       </Main>
-      <Navigation />
     </>
   );
 };

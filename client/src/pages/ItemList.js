@@ -5,8 +5,8 @@ import CategoryContainer from '../components/itemList/CategoryContainer';
 import { useState } from 'react';
 import ItemListItem from '../components/itemList/ItemListItem';
 // import { useStore } from 'zustand';
-import MainHeader from '../components/main/MainHeader';
 import { Link } from 'react-router-dom';
+import Footer from '../components/main/Footer';
 
 const ItemListContainerWrap = styled.div`
   padding: 0 16px;
@@ -123,7 +123,6 @@ const ItemList = () => {
   });
   return (
     <>
-      <MainHeader />
       <Main>
         <ItemListContainerWrap>
           <SearchContainer>
@@ -150,6 +149,7 @@ const ItemList = () => {
                   <ItemListItem key={item.itemId} list={item} />
                 ))}
           </ItemBodyContainer>
+          <Footer />
         </ItemListContainerWrap>
       </Main>
     </>
