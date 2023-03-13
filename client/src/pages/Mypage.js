@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useState, useRef } from 'react';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
+import Footer from '../components/main/Footer';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
 import profileImage from '../img/shoppingCartItem.png';
 
@@ -341,6 +342,7 @@ const Mypage = () => {
             </li>
           </ul>
         </ListContainer>
+        <Footer />
       </MainLayout>
     </Main>
   );
