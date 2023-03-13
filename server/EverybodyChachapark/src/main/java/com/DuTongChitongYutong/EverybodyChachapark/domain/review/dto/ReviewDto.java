@@ -3,6 +3,10 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -12,9 +16,13 @@ public class ReviewDto {
     @AllArgsConstructor
     @Getter
     public static class Post {
+        @Positive
         private Long productId;
+        @Positive
         private Long memberId;
+        @NotBlank(message = "본문 입력은 필수 사항입니다.")
         private String content;
+        @NotNull
         private int score;
     }
 
@@ -22,6 +30,7 @@ public class ReviewDto {
     @Getter
     public static class Patch {
         private Long reviewId;
+        @Positive
         private Long memberId;
         private String content;
         private int score;

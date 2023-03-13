@@ -11,12 +11,16 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
+@Validated
 @AllArgsConstructor
 @RestController
 @RequestMapping("/reviews")
@@ -26,7 +30,7 @@ public class ReviewController {
     final private ReviewMapper mapper;
 
     @PostMapping
-    public ResponseEntity postReview(@RequestBody ReviewDto.Post requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
+    public ResponseEntity postReview(@Valid @RequestBody ReviewDto.Post requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
         Review review = reviewService.createReview(mapper.reviewPostDtoToReview(requestBody));
         URI location = UriCreator.createUri(REVIEW_DEFAULT_URL, review.getReviewId());
 
@@ -34,14 +38,14 @@ public class ReviewController {
     }
 
     @PatchMapping("/{review-id}")
-    public ResponseEntity patchReview(@PathVariable("review-id") Long reviewId, @RequestBody ReviewDto.Patch requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
+    public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId, @Valid @RequestBody ReviewDto.Patch requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
         Review review = reviewService.updateReview(reviewId, mapper.reviewPatchDtoToReview(requestBody));
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(review), "리뷰 수정이 완료되었습니다.", HttpStatus.OK, null), HttpStatus.OK);
     }
 
     @GetMapping("/{product-id}")
-    public ResponseEntity getReviews(@PathVariable("product-id") Long productId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity getReviews(@PathVariable("product-id") @Positive Long productId, @Positive @RequestParam int page, @Positive @RequestParam int size) {
         Page<Review> reviewPage = reviewService.findReviews(productId, page, size);
         List<Review> reviews = reviewPage.getContent();
 
@@ -49,7 +53,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{review-id}")
-    public ResponseEntity deleteReview(@PathVariable("review-id") Long reviewId, @Positive @RequestParam Long memberId) {
+    public ResponseEntity deleteReview(@PathVariable("review-id") @Positive Long reviewId, @Positive @RequestParam Long memberId) {
         reviewService.deleteReview(reviewId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
