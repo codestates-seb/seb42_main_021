@@ -1,6 +1,5 @@
 package com.DuTongChitongYutong.EverybodyChachapark.order.entity;
 
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,16 +16,23 @@ public class OrderProduct {
     @Column(name = "order_product_id")
     private Long orderProductId;
 
-    private int quantity;
-
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    private int productId;
 
+    private int price;
 
+    private int quantity;
 
+    @Enumerated(EnumType.STRING)
+    private OrderpProductStatus orderpProductStatus = OrderpProductStatus.ORDER_WAITING;
+
+    public OrderProduct(Order order, int productId, int price, int quantity) {
+        this.order = order;
+        this.productId = productId;
+        this.price = price;
+        this.quantity = quantity;
+    }
 }

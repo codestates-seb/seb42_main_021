@@ -25,6 +25,7 @@ public class ProductFacade {
     public ProductDto readProduct(long productId){
 
         Product product = productService.readProduct(productId);
+        productService.updateProductView(productId);
 
         return product.toDto();
     }

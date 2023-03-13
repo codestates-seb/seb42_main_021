@@ -59,6 +59,10 @@ public class ProductService {
         return product;
     }
 
+    public void updateProductView(Long productId){
+        productRepository.updateProductView(productId);
+    }
+
     public void deleteProduct(Long productId){
         productRepository.deleteById(productId);
     }

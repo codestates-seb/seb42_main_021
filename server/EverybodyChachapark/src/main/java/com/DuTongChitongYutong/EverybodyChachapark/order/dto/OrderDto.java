@@ -1,25 +1,20 @@
 package com.DuTongChitongYutong.EverybodyChachapark.order.dto;
 
-import com.DuTongChitongYutong.EverybodyChachapark.order.entity.OrderpProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class OrderProductDto {
+public class OrderDto {
 
-    private long productId;
+    private long OrderId;
 
-    private String productName;
-
-    private int price;
-
-    private OrderpProductStatus orderpProductStatus;
+    private List<OrderProductDto> orderProductDtos;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
-
 }
