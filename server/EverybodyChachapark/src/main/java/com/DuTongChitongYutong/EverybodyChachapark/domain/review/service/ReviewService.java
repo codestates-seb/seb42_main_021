@@ -55,11 +55,11 @@ public class ReviewService {
         return findVerifiedReview(reviewId);
     }
 
-    @Transactional(readOnly = true)
-    public Page<Review> findReviews(Long productId, int page, int size) {
-        List<Review> reviews = reviewRepository.findByProduct_ProductId(productId);
-        return new PageImpl<>(reviews, PageRequest.of(page, size, Sort.by("reviewId")), reviews.size()); // 등록순으로
-    }
+//    @Transactional(readOnly = true)
+//    public Page<Review> findReviews(Long productId, int page, int size) {
+//        List<Review> reviews = reviewRepository.findByProduct_ProductId(productId);
+//        return new PageImpl<>(reviews, PageRequest.of(page, size, Sort.by("reviewId")), reviews.size()); // 등록순으로
+//    }
 
     public void deleteReview(Long reviewId, Long memberId) {
         // Todo: 작성자 검증 Request: memberId

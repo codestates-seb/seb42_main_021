@@ -4,7 +4,6 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.review.controller.Revi
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReviewDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.mapper.ReviewMapper;
-import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.service.ReviewService;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
@@ -180,7 +179,7 @@ public class ReviewControllerTest {
         queryParams.add("page", page);
         queryParams.add("size", size);
 
-        given(reviewService.findReviews(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
+//        given(reviewService.findReviews(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
 
         List<ReviewDto.Response> responseReviewList = List.of(new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
                 new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
