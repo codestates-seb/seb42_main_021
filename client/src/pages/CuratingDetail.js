@@ -1,9 +1,7 @@
-import MainHeader from '../components/main/MainHeader';
 import styled from 'styled-components';
 import SubCarousel from '../components/ui/SubCarousel';
 import locationImg from '../img/location.png';
 import Footer from '../components/main/Footer';
-import Navigation from '../components/main/Navigation';
 import { curationList } from '../assets/curationState';
 import { useParams } from 'react-router-dom';
 import Location from '../components/mapApi/Location';
@@ -71,13 +69,6 @@ const LocationTextBox = styled.div`
 `;
 
 const CuratingBodyContainer = styled.div``;
-const CuratingBodyImgBox = styled.div`
-  img {
-    width: 530px;
-    height: 530px;
-    object-fit: cover;
-  }
-`;
 
 const CuratingBodyTitleBox = styled.div`
   margin: 20px 10px;
@@ -162,7 +153,6 @@ const CuratingDetail = () => {
   console.log(location[0].title);
   return (
     <CuratingDetailLayout>
-      <MainHeader />
       <Main>
         <SubCarousel carousel={carousel} />
         <CuratingTitleContainer>
@@ -214,7 +204,6 @@ const CuratingDetail = () => {
         </CuratingBodyContainer>
         <Footer />
       </Main>
-      <Navigation />
     </CuratingDetailLayout>
   );
 };

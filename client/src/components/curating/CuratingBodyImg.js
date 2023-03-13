@@ -23,138 +23,37 @@ const CuratingImg = styled(Link)`
     width: 13px;
     height: 13px;
   }
-  .circle1 {
-    position: absolute;
-    top: 100px;
-    left: -20px;
-    background-color: white;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-  }
-  .circle2 {
-    position: absolute;
-    top: 110px;
-    left: 120px;
-    background-color: white;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-  }
-  .circle3 {
-    position: absolute;
-    top: 50px;
-    left: 0px;
-    background-color: white;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-  }
+  .circle1,
+  .circle2,
+  .circle3,
   .circle4 {
     position: absolute;
-    top: 110px;
-    left: 10px;
     background-color: white;
     border-radius: 50%;
     width: 35px;
     height: 35px;
   }
-
-  .one {
-    position: absolute;
-    top: 0px;
-    left: 10px;
-    width: 130px;
-    height: 100px;
-    border-radius: var(--bd-rd);
-    border: 2px solid var(--border);
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    :hover {
-      opacity: 0.9;
-    }
-
-    div {
-      display: flex;
-      margin-bottom: 5px;
-      img {
-        :nth-child(2) {
-          margin-left: 5px;
-          transform: translateY(4px);
-        }
-        :nth-child(1) {
-          margin-right: 5px;
-        }
-      }
-    }
+  .circle1 {
+    top: 100px;
+    left: -20px;
   }
-  .two {
-    position: absolute;
-    top: 0px;
-    left: 10px;
-    width: 130px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-radius: var(--bd-rd);
-    border: 2px solid var(--border);
-    background-color: white;
-    :hover {
-      opacity: 0.9;
-    }
-    div {
-      display: flex;
-      margin-bottom: 5px;
-      img {
-        :nth-child(2) {
-          margin-left: 5px;
-          transform: translateY(4px);
-        }
-        :nth-child(1) {
-          margin-right: 5px;
-        }
-      }
-    }
+  .circle2 {
+    top: 110px;
+    left: 120px;
   }
-  .three {
-    position: absolute;
-    top: -50px;
-    left: 10px;
-    width: 130px;
-    height: 100px;
-    border-radius: var(--bd-rd);
-    border: 2px solid var(--border);
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    :hover {
-      opacity: 0.9;
-    }
-    div {
-      display: flex;
-      margin-bottom: 5px;
-      img {
-        :nth-child(2) {
-          margin-left: 5px;
-          transform: translateY(4px);
-        }
-        :nth-child(1) {
-          margin-right: 5px;
-        }
-      }
-    }
+  .circle3 {
+    top: 50px;
+    left: 0px;
   }
+  .circle4 {
+    top: 110px;
+    left: 10px;
+  }
+  .one,
+  .two,
+  .three,
   .four {
     position: absolute;
-    top: 0px;
-    left: 10px;
     width: 130px;
     height: 100px;
     border-radius: var(--bd-rd);
@@ -167,6 +66,7 @@ const CuratingImg = styled(Link)`
     :hover {
       opacity: 0.9;
     }
+
     div {
       display: flex;
       margin-bottom: 5px;
@@ -180,6 +80,22 @@ const CuratingImg = styled(Link)`
         }
       }
     }
+  }
+  .one {
+    top: 0px;
+    left: 10px;
+  }
+  .two {
+    top: 0px;
+    left: 10px;
+  }
+  .three {
+    top: -50px;
+    left: 10px;
+  }
+  .four {
+    top: 0px;
+    left: 10px;
   }
 `;
 
