@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Main from '../components/main/Main';
-import mainLogo from '../img/mainLogo.png';
+import logo1 from '../img/logo1.png';
 import { useForm } from 'react-hook-form';
+import MainHeader from '../components/main/MainHeader';
 
 const SignUpLayout = styled.div`
   height: 100%;
@@ -72,8 +73,9 @@ const SignUp = () => {
   };
   return (
     <Main>
+      <MainHeader />
       <SignUpLayout>
-        <LogoImgBox src={mainLogo} />
+        <LogoImgBox src={logo1} />
         <SignUpContainer onSubmit={handleSubmit(onSubmit)}>
           <SignUpInputBox
             type="text"
@@ -93,20 +95,25 @@ const SignUp = () => {
             <ErrorMsg role="alert">{errors.name.message}</ErrorMsg>
           )}
           <SignUpInputBox
-            type="id"
-            placeholder="아이디"
-            name="id"
+            type="email"
+            placeholder="abc@chachapark.com"
+            name="email"
             autoComplete="on"
-            aria-invalid={!isDirty ? undefined : errors.id ? 'true' : 'false'}
-            {...register('id', {
-              required: '아이디는 필수 입력입니다.',
-              minLength: {
-                value: 2,
-                message: '아이디 형식에 맞지 않습니다.',
+            aria-invalid={
+              !isDirty ? undefined : errors.email ? 'true' : 'false'
+            }
+            {...register('email', {
+              required: '이메일은 필수 입력입니다.',
+              pattern: {
+                value:
+                  /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/,
+                message: '이메일 형식에 맞지 않습니다.',
               },
             })}
           />
-          {errors.id && <ErrorMsg role="alert">{errors.id.message}</ErrorMsg>}
+          {errors.id && (
+            <ErrorMsg role="alert">{errors.email.message}</ErrorMsg>
+          )}
           <SignUpInputBox
             name="password"
             type="password"

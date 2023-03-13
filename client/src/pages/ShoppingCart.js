@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Main from '../components/main/Main';
+import MainHeader from '../components/main/MainHeader';
 import ShoppingItems from '../components/shoppingComponents/ShoppingItems';
 import ShippingInformation from '../components/shoppingComponents/ShippingInformation';
 import Footer from '../components/main/Footer';
@@ -29,6 +30,7 @@ const ShoppingCart = () => {
   const [orderPrice, setOrderPrice] = useState(0);
   return (
     <Main>
+      <MainHeader />
       <ShoppingCartLayout>
         <ShoppingItems setOrderPrice={setOrderPrice} />
         <ShippingInformation orderPrice={orderPrice} />
