@@ -1,7 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.member;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
-import lombok.AllArgsConstructor;
+import com.DuTongChitongYutong.EverybodyChachapark.cart.Cart;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -79,5 +79,9 @@ public class Member extends BaseTime {
         int randomIndex = new Random().nextInt(PROFILE_IMAGE_URLS.length);
         return PROFILE_IMAGE_URLS[randomIndex];
     }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Cart> carts = new ArrayList<>();
+
 
 }
