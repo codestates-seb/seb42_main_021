@@ -2,6 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,14 @@ public class MemberDto {
         private String email;
         private String password;
         private String nickname;
+        private String profileImg;
+    }
+
+    @Getter
+    @Setter
+    public static class Patch {
+        private String password;
+        private String nickname;
     }
 
     @AllArgsConstructor
@@ -21,8 +30,19 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String nickname;
+        private String profileImg;
         private Member.MemberStatus memberStatus;
         private LocalDateTime createDate;
 
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class CreateResponse {
+        private long memberId;
+        private String email;
+        private String nickname;
+        private String profileImg;
+        private LocalDateTime createDate;
     }
 }
