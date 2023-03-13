@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.member;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;

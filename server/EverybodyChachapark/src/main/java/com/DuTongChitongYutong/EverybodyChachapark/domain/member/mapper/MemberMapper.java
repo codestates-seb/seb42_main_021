@@ -1,5 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.member;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.member.mapper;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.dto.MemberDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import org.mapstruct.Mapper;
 
 import java.time.LocalDateTime;

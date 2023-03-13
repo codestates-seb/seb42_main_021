@@ -1,5 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.member;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.member.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;

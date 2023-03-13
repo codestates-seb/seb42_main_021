@@ -1,7 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
-import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

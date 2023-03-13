@@ -1,5 +1,6 @@
-package com.DuTongChitongYutong.EverybodyChachapark.member;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.member.dto;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

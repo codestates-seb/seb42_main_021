@@ -4,7 +4,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.member.MemberService;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

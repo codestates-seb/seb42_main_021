@@ -2,7 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.review.mapper;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReviewDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
-import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
