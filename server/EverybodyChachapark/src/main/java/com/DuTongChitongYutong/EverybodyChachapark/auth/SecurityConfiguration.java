@@ -1,3 +1,4 @@
+/*
 package com.DuTongChitongYutong.EverybodyChachapark.auth;
 
 import org.springframework.context.annotation.Bean;
@@ -49,4 +50,4 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-}
+}*/

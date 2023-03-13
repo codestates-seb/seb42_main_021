@@ -3,21 +3,27 @@ package com.DuTongChitongYutong.EverybodyChachapark.cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 public class CartDto {
 
     @AllArgsConstructor
     @Getter
     public static class Post {
-        private String title;
-        private String content;
+        private long productId;
+        private int quantity;
     }
 
     @AllArgsConstructor
     @Getter
     public static class Response {
+        private long cartId;
         private long memberId;
-        private long boardId;
-        private String title;
-        private String content;
+        private long productId;
+        private String productName;
+        private Integer price;
+        private int quantity;
+        private LocalDateTime createAt;
+        private LocalDateTime modifiedAt;
     }
 }
