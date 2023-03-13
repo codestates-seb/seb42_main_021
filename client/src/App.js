@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Mypage from './pages/Mypage';
 import ShoppingCart from './pages/ShoppingCart';
 import SignUp from './pages/SignUp';
+import Navigation from './components/main/Navigation';
 // import MainHeader from './components/main/MainHeader';
 
 const MainLayout = styled.div`
@@ -83,7 +84,7 @@ function App() {
               <Route path="/mypage/:id" element={<Mypage />} />
               <Route path="/admin-item/:id" element={<AdminNewItem />} />
             </Routes>
-            {/* <Navigation /> */}
+            <Navigation />
           </MainBox>
         </MainContainer>
       </MainLayout>
