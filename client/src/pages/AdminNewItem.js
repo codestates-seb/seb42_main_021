@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
+import Footer from '../components/main/Footer';
 
 const PageName = styled.h1`
   margin-bottom: 40px;
@@ -131,9 +132,9 @@ const AdminNewItem = () => {
     setPrice(formattedPrice);
   };
 
-  const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
+  const handleImageChange = () => {
     const file = imgRef.current.files[0];
+    setImage(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -145,12 +146,11 @@ const AdminNewItem = () => {
     event.preventDefault();
     imgRef.current.value = '';
     setPreview('');
-    setImage('');
+    setImage(null);
   };
 
   const handleText = (contents) => {
     setText(contents);
-    console.log(text);
   };
 
   const handleSubmit = async (event) => {
@@ -238,6 +238,7 @@ const AdminNewItem = () => {
             <button type="submit">등록하기</button>
           </ButtonBox>
         </ItemInformationContainer>
+        <Footer />
       </MainLayout>
     </Main>
   );
