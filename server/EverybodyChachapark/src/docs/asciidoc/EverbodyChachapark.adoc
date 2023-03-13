@@ -1,0 +1,79 @@
+= EverybodyChachapark Application
+:sectnums:
+:toc: left
+:toclevles: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+FE: 강민규, 김영임, 이은지
+
+BE: 김병무, 김대현, 조주연
+
+***
+== ReviewController
+=== 리뷰 등록
+.curl-request
+include::{snippets}/post-review/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-review/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-review/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-review/http-response.adoc[]
+
+.response-headers
+include::{snippets}/post-review/response-headers.adoc[]
+
+
+
+=== 리뷰 조회
+.curl-request
+include::{snippets}/get-reviews/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-reviews/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-reviews/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-reviews/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-reviews/response-fields.adoc[]
+
+
+=== 리뷰 수정
+.curl-request
+include::{snippets}/patch-review/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-review/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-review/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-review/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-review/response-fields.adoc[]
+
+=== 리뷰 삭제
+.curl-request
+include::{snippets}/delete-review/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-review/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-review/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-review/http-response.adoc[]
