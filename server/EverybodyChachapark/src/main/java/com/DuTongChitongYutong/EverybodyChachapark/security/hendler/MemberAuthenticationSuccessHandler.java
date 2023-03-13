@@ -11,6 +11,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class MemberAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -19,13 +21,14 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
+        Map<String, Object> success = new HashMap<>();
+        success.put("httpStatus", HttpStatus.OK.value());
+        success.put("message", "로그인 되었습니다.");
+
         Gson gson = new Gson();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpStatus.OK.value());
-        response.getWriter().write(gson.toJson(
-                SingleResponseDto.success(null, "로그인 되었습니다.", HttpStatus.OK),
-                SingleResponseDto.class
-        ));
+        response.getWriter().write(gson.toJson(success));
     }
 }

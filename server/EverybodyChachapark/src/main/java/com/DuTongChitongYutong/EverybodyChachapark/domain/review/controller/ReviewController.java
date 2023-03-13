@@ -41,16 +41,16 @@ public class ReviewController {
     public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId, @Valid @RequestBody ReviewDto.Patch requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
         Review review = reviewService.updateReview(reviewId, mapper.reviewPatchDtoToReview(requestBody));
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(review), "리뷰 수정이 완료되었습니다.", HttpStatus.OK, null), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(review)), HttpStatus.OK);
     }
 
-    @GetMapping("/{product-id}")
-    public ResponseEntity getReviews(@PathVariable("product-id") @Positive Long productId, @Positive @RequestParam int page, @Positive @RequestParam int size) {
-        Page<Review> reviewPage = reviewService.findReviews(productId, page, size);
-        List<Review> reviews = reviewPage.getContent();
-
-        return new ResponseEntity<>(new MultiResponseDto<>(mapper.reviewToReviewResponseDtos(reviews), reviewPage, "리뷰 페이지 불러오기를 완료했습니다.", HttpStatus.OK, null), HttpStatus.OK);
-    }
+//    @GetMapping("/{product-id}")
+//    public ResponseEntity getReviews(@PathVariable("product-id") @Positive Long productId, @Positive @RequestParam int page, @Positive @RequestParam int size) {
+//        Page<Review> reviewPage = reviewService.findReviews(productId, page, size);
+//        List<Review> reviews = reviewPage.getContent();
+//
+//        return new ResponseEntity<>(new MultiResponseDto<>(mapper.reviewToReviewResponseDtos(reviews), reviewPage), HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{review-id}")
     public ResponseEntity deleteReview(@PathVariable("review-id") @Positive Long reviewId, @Positive @RequestParam Long memberId) {

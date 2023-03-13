@@ -12,16 +12,8 @@ import java.util.List;
 @Getter
 public class SingleResponseDto <T> {
     private T data;
-    private ResponseInfo responseInfo;
 
-    public SingleResponseDto(@Nullable T data, @Nullable String message, HttpStatus httpStatus, ExceptionCode exceptionCode) {
+    public SingleResponseDto(@Nullable T data) {
         this.data = data;
-        this.responseInfo = new ResponseInfo(httpStatus.value(), message, exceptionCode);
     }
-
-    public static <T> SingleResponseDto<T> success(@Nullable T data, @Nullable String message, HttpStatus httpStatus) {
-        return new SingleResponseDto<>(data, message, httpStatus, null);
-    }
-
-
 }
