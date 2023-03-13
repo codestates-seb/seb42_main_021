@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
@@ -58,24 +58,27 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
-  > div {
+  label {
+    width: 100%;
+  }
+  span {
+    color: var(--gray);
+    width: 50%;
+    text-align: right;
+  }
+  input {
+    color: var(--black);
+    width: 50%;
+  }
+  .profileBox {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
     width: 100%;
   }
-  label {
-    width: 30%;
-  }
-  span {
-    color: var(--gray);
-    width: 65%;
-    text-align: right;
-  }
   .iconCell {
     margin-left: 5px;
-    width: 100%;
+    width: 20px;
   }
 `;
 
@@ -131,9 +134,67 @@ const Circle = styled.div`
 
 const Mypage = () => {
   const [toggle, setToggle] = useState(false);
+  const [image, setImage] = useState(profileImage);
+  const [nameEdit, setNameEdit] = useState(false);
+  const [editedName, setEditedName] = useState('유저 닉네임'); //서버에서 받아온 이름 초기값으로 넣기
+  const [introEdit, setIntroEdit] = useState(false);
+  const [editedIntro, setEditedIntro] = useState('등록해주세요.'); //서버에서 받아온 소개글 초기값으로 넣기
+
+  const fileInput = useRef(null);
 
   const clickedToggle = () => {
     setToggle(!toggle);
+  };
+
+  const handleNameEdit = () => {
+    setNameEdit(!nameEdit);
+  };
+
+  const handleIntroEdit = () => {
+    setIntroEdit(!introEdit);
+  };
+
+  const handleSubmitEditedName = (event) => {
+    event.preventDefalt();
+    //서버에 수정된 이름 제출하기
+  };
+
+  const handleSubmitEditedIntro = (event) => {
+    event.preventDefalt();
+    //서버에 수정된 소개 제출하기
+  };
+
+  const handleImage = (event) => {
+    if (event.target.files[0]) {
+      setImage(event.target.files[0]);
+    } else {
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(event.target.files[0]);
+
+    //서버에 새로 등록된 이미지 보내주기
+    const formData = new FormData();
+    formData.append('profileImg', image);
+    // /* key 확인하기 */
+    // for (let key of formData.keys()) {
+    //   console.log(key);
+    // }
+    // /* value 확인하기 */
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
+    // const config = {
+    //   headers: {
+    //     'content-type': 'multipart/form-data',
+    //   },
+    // };
+    // axios.post(`uploadAPI`, formData, config);
   };
 
   return (
@@ -142,48 +203,98 @@ const Mypage = () => {
         <ProfileImageContainer>
           <div>
             <div id="imageBox">
-              <img alt="프로필 이미지" src={profileImage}></img>
+              <img alt="프로필 이미지" src={image}></img>
+              <input
+                type="file"
+                style={{ display: 'none' }}
+                accept="image/jpg,image/png,image/jpeg"
+                name="profile_img"
+                onChange={handleImage}
+                ref={fileInput}
+              />
             </div>
-            <button>
+            <button
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            >
               <FaCamera color="#FFFFFF" />
             </button>
           </div>
           <h3>유저 닉네임</h3>
         </ProfileImageContainer>
         <ProfileContainer>
-          <div>
-            <label>닉네임</label>
-            <span>유저 닉네임</span>
-            <button>
-              <FaChevronRight
-                className="iconCell"
-                color="#c9c9c9"
-                size="16px"
+          {nameEdit ? (
+            <form className="profileBox" onSubmit={handleSubmitEditedName}>
+              <label>닉네임</label>
+              <input
+                value={editedName}
+                onChange={(event) => setEditedName(event.target.value)}
               />
-            </button>
-          </div>
-          <div>
-            <label>한 줄 소개</label>
-            <span>등록해주세요</span>
-            <button>
-              <FaChevronRight
-                className="iconCell"
-                color="#c9c9c9"
-                size="16px"
+              <button type="submit">
+                <FaChevronRight
+                  className="iconCell"
+                  color="#c9c9c9"
+                  size="16px"
+                />
+              </button>
+            </form>
+          ) : (
+            <div className="profileBox">
+              <label>닉네임</label>
+              <span>서버 유저 이름</span>
+              <button type="button" onClick={handleNameEdit}>
+                <FaChevronRight
+                  className="iconCell"
+                  color="#c9c9c9"
+                  size="16px"
+                />
+              </button>
+            </div>
+          )}
+          {introEdit ? (
+            <form className="profileBox" onSubmit={handleSubmitEditedIntro}>
+              <label>한 줄 소개</label>
+              <input
+                value={editedIntro}
+                onChange={(event) => setEditedIntro(event.target.value)}
               />
-            </button>
-          </div>
-          <div>
+              <button type="submit">
+                <FaChevronRight
+                  className="iconCell"
+                  color="#c9c9c9"
+                  size="16px"
+                />
+              </button>
+            </form>
+          ) : (
+            <div className="profileBox">
+              <label>한 줄 소개</label>
+              <span>서버에서 받아온 소개</span>
+              <button type="button" onClick={handleIntroEdit}>
+                <FaChevronRight
+                  className="iconCell"
+                  color="#c9c9c9"
+                  size="16px"
+                />
+              </button>
+            </div>
+          )}
+          <div className="profileBox">
             <label>웹사이트 및 SNS</label>
-            <button>
+            <a
+              href="https://github.com/codestates-seb/seb42_main_021"
+              target="_blank"
+              rel="noreferrer"
+            >
               <FaChevronRight
                 className="iconCell"
                 color="#c9c9c9"
                 size="16px"
               />
-            </button>
+            </a>
           </div>
-          <div>
+          <div className="profileBox">
             <label>마케팅 수신 동의</label>
             <Toggle onClick={clickedToggle} toggle={toggle}>
               <Circle toggle={toggle} />
