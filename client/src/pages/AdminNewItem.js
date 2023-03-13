@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
+import Footer from '../components/main/Footer';
 
 const PageName = styled.h1`
   margin-bottom: 40px;
@@ -237,6 +238,7 @@ const AdminNewItem = () => {
             <button type="submit">등록하기</button>
           </ButtonBox>
         </ItemInformationContainer>
+        <Footer />
       </MainLayout>
     </Main>
   );
