@@ -5,6 +5,7 @@ import CategoryContainer from '../components/itemList/CategoryContainer';
 import { useState } from 'react';
 import ItemListItem from '../components/itemList/ItemListItem';
 import { useStore } from 'zustand';
+import SubHeader from '../components/main/SubHeader';
 
 const ItemListContainerWrap = styled.div`
   padding: 0 16px;
@@ -121,33 +122,36 @@ const ItemList = () => {
     return item.title.toLowerCase().includes(searchValue.toLowerCase());
   });
   return (
-    <Main>
-      <ItemListContainerWrap>
-        <SearchContainer>
-          <FaSistrix className="icons" />
-          <input
-            value={searchValue}
-            placeholder="찾으시려는 상품의 이름을 입력 후 Enter 해주세요."
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-        </SearchContainer>
-        <CategoryContainer />
-        <ItemHeaderContainer>
-          <h3>전체 상품</h3>
-          <button>상품 등록하기</button>
-        </ItemHeaderContainer>
-        <ItemBodyContainer>
-          {filterItemList.length > 0
-            ? filterItemList.map((item) => (
-                <ItemListItem key={item.itemId} list={item} />
-              ))
-            : items.map((item) => (
-                <ItemListItem key={item.itemId} list={item} />
-              ))}
-        </ItemBodyContainer>
-      </ItemListContainerWrap>
-    </Main>
+    <>
+      <SubHeader />
+      <Main>
+        <ItemListContainerWrap>
+          <SearchContainer>
+            <FaSistrix className="icons" />
+            <input
+              value={searchValue}
+              placeholder="찾으시려는 상품의 이름을 입력 후 Enter 해주세요."
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+          </SearchContainer>
+          <CategoryContainer />
+          <ItemHeaderContainer>
+            <h3>전체 상품</h3>
+            <button>상품 등록하기</button>
+          </ItemHeaderContainer>
+          <ItemBodyContainer>
+            {filterItemList.length > 0
+              ? filterItemList.map((item) => (
+                  <ItemListItem key={item.itemId} list={item} />
+                ))
+              : items.map((item) => (
+                  <ItemListItem key={item.itemId} list={item} />
+                ))}
+          </ItemBodyContainer>
+        </ItemListContainerWrap>
+      </Main>
+    </>
   );
 };
 

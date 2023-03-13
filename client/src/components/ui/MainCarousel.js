@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -12,6 +12,7 @@ import camping1 from '../../img/camping1.jpg';
 import camping5 from '../../img/camping5.jpg';
 import island from '../../img/island.jpg';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const StyledSlider = styled(Slider)`
   height: 100%;
@@ -56,12 +57,13 @@ const TextBox = styled.div`
   font-size: 12px;
   font-weight: bold;
   background: var(--whitegray200);
-  opacity: 0.5;
+  opacity: 0.8;
   text-align: center;
+  top: 95px;
 `;
 const TextLink = styled(Link)`
   position: absolute;
-  top: 20px;
+  top: 16px;
   width: 100px;
   height: 50px;
   color: black;
@@ -77,17 +79,18 @@ const Image = styled.img`
 `;
 
 export default function MainCarousel(props) {
-  const [nav1, setNav1] = useState();
+  const navigate = useNavigate();
+  const [nav1] = useState();
   const [nav2, setNav2] = useState();
-  const slider1 = useRef();
-  const slider2 = useRef();
+  // const slider1 = useRef();
+  // const slider2 = useRef();
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    // autoplay: true,
+    autoplay: true,
     nextArrow: (
       <NextTo>
         <IoChevronForwardCircleOutline className="icon" />
@@ -112,7 +115,7 @@ export default function MainCarousel(props) {
               호수
             </TextLink>
           </TextBox>
-          <ImageBox>
+          <ImageBox onClick={() => navigate('/curation/1')}>
             <Image src={camping1} />
           </ImageBox>
         </div>
@@ -122,27 +125,27 @@ export default function MainCarousel(props) {
               섬
             </TextLink>
           </TextBox>
-          <ImageBox>
+          <ImageBox onClick={() => navigate('/curation/2')}>
             <Image src={island} />
           </ImageBox>
         </div>
         <div>
           <TextBox>
-            <TextLink className="textLink" to="/product">
+            <TextLink className="textLink" to="/product/3">
               산·숲
             </TextLink>
           </TextBox>
-          <ImageBox>
+          <ImageBox onClick={() => navigate('/curation/3')}>
             <Image src={camping5} />
           </ImageBox>
         </div>
         <div>
           <TextBox>
             <TextLink className="textLink" to="/product">
-              강
+              바다
             </TextLink>
           </TextBox>
-          <ImageBox>
+          <ImageBox onClick={() => navigate('/curation/4')}>
             <Image src={camping} />
           </ImageBox>
         </div>
@@ -187,7 +190,7 @@ export default function MainCarousel(props) {
         <div>
           <TextBox>
             <TextLink className="textLink" to="/product">
-              강
+              바다
             </TextLink>
           </TextBox>
           <ImageBox>
