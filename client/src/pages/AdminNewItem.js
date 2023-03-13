@@ -131,9 +131,9 @@ const AdminNewItem = () => {
     setPrice(formattedPrice);
   };
 
-  const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
+  const handleImageChange = () => {
     const file = imgRef.current.files[0];
+    setImage(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -145,12 +145,11 @@ const AdminNewItem = () => {
     event.preventDefault();
     imgRef.current.value = '';
     setPreview('');
-    setImage('');
+    setImage(null);
   };
 
   const handleText = (contents) => {
     setText(contents);
-    console.log(text);
   };
 
   const handleSubmit = async (event) => {
