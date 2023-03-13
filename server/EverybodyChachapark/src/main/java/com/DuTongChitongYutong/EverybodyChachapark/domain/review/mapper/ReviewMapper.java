@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.mapper;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReviewDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
@@ -12,17 +13,16 @@ import java.util.List;
 public interface ReviewMapper {
     default Review reviewPostDtoToReview(ReviewDto.Post reviewPostDto) {
         Review review = new Review();
-
         review.setContent(reviewPostDto.getContent());
         review.setScore(reviewPostDto.getScore());
 
         Member member = new Member();
-        member.setMemberId(reviewPostDto.getMemberId());
-//        Product product = new Product();
-//        product.setProductId(reviewPostDto.getProductId());
-
         review.setMember(member);
-//        review.setProduct(product);
+
+        Product product = new Product();
+        product.setProductId(reviewPostDto.getProductId());
+
+        review.setProduct(product);
 
         return review;
     }
@@ -34,7 +34,6 @@ public interface ReviewMapper {
         review.setScore(reviewPatchDto.getScore());
 
         Member member = new Member();
-        member.setMemberId(reviewPatchDto.getMemberId());
 
         review.setMember(member);
 

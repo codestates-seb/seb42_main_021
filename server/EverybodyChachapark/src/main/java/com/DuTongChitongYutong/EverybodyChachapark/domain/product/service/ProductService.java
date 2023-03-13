@@ -1,10 +1,10 @@
-package com.DuTongChitongYutong.EverybodyChachapark.product.service;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.product.service;
 
-import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductPatchDto;
-import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductPostDto;
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.Product;
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.ProductCategory;
-import com.DuTongChitongYutong.EverybodyChachapark.product.repository.ProductRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPatchDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.ProductCategory;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.repository.ProductRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPostDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

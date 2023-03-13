@@ -1,4 +1,5 @@
-package com.DuTongChitongYutong.EverybodyChachapark.order.entity;
+/*
+package com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,3 +37,4 @@ public class OrderProduct {
         this.quantity = quantity;
     }
 }
+*/

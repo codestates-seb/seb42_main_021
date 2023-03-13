@@ -1,11 +1,11 @@
-package com.DuTongChitongYutong.EverybodyChachapark.product.facade;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.product.facade;
 
 
-import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductDto;
-import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductPatchDto;
-import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductPostDto;
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.Product;
-import com.DuTongChitongYutong.EverybodyChachapark.product.service.ProductService;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPatchDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPostDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

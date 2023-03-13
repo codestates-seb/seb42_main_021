@@ -1,12 +1,10 @@
-package com.DuTongChitongYutong.EverybodyChachapark.product.dto;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto;
 
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.ProductCategory;
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.ProductStatus;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.ProductCategory;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.ProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 

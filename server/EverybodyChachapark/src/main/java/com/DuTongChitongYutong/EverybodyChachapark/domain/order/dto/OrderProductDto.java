@@ -1,6 +1,6 @@
-package com.DuTongChitongYutong.EverybodyChachapark.order.dto;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto;
 
-import com.DuTongChitongYutong.EverybodyChachapark.order.entity.OrderpProductStatus;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderpProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

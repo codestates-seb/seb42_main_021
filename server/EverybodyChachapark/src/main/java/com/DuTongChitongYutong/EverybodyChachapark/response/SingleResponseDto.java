@@ -1,9 +1,8 @@
 package com.DuTongChitongYutong.EverybodyChachapark.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.lang.Nullable;
 
-@AllArgsConstructor
 @Getter
 public class SingleResponseDto <T> {
     private T data;

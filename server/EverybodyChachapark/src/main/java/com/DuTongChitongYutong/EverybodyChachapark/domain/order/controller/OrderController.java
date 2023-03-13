@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.order.controller;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.order.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

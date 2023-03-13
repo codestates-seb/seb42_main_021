@@ -1,9 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.order.entity;
-
-import lombok.Getter;
+/*
+package com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,4 +18,5 @@ public class Order {
 
 
 
-    }
+}
+*/

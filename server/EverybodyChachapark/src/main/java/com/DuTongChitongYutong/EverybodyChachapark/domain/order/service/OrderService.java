@@ -1,4 +1,5 @@
-package com.DuTongChitongYutong.EverybodyChachapark.order.service;
+/*
+package com.DuTongChitongYutong.EverybodyChachapark.domain.order.service;
 
 import org.springframework.stereotype.Service;
 
@@ -6,3 +7,4 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
 }
+*/

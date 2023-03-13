@@ -2,6 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,13 +26,13 @@ public class Review extends BaseTime {
 
     //    private String imageURL;  // Todo: 이미지 식별자
 
-    @ManyToOne(fetch = FetchType.LAZY)  // No mapping으로 해본다
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "PRODUCT_ID")
-//    private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
 
 //    public void setMember(Member member) { // 양방향 매핑
 //        this.member = member;

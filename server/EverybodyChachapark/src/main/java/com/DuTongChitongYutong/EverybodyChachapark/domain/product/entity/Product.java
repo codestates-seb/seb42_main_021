@@ -1,7 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.product.entity;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity;
 
-import com.DuTongChitongYutong.EverybodyChachapark.order.entity.OrderProduct;
-import com.DuTongChitongYutong.EverybodyChachapark.product.dto.ProductDto;
+import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
+public class Product extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,6 @@ public class Product {
 
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime modifiedAt;
 
     public Product(String productName, int price){
         this.productName = productName;
