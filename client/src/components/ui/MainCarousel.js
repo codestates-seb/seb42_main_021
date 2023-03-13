@@ -70,12 +70,15 @@ const TextLink = styled(Link)`
   margin-top: 10px;
   transform: translate(-50%, -50%);
 `;
-const ImageBox = styled.div``;
+const ImageBox = styled.div`
+  cursor: pointer;
+`;
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
   background-size: cover;
+  object-fit: cover;
 `;
 
 export default function MainCarousel(props) {

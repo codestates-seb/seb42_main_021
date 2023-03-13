@@ -48,6 +48,7 @@ const Image = styled.img`
   width: 530px;
   height: 350px;
   background-size: cover;
+  object-fit: cover;
 `;
 
 export default function SubCarousel({ carousel }) {
@@ -75,22 +76,22 @@ export default function SubCarousel({ carousel }) {
       <StyledSlider {...settings}>
         <div>
           <ImageBox>
-            <Image src={carousel[0].img1} />
+            <Image src={carousel.img1} />
           </ImageBox>
         </div>
         <div>
           <ImageBox>
-            <Image src={carousel[0].img2} />
+            <Image src={carousel.img2} />
           </ImageBox>
         </div>
         <div>
           <ImageBox>
-            <Image src={carousel[0].img3} />
+            <Image src={carousel.img3} />
           </ImageBox>
         </div>
         <div>
           <ImageBox>
-            <Image src={carousel[0].img4} />
+            <Image src={carousel.img4} />
           </ImageBox>
         </div>
       </StyledSlider>

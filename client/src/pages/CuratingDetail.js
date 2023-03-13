@@ -8,6 +8,7 @@ import { curationList } from '../assets/curationState';
 import { useParams } from 'react-router-dom';
 import Location from '../components/mapApi/Location';
 import { useState } from 'react';
+import CuratingBodyImg from '../components/curating/CuratingBodyImg';
 
 const CuratingDetailLayout = styled.div`
   width: 100%;
@@ -36,6 +37,7 @@ const CuratingTitleContainer = styled.div`
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
   h3 {
     font-size: 24px;
@@ -50,7 +52,7 @@ const LocationApiContainer = styled.div`
   h4 {
     margin: 0 10px;
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
   }
   img {
     width: 25px;
@@ -73,6 +75,7 @@ const CuratingBodyImgBox = styled.div`
   img {
     width: 530px;
     height: 530px;
+    object-fit: cover;
   }
 `;
 
@@ -132,6 +135,7 @@ const BodyContentImgBox = styled.div`
     margin: 10px;
     border: 1px solid gray;
     border-radius: var(--bd-rd);
+    object-fit: cover;
   }
   p {
     text-align: center;
@@ -151,7 +155,8 @@ const CuratingDetail = () => {
   const { id } = useParams();
   const ID = Number(id);
 
-  const [carousel] = useState([curationList.SubCarouselImg[ID - 1]]);
+  const [carousel] = useState(curationList.SubCarouselImg[ID - 1]);
+  console.log(carousel);
   const [location] = useState([curationList.mapLocation[ID - 1]]);
   const [curatingContent] = useState([curationList.curatingContent[ID - 1]]);
   console.log(location[0].title);
@@ -175,9 +180,10 @@ const CuratingDetail = () => {
           <ContainerBorderTop />
         </LocationApiContainer>
         <CuratingBodyContainer>
-          <CuratingBodyImgBox>
+          <CuratingBodyImg />
+          {/* <CuratingBodyImgBox>
             <img src={curatingContent[0].img} alt="" />
-          </CuratingBodyImgBox>
+          </CuratingBodyImgBox> */}
           <CuratingBodyTitleBox>
             <h4>기본정보</h4>
             <BodyTitleTextBox>
