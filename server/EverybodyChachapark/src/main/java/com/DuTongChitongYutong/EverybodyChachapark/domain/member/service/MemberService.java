@@ -59,9 +59,18 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
+    }*/
+
+    @Transactional(readOnly = true)
+    public Member findMember (long memberId) {
+        Member authMember = findByEmail();
+
+        Member member = authMember.getMemberId() == memberId ? authMember : findVerifiedMember(memberId);
+
+        return member;
     }
 
     @Transactional(readOnly = true)
@@ -91,7 +100,11 @@ public class MemberService {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-
+    @Transactional
+    public Member findByEmail(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
 
     public void deleteMember(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization").substring(7);

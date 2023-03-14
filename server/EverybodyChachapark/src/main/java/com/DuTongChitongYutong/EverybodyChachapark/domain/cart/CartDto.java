@@ -2,7 +2,9 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.SecondaryTable;
 import java.time.LocalDateTime;
 
 public class CartDto {
@@ -11,6 +13,12 @@ public class CartDto {
     @Getter
     public static class Post {
         private long productId;
+        private int quantity;
+    }
+
+    @Getter
+    @Setter
+    public static class Patch {
         private int quantity;
     }
 

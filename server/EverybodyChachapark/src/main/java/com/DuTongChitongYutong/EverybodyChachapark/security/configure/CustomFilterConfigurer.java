@@ -18,9 +18,7 @@ public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterC
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-
     private final MemberDetailsService memberDetailsService;
-
     private final ObjectMapper mapper;
 
 

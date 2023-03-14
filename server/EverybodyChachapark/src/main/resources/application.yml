@@ -19,9 +19,8 @@ logging:
         orm:
           jpa: DEBUG
 
-mail:
-  address:
-    admin: admin@gmail.com
+account:
+  admin: admin@gmail.com
 
 jwt:
   key: kim123412341234123456789567895678956789

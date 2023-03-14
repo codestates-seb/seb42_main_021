@@ -3,10 +3,13 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,4 +46,30 @@ public class CartService {
 
         return cartRepository.save(cart);
     }
+
+    public Cart updateCart (long cartId, int quantity) {
+        Member member = memberService.findByEmail();
+
+        Cart cart = findCart(cartId);
+        cart.setQuantity(quantity);
+        return cartRepository.save(cart);
+    }
+
+    @Transactional
+    public Cart findCart(long cartId) {
+        return cartRepository.findById(cartId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND));
+    }
+
+    public List<Cart> findCarts(long memberId) {
+        return cartRepository.findByMemberId(memberId);
+    }
+
+    public void deleteCart (long cartId) {
+        Member member = memberService.findByEmail();
+        Cart cart = findCart(cartId);
+
+        cartRepository.delete(cart);
+    }
+
+
 }
