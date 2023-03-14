@@ -93,7 +93,7 @@ export const curationList = {
     {
       img: `${process.env.PUBLIC_URL}/images/curating4.jpg`,
       titleText1: '바다',
-      titleText2: '오후 241:00 ~ 오전 7:00',
+      titleText2: '14:00 ~ 익일 12:00',
       contentText:
         '추암오토캠핑장은 해돋이 명소로 유명한 동해의 추암해변에 위치해있어 아름다운 아침 해돋이를 보며 캠핑을 즐길 수 있습니다. 사랑하는 가족과 연인, 친구들과 함께 추암해변에서 시원한 바닷바람을 맞으며 힐링을 만끽해보세요!',
       contentText2: '추암오토캠핑장 전경',

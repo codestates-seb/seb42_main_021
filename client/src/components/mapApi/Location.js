@@ -10,6 +10,8 @@ const Location = ({ location }) => {
       level: 3,
     };
     const map = new kakao.maps.Map(container, options);
+    map.setDraggable(false);
+    map.setZoomable(false);
     const markerPosition = new kakao.maps.LatLng(
       location[0].lat,
       location[0].lng

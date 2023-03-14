@@ -2,6 +2,7 @@ import logolast from '../../img/logolast.png';
 import styled from 'styled-components';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import back from '../../img/back.svg';
+// import logoChachapark from '../../img/logoChachapark.png';
 
 const MainHeaderLayout = styled.div`
   z-index: 1000;
@@ -108,8 +109,8 @@ const SubHeader = () => {
           <LoginLink to="/login" className="logout">
             로그인
           </LoginLink>
-          <LoginLink to="/login" className="logout">
-            로그아웃
+          <LoginLink to="/singup" className="signup">
+            회원가입
           </LoginLink>
           {/* <img src={logolast} alt="프로필" />
           <LoginLink to="/login" className="logout">

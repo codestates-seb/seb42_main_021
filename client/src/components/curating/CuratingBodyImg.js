@@ -24,35 +24,59 @@ const CuratingImg = styled(Link)`
     height: 13px;
   }
   .circle1,
+  .circle11,
   .circle2,
+  .circle22,
   .circle3,
-  .circle4 {
+  .circle33,
+  .circle4,
+  .circle44 {
     position: absolute;
     background-color: white;
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--grayblue);
+    box-shadow: 0 0 0 1px var(--graywhite);
+    :hover {
+      opacity: 0.9;
+    }
   }
   .circle1 {
     top: 100px;
     left: -20px;
   }
+  .circle11 {
+    top: 160px;
+    left: -130px;
+  }
   .circle2 {
-    top: 110px;
+    top: 120px;
     left: 120px;
+  }
+  .circle22 {
+    top: -50px;
+    left: 50px;
   }
   .circle3 {
     top: 50px;
-    left: 0px;
+    left: -10px;
   }
   .circle4 {
     top: 110px;
     left: 10px;
   }
-  .one,
-  .two,
-  .three,
-  .four {
+  .circle44 {
+    top: 150px;
+    left: -50px;
+  }
+  .oneTheme1,
+  .oneTheme2,
+  .twoTheme1,
+  .twoTheme2,
+  .threeTheme1,
+  .fourTheme1,
+  .fourTheme2 {
     position: absolute;
     width: 130px;
     height: 100px;
@@ -63,6 +87,8 @@ const CuratingImg = styled(Link)`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    border: 1px solid var(--grayblue);
+    box-shadow: 0 0 0 3px var(--graywhite);
     :hover {
       opacity: 0.9;
     }
@@ -81,21 +107,34 @@ const CuratingImg = styled(Link)`
       }
     }
   }
-  .one {
+  .oneTheme1 {
     top: 0px;
-    left: 10px;
+    left: 0px;
   }
-  .two {
-    top: 0px;
-    left: 10px;
+  .oneTheme2 {
+    top: 190px;
+    left: -110px;
   }
-  .three {
+  .twoTheme1 {
+    top: 140px;
+    left: 140px;
+  }
+  .twoTheme2 {
+    top: -20px;
+    left: -70px;
+  }
+  .threeTheme1 {
     top: -50px;
     left: 10px;
   }
-  .four {
+
+  .fourTheme1 {
     top: 0px;
-    left: 10px;
+    left: 30px;
+  }
+  .fourTheme2 {
+    top: 180px;
+    left: -180px;
   }
 `;
 
@@ -110,7 +149,7 @@ const CuratingBodyImg = () => {
       {location.pathname === '/curation/1' ? (
         <>
           <CuratingImg to="/product/1">
-            <div className="one">
+            <div className="oneTheme1">
               <div>
                 <span>SAMLA 삼라</span>
                 <img src={right} alt="" />
@@ -126,13 +165,29 @@ const CuratingBodyImg = () => {
                 <img src={circle} alt="" className="circle1" />
               </a>
             </div>
+            <div className="oneTheme2">
+              <div>
+                <span>SAMLA 삼라</span>
+                <img src={right} alt="" />
+              </div>
+              <div>수납합</div>
+              <div>
+                <img src={money} alt="" />
+                <span>4,900</span>
+              </div>
+            </div>
+            <div>
+              <a href="/product/1">
+                <img src={circle} alt="" className="circle11" />
+              </a>
+            </div>
           </CuratingImg>
         </>
       ) : null}
       {location.pathname === '/curation/2' ? (
         <>
           <CuratingImg to="/product/2">
-            <div className="two">
+            <div className="twoTheme1">
               <div>
                 <span>SAMLA 삼라</span>
                 <img src={right} alt="" />
@@ -148,13 +203,29 @@ const CuratingBodyImg = () => {
                 <img src={circle} alt="" className="circle2" />
               </a>
             </div>
+            <div className="twoTheme2">
+              <div>
+                <span>SAMLA 삼라</span>
+                <img src={right} alt="" />
+              </div>
+              <div>수납합</div>
+              <div>
+                <img src={money} alt="" />
+                <span>4,900</span>
+              </div>
+            </div>
+            <div>
+              <a href="/product/2">
+                <img src={circle} alt="" className="circle22" />
+              </a>
+            </div>
           </CuratingImg>
         </>
       ) : null}
       {location.pathname === '/curation/3' ? (
         <>
           <CuratingImg to="/product/3">
-            <div className="three">
+            <div className="threeTheme1">
               <div>
                 <span>SAMLA 삼라</span>
                 <img src={right} alt="" />
@@ -176,7 +247,7 @@ const CuratingBodyImg = () => {
       {location.pathname === '/curation/4' ? (
         <>
           <CuratingImg to="/product/4">
-            <div className="four">
+            <div className="fourTheme1">
               <div>
                 <span>SAMLA 삼라</span>
                 <img src={right} alt="" />
@@ -190,6 +261,22 @@ const CuratingBodyImg = () => {
             <div>
               <a href="/product/4">
                 <img src={circle} alt="" className="circle4" />
+              </a>
+            </div>
+            <div className="fourTheme2">
+              <div>
+                <span>SAMLA 삼라</span>
+                <img src={right} alt="" />
+              </div>
+              <div>수납합</div>
+              <div>
+                <img src={money} alt="" />
+                <span>4,900</span>
+              </div>
+            </div>
+            <div>
+              <a href="/product/4">
+                <img src={circle} alt="" className="circle44" />
               </a>
             </div>
           </CuratingImg>
