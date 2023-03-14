@@ -171,9 +171,6 @@ const CuratingDetail = () => {
         </LocationApiContainer>
         <CuratingBodyContainer>
           <CuratingBodyImg />
-          {/* <CuratingBodyImgBox>
-            <img src={curatingContent[0].img} alt="" />
-          </CuratingBodyImgBox> */}
           <CuratingBodyTitleBox>
             <h4>기본정보</h4>
             <BodyTitleTextBox>
