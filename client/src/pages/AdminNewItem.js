@@ -184,60 +184,62 @@ const AdminNewItem = () => {
   return (
     <Main>
       <MainLayout>
-        <PageName>상품 등록하기</PageName>
-        <ItemInformationContainer onSubmit={handleSubmit}>
-          <ItemInformationBox>
-            <div>
-              <label>상품 카테고리</label>
-              <select value={category} onChange={handleCategory}>
-                <option value="선택해주세요">선택해주세요</option>
-                <option value="텐트">텐트</option>
-                <option value="체어">체어</option>
-                <option value="테이블">테이블</option>
-                <option value="조명">조명</option>
-                <option value="화로대">화로대</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="상품명">상품명</label>
-              <ContentInput type="text" onChange={handleName} required />
-            </div>
-            <div>
-              <label htmlFor="가격">가격</label>
-              <ContentInput
-                type="text"
-                value={price}
-                onChange={handlePrice}
-                required
-              />
-              <span>원</span>
-            </div>
-            <div>
-              <label htmlFor="대표 이미지">대표 이미지</label>
-              <ContentInput
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                ref={imgRef}
-              />
-              <button type="button" onClick={handleDismiss}>
-                삭제하기
-              </button>
-            </div>
-            {preview && (
+        <div>
+          <PageName>상품 등록하기</PageName>
+          <ItemInformationContainer onSubmit={handleSubmit}>
+            <ItemInformationBox>
               <div>
-                <label htmlFor="첨부 이미지 미리보기">미리보기</label>
-                <img alt="첨부 이미지 미리보기" src={preview} />
+                <label>상품 카테고리</label>
+                <select value={category} onChange={handleCategory}>
+                  <option value="선택해주세요">선택해주세요</option>
+                  <option value="텐트">텐트</option>
+                  <option value="체어">체어</option>
+                  <option value="테이블">테이블</option>
+                  <option value="조명">조명</option>
+                  <option value="화로대">화로대</option>
+                </select>
               </div>
-            )}
-          </ItemInformationBox>
-          <ItemDescriptionBox>
-            <ItemDescription modules={modules} onChange={handleText} />
-          </ItemDescriptionBox>
-          <ButtonBox>
-            <button type="submit">등록하기</button>
-          </ButtonBox>
-        </ItemInformationContainer>
+              <div>
+                <label htmlFor="상품명">상품명</label>
+                <ContentInput type="text" onChange={handleName} required />
+              </div>
+              <div>
+                <label htmlFor="가격">가격</label>
+                <ContentInput
+                  type="text"
+                  value={price}
+                  onChange={handlePrice}
+                  required
+                />
+                <span>원</span>
+              </div>
+              <div>
+                <label htmlFor="대표 이미지">대표 이미지</label>
+                <ContentInput
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  ref={imgRef}
+                />
+                <button type="button" onClick={handleDismiss}>
+                  삭제하기
+                </button>
+              </div>
+              {preview && (
+                <div>
+                  <label htmlFor="첨부 이미지 미리보기">미리보기</label>
+                  <img alt="첨부 이미지 미리보기" src={preview} />
+                </div>
+              )}
+            </ItemInformationBox>
+            <ItemDescriptionBox>
+              <ItemDescription modules={modules} onChange={handleText} />
+            </ItemDescriptionBox>
+            <ButtonBox>
+              <button type="submit">등록하기</button>
+            </ButtonBox>
+          </ItemInformationContainer>
+        </div>
         <Footer />
       </MainLayout>
     </Main>
