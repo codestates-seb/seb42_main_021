@@ -29,7 +29,6 @@ const TitleContainerBox = styled.div`
   flex-direction: column;
   width: 530px;
   height: 100%;
-  margin: 0 auto;
   justify-content: center;
   color: white;
   .MainTitle {
@@ -41,6 +40,7 @@ const TitleContainerBox = styled.div`
   .SubTitle {
     font-size: 20px;
     margin-left: 120px;
+    line-height: 200%;
   }
 `;
 const MainContainer = styled.div`
