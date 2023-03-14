@@ -2,13 +2,13 @@ package com.DuTongChitongYutong.EverybodyChachapark.exception;
 
 import lombok.Getter;
 
+@Getter
 public class StorageException extends RuntimeException{
 
-    public StorageException(String message) {
-        super(message);
-    }
+    private StorageExceptionCode storageExceptionCode;
 
-    public StorageException(String message, Throwable cause) {
-        super(message, cause);
+    public StorageException(StorageExceptionCode exceptionCode) {
+        super(exceptionCode.getMessage());
+        this.storageExceptionCode = exceptionCode;
     }
 }

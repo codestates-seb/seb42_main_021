@@ -20,40 +20,29 @@ public class ImageController {
 
     final private StorageService storageService;
 
-    @PostMapping("/members")
-    public ResponseEntity postMemberImg(/*Todo: @RequestPart*/) {
-        // Todo: 프로필 이미지 등록
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
-    @PostMapping("/products")
-    public ResponseEntity postProductImg(/*Todo: @RequestPart*/) {
-        // Todo: 상품 이미지 등록
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
     @PostMapping
     public ResponseEntity postReivewImg(@RequestPart MultipartFile reviewImage) {
-        // Todo: 리뷰 이미지 등록
+        // Todo: 이미지 등록
 
         String url = storageService.store(reviewImage);
 
-        return new ResponseEntity(url, HttpStatus.CREATED);
+        return new ResponseEntity<>(url, HttpStatus.CREATED);
     }
 
-    @GetMapping("/members/{image-id}")
-    public ResponseEntity getMemberImg(/*Todo: @PathVariable("image-id")*/) {
-        // Todo: 프로필 이미지 불러오기
-        return new ResponseEntity(HttpStatus.OK);
+    @GetMapping("/{image-name}")
+    public ResponseEntity getMemberImg(@PathVariable("image-name") String imageName) {
+        // Todo: 이미지 불러오기
+
+        byte[] imageFile = storageService.load(imageName);
+
+        return new ResponseEntity<>(imageFile, HttpStatus.OK);
     }
 
-    @GetMapping("/products/{image-id}")
-    public ResponseEntity getProductImg(/*Todo: @PathVariable("image-id")*/) {
-        // Todo: 상품 이미지 불러오기
-        return new ResponseEntity(HttpStatus.OK);
-    }
+    @DeleteMapping("/{image-name}")
+    public ResponseEntity getReivewImg(@PathVariable("image-name") String imageName) {
+        // Todo: 이미지 삭제
+        storageService.delete(imageName);
 
-    @GetMapping("/reviews/{image-id}")
-    public ResponseEntity getReivewImg(/*Todo: @PathVariable("image-id")*/) {
-        // Todo: 리뷰 이미지 불러오기
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

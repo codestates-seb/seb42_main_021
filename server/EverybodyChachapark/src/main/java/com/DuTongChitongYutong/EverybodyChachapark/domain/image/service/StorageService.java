@@ -4,5 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StorageService {
     String store(MultipartFile file);
-    void delete();
+    byte[] load(String imageUrl);
+    void delete(String imageUrl);
 }
