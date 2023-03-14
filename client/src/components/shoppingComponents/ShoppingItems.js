@@ -5,6 +5,11 @@ import { useProduct } from '../store';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
+  .noProduct {
+    margin: 50px 0 50px 150px;
+    font-size: 20px;
+    color: var(--gray);
+  }
 `;
 
 const AllCheckContainer = styled.div`
@@ -101,28 +106,66 @@ const ShoppingItems = ({ setOrderPrice }) => {
   //for(let i of checkdItem)
   //product.filter((el) => el.id === i)) 상품이름 가격 아이디값추출
   //counts[i]+1 수량 추출
-  const { product, removeProduct } = useProduct((state) => state);
+
+  const items = {
+    memberId: 1,
+    orders: [
+      // {
+      //   productId: 6,
+      //   productName: '차량용텐트1',
+      //   price: 50000,
+      //   quantity: 1,
+      // },
+      // {
+      //   productId: 2,
+      //   productName: '차량용텐트2',
+      //   price: 1000,
+      //   quantity: 5,
+      // },
+      // {
+      //   productId: 1,
+      //   productName: '차량용텐트1',
+      //   price: 2000,
+      //   quantity: 2,
+      // },
+    ],
+  };
+
+  const { removeProduct } = useProduct((state) => state);
+  const product = items.orders;
   const [counts, setCounts] = useState({});
-  const [checkdItem, setCheckedItem] = useState(product.map((el) => el.id));
+  const [checkdItem, setCheckedItem] = useState(
+    product.map((el) => el.productId)
+  );
+
+  useEffect(() => {
+    product.forEach((el) => {
+      setCounts((pre) => ({
+        ...pre,
+        [el.productId]: el.quantity,
+      }));
+    });
+  }, []);
 
   function handleIncreaseCount(id) {
     setCounts((prevCounts) => ({
       ...prevCounts,
-      [id]: (prevCounts[id] || 1) + 1,
+      [id]: prevCounts[id] + 1,
     }));
   }
+
   const handleDecreaseCount = (id) => {
     if (counts[id] > 1) {
       setCounts((prevCounts) => ({
         ...prevCounts,
-        [id]: (prevCounts[id] || 0) - 1,
+        [id]: prevCounts[id] - 1,
       }));
     }
   };
 
   const handleAllCheck = (checked) => {
     if (checked) {
-      setCheckedItem(product.map((el) => el.id));
+      setCheckedItem(product.map((el) => el.productId));
     } else {
       setCheckedItem([]);
     }
@@ -139,14 +182,13 @@ const ShoppingItems = ({ setOrderPrice }) => {
   const handleDelte = (id) => {
     removeProduct(id);
   };
-
   const totalPrice = () => {
-    const itemArr = product.map((el) => el.id);
+    const itemArr = product.map((el) => el.productId);
     let newTotalPrice = 0;
     for (let i of itemArr) {
       if (checkdItem.includes(i)) {
-        let quantity = counts[i] || 1;
-        let price = product.filter((el) => el.id === i)[0].price;
+        let quantity = counts[i];
+        let price = product.filter((el) => el.productId === i)[0].price;
         newTotalPrice += quantity * price;
       }
     }
@@ -175,32 +217,34 @@ const ShoppingItems = ({ setOrderPrice }) => {
       </AllCheckContainer>
 
       <h2 className="item">배송상품</h2>
-
-      {product &&
+      {product.length === 0 ? (
+        <div className="noProduct">주문 할 제품이 없습니다</div>
+      ) : (
+        product &&
         product.map((el) => (
-          <ShoppingItemContainer>
+          <ShoppingItemContainer key={el.productId}>
             <EachItemContainer>
               <CheckBoxContainer>
                 <input
                   type={'checkbox'}
-                  id={el.id}
-                  checked={checkdItem.includes(el.id) ? true : false}
+                  id={el.productId}
+                  checked={checkdItem.includes(el.productId) ? true : false}
                   onChange={(e) => {
-                    handleSingleCheck(e.target.checked, el.id);
+                    handleSingleCheck(e.target.checked, el.productId);
                   }}
                 />
               </CheckBoxContainer>
               <ItemImgBox alt={'shoppingItem'} src={shoppingCartItem} />
               <ItemInformationBox>
-                <label className="singleCheckText" htmlFor={el.id}>
-                  {el.item}
+                <label className="singleCheckText" htmlFor={el.productId}>
+                  {el.productName}
                 </label>
                 <div className="itemPrice">{el.price}원</div>
               </ItemInformationBox>
               <div
                 className="cancel"
                 onClick={() => {
-                  handleDelte(el.id);
+                  handleDelte(el.productId);
                 }}
               >
                 x
@@ -209,20 +253,21 @@ const ShoppingItems = ({ setOrderPrice }) => {
             <ItemNumberChangeContainer>
               <button
                 className="itemPlus"
-                onClick={() => handleIncreaseCount(el.id)}
+                onClick={() => handleIncreaseCount(el.productId)}
               >
                 +
               </button>
-              <div className="itemNumber">{counts[el.id] || 1}</div>
+              <div className="itemNumber">{counts[el.productId]}</div>
               <button
                 className="itemMinus"
-                onClick={() => handleDecreaseCount(el.id)}
+                onClick={() => handleDecreaseCount(el.productId)}
               >
                 -
               </button>
             </ItemNumberChangeContainer>
           </ShoppingItemContainer>
-        ))}
+        ))
+      )}
     </ShoppingItemLayout>
   );
 };
