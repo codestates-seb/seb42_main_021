@@ -24,7 +24,7 @@ mail:
     admin: admin@gmail.com
 
 image:
-  local-path: D:\output
+  local-path: "src/main/resources/file"
   server-url: http://localhost:8080/images/
 
 jwt:
