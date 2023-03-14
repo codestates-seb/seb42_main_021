@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
@@ -22,10 +23,11 @@ import java.util.Optional;
 public class ReviewService {
     final private ReviewRepository reviewRepository;
     final private MemberService memberService;
-
-//    final private ProductService productService;
+    final private ProductService productService;
 
     public Review createReview(Review review) {
+        review.getMember().setMemberId(memberService.findByEmail().getMemberId());
+
         verifyReview(review); // 작성자, 상품 검증
 
         // Todo: ImageURL 생성 처리
@@ -34,10 +36,12 @@ public class ReviewService {
     }
 
     public Review updateReview(Long reviewId, Review review) {
-        // Todo: 작성자 검증 Request: memberId
+        review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
         Review foundReview = findReview(reviewId);
-        Optional<Review> optionReview = Optional.ofNullable(review); // Update Request를 받은 필드 탐색. 방식: NullPoint Optional
+        verifyReviewAskedMember(review, foundReview);
+
+        Optional<Review> optionReview = Optional.of(review); // Update Request를 받은 필드 탐색. 방식: NullPoint Optional
         optionReview.map(Review::getContent).ifPresent(foundReview::setContent); // Update Request를 받은 필드가 NULL이 아닌것을 찾아 리포지토리에 가져온 Entity의 필드값 교체
         optionReview.map(Review::getScore).ifPresent(foundReview::setScore);
 
@@ -55,16 +59,17 @@ public class ReviewService {
         return findVerifiedReview(reviewId);
     }
 
-//    @Transactional(readOnly = true)
-//    public Page<Review> findReviews(Long productId, int page, int size) {
-//        List<Review> reviews = reviewRepository.findByProduct_ProductId(productId);
-//        return new PageImpl<>(reviews, PageRequest.of(page, size, Sort.by("reviewId")), reviews.size()); // 등록순으로
-//    }
+    @Transactional(readOnly = true)
+    public Page<Review> findReviews(Long productId, int page, int size) {
+        return reviewRepository.findPageByProduct_ProductId(productId, PageRequest.of(page-1, size, Sort.by("reviewId")));
+    }
 
-    public void deleteReview(Long reviewId, Long memberId) {
-        // Todo: 작성자 검증 Request: memberId
+    public void deleteReview(Long reviewId) {
+        Long memberId = memberService.findByEmail().getMemberId();
 
         Review foundReview = findReview(reviewId);
+        verifyReviewAskedMember(memberId, foundReview);
+
         reviewRepository.delete(foundReview); // Hard Delete
     }
 
@@ -74,7 +79,19 @@ public class ReviewService {
     }
 
     private void verifyReview(Review review) {
-//        memberService.findMember(review.getMember().getMemberId());
-//        productService.readProduct(review.getProduct().getProductId());
+        memberService.findMember(review.getMember().getMemberId());
+        productService.readProduct(review.getProduct().getProductId());
+    }
+
+    private void verifyReviewAskedMember(Review review, Review foundReview) {
+        if(!memberService.verifyAskedMember(review.getMember().getMemberId(), foundReview.getMember().getMemberId())){
+            throw new BusinessLogicException(ExceptionCode.REVIEW_UPDATE_NO_PERMISSION);
+        }
+    }
+
+    private void verifyReviewAskedMember(Long memberId, Review foundReview) {
+        if(!memberService.verifyAskedMember(memberId, foundReview.getMember().getMemberId())){
+            throw new BusinessLogicException(ExceptionCode.REVIEW_DELETE_NO_PERMISSION);
+        }
     }
 }

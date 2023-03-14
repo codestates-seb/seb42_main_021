@@ -66,7 +66,7 @@ public class ReviewControllerTest {
     @Test
     public void postReviewTest() throws Exception {
         // given
-        ReviewDto.Post createReview = new ReviewDto.Post(1L, 1L, "Stub 리뷰 작성합니다!", 5);
+        ReviewDto.Post createReview = new ReviewDto.Post(1L, "Stub 리뷰 작성합니다!", 5);
         String content = gson.toJson(createReview);
 
         given(reviewMapper.reviewPostDtoToReview(Mockito.any(ReviewDto.Post.class))).willReturn(new Review());
@@ -95,7 +95,6 @@ public class ReviewControllerTest {
                         getResponsePreProcessor(),
                         requestFields(
                                 List.of(fieldWithPath("productId").type(JsonFieldType.NUMBER).description("상품 식별 ID"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 ID"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 내용"),
                                         fieldWithPath("score").type(JsonFieldType.NUMBER).description("리뷰 별점 점수")
                                 )
@@ -110,7 +109,7 @@ public class ReviewControllerTest {
     @Test
     public void patchReviewTest() throws Exception {
         // given
-        ReviewDto.Patch updateReview = new ReviewDto.Patch(1L, 1L, "Stub 리뷰 수정합니다!", 0);
+        ReviewDto.Patch updateReview = new ReviewDto.Patch(1L, "Stub 리뷰 수정합니다!", 0);
         String content = gson.toJson(updateReview);
 
         given(reviewMapper.reviewPatchDtoToReview(Mockito.any(ReviewDto.Patch.class))).willReturn(new Review());
@@ -143,7 +142,6 @@ public class ReviewControllerTest {
                         ),
                         requestFields(
                                 List.of(fieldWithPath("reviewId").type(JsonFieldType.NUMBER).description("수정할 리뷰의 식별 ID").ignored(),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("수정할 리뷰의 작성자 식별 ID"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 리뷰 내용"),
                                         fieldWithPath("score").type(JsonFieldType.NUMBER).description("수정할 리뷰 점수")
                                 )
@@ -158,12 +156,8 @@ public class ReviewControllerTest {
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정 날짜"),
                                         fieldWithPath("data.reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
                                         fieldWithPath("data.reviewMember.memberId").type(JsonFieldType.NUMBER).description("회원 식별 ID"),
-                                        fieldWithPath("data.reviewMember.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                        fieldWithPath("data.reviewMember.nickname").type(JsonFieldType.STRING).description("회원 닉네임")
 //                                        fieldWithPath("data.answerMember.memberImgId").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL") Todo
-                                        fieldWithPath("responseInfo").type(JsonFieldType.OBJECT).description("Response Info").ignored(),
-                                        fieldWithPath("responseInfo.status").type(JsonFieldType.NUMBER).description("Response Status").ignored(),
-                                        fieldWithPath("responseInfo.message").type(JsonFieldType.STRING).description("Response Message").ignored(),
-                                        fieldWithPath("responseInfo.exceptionCode").type(JsonFieldType.NULL).description("Response ExeceptionCode").ignored()
                                 )
                         )
                 ));
@@ -236,12 +230,8 @@ public class ReviewControllerTest {
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 수"),
                                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
                                         fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 요소"),
-                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지"),
-
-                                        fieldWithPath("responseInfo").type(JsonFieldType.OBJECT).description("Response Info").ignored(),
-                                        fieldWithPath("responseInfo.status").type(JsonFieldType.NUMBER).description("Response Status").ignored(),
-                                        fieldWithPath("responseInfo.message").type(JsonFieldType.STRING).description("Response Message").ignored(),
-                                        fieldWithPath("responseInfo.exceptionCode").type(JsonFieldType.NULL).description("Response ExeceptionCode").ignored())
+                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지")
+                                )
                         )
                 )
         );
@@ -251,7 +241,7 @@ public class ReviewControllerTest {
     @Test
     public void deleteReviewTest() throws Exception {
         // given
-        doNothing().when(reviewService).deleteReview(Mockito.anyLong(), Mockito.anyLong());
+        doNothing().when(reviewService).deleteReview(Mockito.anyLong());
         // when
         ResultActions deleteAction =
                 mockMvc.perform(
@@ -268,9 +258,6 @@ public class ReviewControllerTest {
                                 getResponsePreProcessor(),
                                 pathParameters(
                                         parameterWithName("review-id").description("삭제할 리뷰 식별 ID")
-                                ),
-                                requestParameters(
-                                        parameterWithName("memberId").description("삭제할 리뷰의 작성자 식별 ID")
                                 )
                         )
                 );

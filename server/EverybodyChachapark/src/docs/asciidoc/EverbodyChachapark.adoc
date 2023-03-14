@@ -39,6 +39,9 @@ include::{snippets}/get-reviews/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-reviews/path-parameters.adoc[]
 
+.request-parameters
+include::{snippets}/get-reviews/request-parameters.adoc[]
+
 .http-response
 include::{snippets}/get-reviews/http-response.adoc[]
 

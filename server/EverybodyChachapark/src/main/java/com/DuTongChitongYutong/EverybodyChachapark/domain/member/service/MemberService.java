@@ -71,6 +71,10 @@ public class MemberService {
         return findMember;
     }
 
+    public boolean verifyAskedMember(long memberId1, long memberId2) { // 작성자 검증
+        return memberId1 == memberId2;
+    }
+
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
@@ -84,7 +88,15 @@ public class MemberService {
     }
 
     public String getCurrentMemberEmail() {
-        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<String> optionalMember;
+        try {
+            optionalMember = Optional.ofNullable((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        } catch (ClassCastException e) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
+        }
+
+        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION));
     }
 
     public void deleteMember(HttpServletRequest request) {
