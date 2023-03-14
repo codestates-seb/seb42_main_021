@@ -11,6 +11,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorit
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -65,6 +66,11 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/members/mypage").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/carts").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/carts").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/reviews").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/reviews/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/reviews/*").hasRole("USER")
                         .anyRequest().permitAll()
                 );
         return http.build();
