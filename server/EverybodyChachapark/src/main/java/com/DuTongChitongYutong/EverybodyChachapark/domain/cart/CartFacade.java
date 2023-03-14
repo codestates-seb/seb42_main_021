@@ -1,7 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
 
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.Product;
-import com.DuTongChitongYutong.EverybodyChachapark.product.service.ProductService;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import org.springframework.stereotype.Service;
 
 @Service

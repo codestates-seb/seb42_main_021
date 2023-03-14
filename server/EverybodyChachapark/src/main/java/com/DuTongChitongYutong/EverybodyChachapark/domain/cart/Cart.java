@@ -1,9 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
-import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
-import com.DuTongChitongYutong.EverybodyChachapark.product.entity.Product;
-import lombok.AllArgsConstructor;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

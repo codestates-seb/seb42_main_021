@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
