@@ -31,15 +31,16 @@ public class CartService {
 
         Optional<Cart> optionalCart = cartRepository.findByMemberIdAndProductId(memberId, productId);
 
-        Cart cart = new Cart(post.getProductId(), post.getQuantity());
-        /*if (optionalCart.isPresent()) {
+        Cart cart;
+        if (optionalCart.isPresent()) {
             cart = optionalCart.get();
             cart.setQuantity(cart.getQuantity() + post.getQuantity());
 
             return cart;
-        }*/
+        }
+
+        cart = new Cart(post.getProductId(), post.getQuantity());
 
         return cartRepository.save(cart);
-
     }
 }

@@ -1,6 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(indexes = @Index(name = "idx_cart_item_user_id_product_id", columnList = "memberId, productId"))
@@ -25,25 +26,26 @@ public class Cart extends BaseTime {
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
-    private Long memberId;
+    private long memberId;
 
-    @Column(nullable = false)
-    private Long productId;
+    @Column(nullable = false, updatable = false)
+    private long productId;
 
     @Column(nullable = false)
     private int quantity;
 
-    public Cart(Long cartId, Integer quantity) {
-        this.cartId = cartId;
+    public Cart(long productId, int quantity) {
+        this.productId = productId;
         this.quantity = quantity;
     }
 
     public CartDto.Response toDto(Product product) {
-        return new CartDto.Response(cartId,memberId, productId, product.getProductName(), product.getPrice(), quantity,
-                getCreatedAt(), getModifiedAt());
+
+        return new CartDto.Response(cartId, memberId, productId, product.getProductName(), product.getPrice(),
+                quantity, getCreatedAt(), getModifiedAt());
     }
 
-    public CartDto.Response todo() {
+    public CartDto.Response toDto() {
         return new CartDto.Response(
                 cartId, memberId, productId, null, null, quantity, getCreatedAt(), getModifiedAt()
         );

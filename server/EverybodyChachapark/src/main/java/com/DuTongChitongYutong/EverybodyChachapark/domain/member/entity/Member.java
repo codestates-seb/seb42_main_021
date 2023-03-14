@@ -2,6 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,8 +38,8 @@ public class Member extends BaseTime {
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Review> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
 
     public Member(String email) {
         this.email = email;

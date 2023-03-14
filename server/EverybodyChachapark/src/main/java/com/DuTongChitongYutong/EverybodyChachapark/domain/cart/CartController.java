@@ -18,10 +18,10 @@ public class CartController {
         this.cartFacade = cartFacade;
     }
 
-    /*@PostMapping
+    @PostMapping
     public ResponseEntity postCart (@RequestBody CartDto.Post post) {
-        return new ResponseEntity<>(SingleResponseDto(cartFacade.addCart(post)), HttpStatus.CREATED);
-    }*/
+        return new ResponseEntity<>(new SingleResponseDto(cartFacade.addCart(post)), HttpStatus.CREATED);
+    }
 
 
 }

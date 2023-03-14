@@ -88,16 +88,10 @@ public class MemberService {
     }
 
     public String getCurrentMemberEmail() {
-        Optional<String> optionalMember;
-        try {
-            optionalMember = Optional.ofNullable((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-        } catch (ClassCastException e) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
-        }
-
-        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION));
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+
 
     public void deleteMember(HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization").substring(7);
