@@ -24,7 +24,7 @@ public class ProductController {
     private final ProductFacade productFacade;
 
     @PostMapping
-    public ResponseEntity<SingleResponseDto<ProductDto>> postProduct(@Valid @RequestPart("data-json")ProductPostDto productPostDto){
+    public ResponseEntity<SingleResponseDto<ProductDto>> postProduct(@Valid @RequestPart("data-json") ProductPostDto productPostDto){
 
         return new ResponseEntity<>(SingleResponseDto.of(productFacade.createProduct(productPostDto)), HttpStatus.CREATED);
     }
@@ -35,7 +35,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestPart("data-json")ProductPatchDto productPatchDto){
+    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestPart("data-json") ProductPatchDto productPatchDto){
         return new ResponseEntity<>(SingleResponseDto.of(productFacade.updateProduct(productId, productPatchDto)), HttpStatus.OK);
     }
 }
