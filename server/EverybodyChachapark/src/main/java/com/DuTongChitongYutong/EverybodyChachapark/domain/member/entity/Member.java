@@ -1,8 +1,8 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity;
 
 import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
+
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,8 +38,8 @@ public class Member extends BaseTime {
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Review> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews = new ArrayList<>();
 
     public Member(String email) {
         this.email = email;
@@ -67,21 +67,20 @@ public class Member extends BaseTime {
     private List<String> roles = new ArrayList<>();
 
     private static final String[] PROFILE_IMAGE_URLS = {
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/fYH5Wv9/1.png\" alt=\"1\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/5FB24RR/2.png\" alt=\"2\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/YXRjdgQ/3.png\" alt=\"3\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/1Z9k49d/4.png\" alt=\"4\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/G0FHVDB/5.png\" alt=\"5\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/MP8k0GF/6.png\" alt=\"6\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/6F9gTGc/7.png\" alt=\"7\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/W6vW3mN/8.png\" alt=\"8\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/KFkNYDR/9.png\" alt=\"9\" border=\"0\"></a>",
-            "<a href=\"https://imgbb.com/\"><img src=\"https://i.ibb.co/n7tcz4v/10.png\" alt=\"10\" border=\"0\"></a>"
+            "https://i.ibb.co/fYH5Wv9/1.png",
+            "https://i.ibb.co/5FB24RR/2.png",
+            "https://i.ibb.co/YXRjdgQ/3.png",
+            "https://i.ibb.co/1Z9k49d/4.png",
+            "https://i.ibb.co/G0FHVDB/5.png",
+            "https://i.ibb.co/MP8k0GF/6.png",
+            "https://i.ibb.co/6F9gTGc/7.png",
+            "https://i.ibb.co/W6vW3mN/8.png",
+            "https://i.ibb.co/KFkNYDR/9.png",
+            "https://i.ibb.co/n7tcz4v/10.png"
     };
 
     public String getRandomProfileImageUrl() {
         int randomIndex = new Random().nextInt(PROFILE_IMAGE_URLS.length);
         return PROFILE_IMAGE_URLS[randomIndex];
     }
-
 }

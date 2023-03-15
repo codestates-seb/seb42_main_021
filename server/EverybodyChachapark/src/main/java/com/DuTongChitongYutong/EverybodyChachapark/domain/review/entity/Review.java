@@ -34,12 +34,12 @@ public class Review extends BaseTime {
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
-//    public void setMember(Member member) { // 양방향 매핑
-//        this.member = member;
-//        if (!this.member.getReviews().contains(this)) {
-//            this.member.getReviews().add(this);
-//        }
-//    }
+    public void setMember(Member member) { // 양방향 매핑
+        this.member = member;
+        if (!this.member.getReviews().contains(this)) {
+            this.member.getReviews().add(this);
+        }
+    }
 //
 //    public void setProduct(Product product) { // 양방향 매핑
 //        this.product = product;

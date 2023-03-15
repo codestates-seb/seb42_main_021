@@ -19,9 +19,8 @@ logging:
         orm:
           jpa: DEBUG
 
-mail:
-  address:
-    admin: admin@gmail.com
+account:
+  admin: admin@gmail.com
 
 image:
   local-path: "src/main/resources/file"

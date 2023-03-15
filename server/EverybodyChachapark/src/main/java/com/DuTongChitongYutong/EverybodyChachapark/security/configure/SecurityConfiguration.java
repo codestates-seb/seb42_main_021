@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.configure;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAccessDeniedHandler;
 import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationEntryPoint;
 import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationFailureHandler;
@@ -7,10 +8,13 @@ import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthen
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtAuthenticationFilter;
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtVerificationFilter;
+import com.DuTongChitongYutong.EverybodyChachapark.security.service.MemberDetailsService;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,6 +28,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -33,10 +38,14 @@ public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final MemberDetailsService memberDetailsService;
+    private final ObjectMapper mapper;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberDetailsService memberDetailsService, ObjectMapper mapper) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.memberDetailsService = memberDetailsService;
+        this.mapper = mapper;
     }
 
     @Bean
@@ -57,7 +66,7 @@ public class SecurityConfiguration {
                 .accessDeniedHandler(new MemberAccessDeniedHandler())
 
                 .and()
-                .apply(new CustomFilterConfigurer())
+                .apply(new CustomFilterConfigurer(jwtTokenizer, authorityUtils, memberDetailsService, mapper))
 
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
@@ -65,6 +74,13 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/members/mypage").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/carts").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/carts").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/carts/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/carts/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/reviews").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/reviews/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/reviews/*").hasRole("USER")
                         .anyRequest().permitAll()
                 );
         return http.build();
@@ -80,27 +96,12 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization", "Refresh"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-        @Override
-        public void configure(HttpSecurity builder) throws Exception {
-            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
-            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
-
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
-
-            builder
-                    .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-        }
     }
 }
