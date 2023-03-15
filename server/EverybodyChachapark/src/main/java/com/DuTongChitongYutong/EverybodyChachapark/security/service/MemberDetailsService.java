@@ -1,7 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.service;
 
-import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
-import com.DuTongChitongYutong.EverybodyChachapark.member.MemberRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

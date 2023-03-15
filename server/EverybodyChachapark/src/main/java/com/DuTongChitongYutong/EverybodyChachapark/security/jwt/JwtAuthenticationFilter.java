@@ -1,6 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
-import com.DuTongChitongYutong.EverybodyChachapark.member.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.security.dto.LoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;

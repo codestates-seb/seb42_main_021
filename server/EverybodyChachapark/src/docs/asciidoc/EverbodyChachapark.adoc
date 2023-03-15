@@ -39,6 +39,9 @@ include::{snippets}/get-reviews/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-reviews/path-parameters.adoc[]
 
+.request-parameters
+include::{snippets}/get-reviews/request-parameters.adoc[]
+
 .http-response
 include::{snippets}/get-reviews/http-response.adoc[]
 
@@ -77,3 +80,103 @@ include::{snippets}/delete-review/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/delete-review/http-response.adoc[]
+
+== ProductController
+=== 상품 등록
+.curl-request
+include::{snippets}/post-product/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-product/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-product/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-product/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-product/response-fields.adoc[]
+
+=== 단일 상품 조회
+.curl-request
+include::{snippets}/read-product/curl-request.adoc[]
+
+.http-request
+include::{snippets}/read-product/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/read-product/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/read-product/http-response.adoc[]
+
+.response-fields
+include::{snippets}/read-product/response-fields.adoc[]
+
+=== 전체 상품 조회
+.curl-request
+include::{snippets}/get-all-products/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-all-products/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-all-products/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-all-products/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-all-products/response-fields.adoc[]
+
+=== 카테고리별 상품 조회
+.curl-request
+include::{snippets}/get-category-products/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-category-products/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-category-products/path-parameters.adoc[]
+
+.request-parameters
+include::{snippets}/get-category-products/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-category-products/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-category-products/response-fields.adoc[]
+
+=== 상품 수정
+.curl-request
+include::{snippets}/patch-product/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-product/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-product/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-product/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-product/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-product/response-fields.adoc[]
+
+=== 상품 삭제
+.curl-request
+include::{snippets}/delete-product/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-product/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-product/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-product/http-response.adoc[]
