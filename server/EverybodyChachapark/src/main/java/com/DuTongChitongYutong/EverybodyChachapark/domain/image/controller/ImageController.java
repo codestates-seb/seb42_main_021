@@ -1,48 +1,38 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.image.controller;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.service.StorageService;
+import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/images")
 public class ImageController {
-    /*
-     * 본 Post 컨트롤러는 이미지를 저장하고 이미지Id 형태의 URL로 응답하기 위한 기능
-     *
-     * 그런 것이 아니라면 해당 도메인의 Post에서 multipart로 보낼 것
-     * */
+    final private FacadeImage facadeImage;
 
-    final private StorageService storageService;
+    @PostMapping // Image Upload Test
+    public ResponseEntity postImage(@RequestPart MultipartFile reviewImage) {
+        String imageURL = facadeImage.createImageURL(reviewImage);
 
-    @PostMapping
-    public ResponseEntity postReivewImg(@RequestPart MultipartFile reviewImage) {
-        // Todo: 이미지 등록
-
-        String url = storageService.store(reviewImage);
-
-        return new ResponseEntity<>(url, HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(imageURL), HttpStatus.CREATED);
     }
 
     @GetMapping("/{image-name}")
-    public ResponseEntity getMemberImg(@PathVariable("image-name") String imageName) {
-        // Todo: 이미지 불러오기
+    public ResponseEntity getImage(@PathVariable("image-name") String imageName) {
+        String type = "image/" + imageName.substring(imageName.lastIndexOf(".") + 1);
 
-        byte[] imageFile = storageService.load(imageName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", type);
 
-        return new ResponseEntity<>(imageFile, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{image-name}")
-    public ResponseEntity getReivewImg(@PathVariable("image-name") String imageName) {
-        // Todo: 이미지 삭제
-        storageService.delete(imageName);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(facadeImage.loadImage(imageName), headers, HttpStatus.OK);
     }
 }

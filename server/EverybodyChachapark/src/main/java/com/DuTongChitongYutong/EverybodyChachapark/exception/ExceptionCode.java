@@ -11,7 +11,9 @@ public enum ExceptionCode {
     REVIEW_SCORE_EXISTS(409, "이미 리뷰에 평가를 했습니다."),
     PRODUCT_SCORE_EXISTS(409, "이미 추천 된 상품입니다."),
     REVIEW_UPDATE_NO_PERMISSION(403, "리뷰 작성자만 리뷰를 수정할 수 있습니다."),
-    REVIEW_DELETE_NO_PERMISSION(403, "리뷰 작성자만 리뷰를 삭제할 수 있습니다.");
+    REVIEW_DELETE_NO_PERMISSION(403, "리뷰 작성자만 리뷰를 삭제할 수 있습니다."),
+    JSON_CANNOT_WRITE_IMAGE_URLS(500, "이미지 주소를 쓸 수 없습니다."),
+    JSON_CANNOT_READ_IMAGE_URLS(500, "이미지 주소를 읽을 수 없습니다.");
 
     @Getter
     private int status;
