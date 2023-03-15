@@ -13,8 +13,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class FacadeImage {
-    private final StorageService storageService;
-    private final JsonListHelper jsonListHelper;
+    final private StorageService storageService;
+    final private JsonListHelper jsonListHelper;
 
     public String createImageURL(MultipartFile file) {
         return storageService.store(file);
@@ -29,11 +29,7 @@ public class FacadeImage {
     }
 
     public void deleteImage(String imageURL) {
-        storageService.delete(imageURL);
-    }
-
-    public void deleteImages(String imageURLs) {
-        List<String> imageURLList = jsonListHelper.jsonToList(imageURLs);
-        storageService.deletes(imageURLList);
+        List<String> imageURLList = jsonListHelper.jsonToList(imageURL);
+        storageService.delete(imageURLList);
     }
 }

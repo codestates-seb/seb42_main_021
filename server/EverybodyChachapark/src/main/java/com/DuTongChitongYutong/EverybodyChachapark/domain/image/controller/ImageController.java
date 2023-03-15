@@ -3,6 +3,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.image.controller;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.service.StorageService;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
+import com.DuTongChitongYutong.EverybodyChachapark.util.JsonListHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,10 +20,11 @@ import java.util.List;
 @RequestMapping("/images")
 public class ImageController {
     final private FacadeImage facadeImage;
+    final private JsonListHelper jsonListHelper;
 
     @PostMapping // Image Upload Test
-    public ResponseEntity postImage(@RequestPart MultipartFile reviewImage) {
-        String imageURL = facadeImage.createImageURL(reviewImage);
+    public ResponseEntity postImage(@RequestPart MultipartFile imageFile) {
+        String imageURL = facadeImage.createImageURL(imageFile);
 
         return new ResponseEntity<>(new SingleResponseDto<>(imageURL), HttpStatus.CREATED);
     }

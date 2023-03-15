@@ -11,7 +11,5 @@ public interface StorageService {
 
     byte[] load(String imageURL);
 
-    void delete(String imageURL);
-
-    void deletes(List<String> imageURLs);
+    void delete(List<String> imageURLs);
 }
