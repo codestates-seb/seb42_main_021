@@ -1,6 +1,6 @@
-package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart.repository;
 
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

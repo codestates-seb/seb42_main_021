@@ -1,5 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart.controller;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.fasade.CartFacade;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.dto.CartDto;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +28,10 @@ public class CartController {
         return new ResponseEntity(new SingleResponseDto<>(cartFacade.updateCart(cartId, patch)), HttpStatus.OK);
     }
 
-    @GetMapping("/{cart-id}")
+    /*@GetMapping("/{cart-id}")
     public ResponseEntity getCart (@PathVariable ("cart-id") long cartId) {
         return new ResponseEntity(new SingleResponseDto<>(cartFacade.findCart(cartId)), HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity getCarts() {

@@ -1,12 +1,13 @@
-package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart.fasade;
 
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.service.CartService;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.dto.CartDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.entity.Cart;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,15 +41,17 @@ public class CartFacade {
         Cart cart = cartService.findCart(cartId);
 
         // 회원 확인 로직
-        Member member = memberService.findByEmail();
-        if (member.getMemberId() != cart.getMemberId()) {
+        long memberId = memberService.findByEmail().getMemberId();
+        if (memberId != cart.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
         }
 
-        return cartService.updateCart(cartId, patch.getQuantity()).toDto();
+        Product product = productService.readProduct(cart.getProductId());
+
+        return cartService.updateCart(cartId, patch.getQuantity()).toDto(product);
     }
 
-    public CartDto.Response findCart (long cartId) {
+    /*public CartDto.Response findCart (long cartId) {
         Cart cart = cartService.findCart(cartId);
 
         // 회원 확인 로직
@@ -61,19 +64,20 @@ public class CartFacade {
         Product product = productService.readProduct(cart.getProductId());
 
         return cart.toDto(product);
-    }
+    }*/
 
     public List<CartDto.Response> findCarts() {
 
         // 회원 확인 로직
-        Member member = memberService.findByEmail();
+        long memberId = memberService.findByEmail().getMemberId();
 
-        List<Cart> carts = cartService.findCarts(member.getMemberId());
+        List<Cart> carts = cartService.findCarts(memberId);
 
         Set<Long> products = carts.stream().map(Cart::getProductId).collect(Collectors.toSet());
 
         Map<Long, Product> productMap = productService.getVerifiedProducts(products).stream()
                 .collect(Collectors.toMap(Product::getProductId, Function.identity()));
+
 
         return carts.stream().map(cart -> cart.toDto(productMap.get(cart.getProductId()))).collect(Collectors.toList());
 
@@ -82,9 +86,9 @@ public class CartFacade {
     public void deleteCart (long cartId) {
         Cart cart = cartService.findCart(cartId);
 
-        Member member = memberService.findByEmail();
+        long memberId = memberService.findByEmail().getMemberId();
 
-        if (member.getMemberId() != cart.getMemberId()) {
+        if (memberId != cart.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
         }
 

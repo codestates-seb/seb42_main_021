@@ -1,11 +1,13 @@
-package com.DuTongChitongYutong.EverybodyChachapark.domain.cart;
+package com.DuTongChitongYutong.EverybodyChachapark.domain.cart.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.dto.CartDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.entity.Cart;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.repository.CartRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ public class CartService {
     }
 
     public Cart addCart (CartDto.Post post) {
-        long memberId = ((Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberId();
+        long memberId = memberService.findByEmail().getMemberId();
         long productId = post.getProductId();
 
         Optional<Cart> optionalCart = cartRepository.findByMemberIdAndProductId(memberId, productId);
@@ -43,12 +45,12 @@ public class CartService {
         }
 
         cart = new Cart(post.getProductId(), post.getQuantity());
+        cart.setMemberId(memberId);
 
         return cartRepository.save(cart);
     }
 
     public Cart updateCart (long cartId, int quantity) {
-        Member member = memberService.findByEmail();
 
         Cart cart = findCart(cartId);
         cart.setQuantity(quantity);
@@ -70,6 +72,4 @@ public class CartService {
 
         cartRepository.delete(cart);
     }
-
-
 }
