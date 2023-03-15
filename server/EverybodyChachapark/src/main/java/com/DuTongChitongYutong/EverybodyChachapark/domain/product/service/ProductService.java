@@ -5,13 +5,17 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.ProductCategory;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.repository.ProductRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPostDto;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -65,5 +69,17 @@ public class ProductService {
 
     public void deleteProduct(Long productId){
         productRepository.deleteById(productId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Product> getVerifiedProducts(Set<Long> productId) {
+
+        List<Product> products = productRepository.findAllById(productId);
+
+        if (products.size() != productId.size()) {
+            throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
+        }
+
+        return products;
     }
 }

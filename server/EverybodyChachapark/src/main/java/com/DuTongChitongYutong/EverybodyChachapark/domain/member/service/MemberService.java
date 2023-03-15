@@ -59,9 +59,18 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
+    }*/
+
+    @Transactional(readOnly = true)
+    public Member findMember (long memberId) {
+        Member authMember = findByEmail();
+
+        Member member = authMember.getMemberId() == memberId ? authMember : findVerifiedMember(memberId);
+
+        return member;
     }
 
     @Transactional(readOnly = true)
@@ -88,15 +97,13 @@ public class MemberService {
     }
 
     public String getCurrentMemberEmail() {
-        Optional<String> optionalMember;
-        try {
-            optionalMember = Optional.ofNullable((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
-        } catch (ClassCastException e) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
-        }
-
-        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION));
+    @Transactional
+    public Member findByEmail(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     public void deleteMember(HttpServletRequest request) {

@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class CustomAuthorityUtils {
-    @Value("${mail.address.admin}")
-    private String adminMailAddress;
+    @Value("${account.admin}")
+    private String adminAccount;
 
     private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
     private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER");
@@ -27,7 +27,7 @@ public class CustomAuthorityUtils {
     }
 
     public List<String> createRoles(String email) {
-        if (email.equals(adminMailAddress)) {
+        if (email.equals(adminAccount)) {
             return ADMIN_ROLES_STRING;
         }
         return USER_ROLES_STRING;
