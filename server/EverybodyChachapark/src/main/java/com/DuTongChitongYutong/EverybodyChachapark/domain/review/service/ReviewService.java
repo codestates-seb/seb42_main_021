@@ -8,6 +8,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicExcept
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class ReviewService {
     final private ReviewRepository reviewRepository;
     final private MemberService memberService;
@@ -40,7 +42,7 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public Review updateReview(Long reviewId, Review review) {
+    public Review updateReview(Long reviewId, Review review, MultipartFile imageFile) {
         review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
         Review foundReview = findReview(reviewId);
@@ -50,11 +52,13 @@ public class ReviewService {
         optionReview.map(Review::getContent).ifPresent(foundReview::setContent); // Update Request를 받은 필드가 NULL이 아닌것을 찾아 리포지토리에 가져온 Entity의 필드값 교체
         optionReview.map(Review::getScore).ifPresent(foundReview::setScore);
 
-        /* Todo: 이미지 변경 요청
-        *   1. Patch의 Multipart가 NULL인지 확인
-        *   NULL -> Pass
-        *   NotNULL -> 이미지 저장 및 URL 생성 -> imageURL 필드값 교체 */
+        if(!imageFile.isEmpty()) {
+            String imageURL = foundReview.getImageURL();
+            facadeImage.deleteImage(imageURL);
 
+            imageURL = facadeImage.createImageURL(List.of(imageFile));
+            foundReview.setImageURL(imageURL);
+        }
 
         return foundReview;
     }

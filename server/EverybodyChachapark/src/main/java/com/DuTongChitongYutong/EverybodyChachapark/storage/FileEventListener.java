@@ -43,6 +43,10 @@ public class FileEventListener {
     @Async
     public void processFileDeleteEvent(FileDeletesEvent event) {
         for (String filename : event.getFiles()) {
+            if(filename.isEmpty() || filename.equals("NotfoundImage.jpg")) {
+                continue;
+            }
+
             Path destination = Path.of(localPath, filename).normalize(); // 경로 설정
 
             try {

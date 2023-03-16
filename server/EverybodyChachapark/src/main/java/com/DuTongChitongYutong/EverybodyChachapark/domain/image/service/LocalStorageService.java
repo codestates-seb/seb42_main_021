@@ -41,7 +41,7 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
         Map<String, MultipartFile> fileMap = new HashMap<>();
         for (MultipartFile file: files) {
             if(file.isEmpty()) {
-                imageURLs.add(localPath + "e7dd60dc-45ab-473a-a752-dc356f48a77e.jpg");
+                imageURLs.add(serverUrl+ "NotfoundImage.jpg");
                 continue;
             }
 

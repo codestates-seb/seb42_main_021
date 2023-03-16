@@ -69,8 +69,6 @@ public class ReviewControllerTest {
     @Test
     public void postReviewTest() throws Exception {
         // given
-        MultiValueMap<String, MockMultipartFile> parmValue = new LinkedMultiValueMap<>();
-
         ReviewDto.Post createReview = new ReviewDto.Post(1L, "Stub 리뷰 작성합니다!", 5);
         String content = gson.toJson(createReview);
 
@@ -138,9 +136,9 @@ public class ReviewControllerTest {
         String content = gson.toJson(updateReview);
 
         given(reviewMapper.reviewPatchDtoToReview(Mockito.any(ReviewDto.Patch.class))).willReturn(new Review());
-        given(reviewService.updateReview(Mockito.anyLong(), Mockito.any(Review.class))).willReturn(new Review());
+        given(reviewService.updateReview(Mockito.anyLong(), Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(new Review());
 
-        ReviewDto.Response response =  new ReviewDto.Response(1L,"Stub 리뷰 수정합니다!", 0, LocalDateTime.now(), LocalDateTime.now(),
+        ReviewDto.Response response =  new ReviewDto.Response(1L,"Stub 리뷰 수정합니다!", 0, , LocalDateTime.now(), LocalDateTime.now(),
                 new ReviewDto.Response.ReviewMember(1L, "legendpaino"));
 
         given(reviewMapper.reviewToReviewResponseDto(Mockito.any(Review.class))).willReturn(response);
@@ -176,7 +174,7 @@ public class ReviewControllerTest {
                                         fieldWithPath("data.reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별 ID"),
                                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("리뷰 내용"),
                                         fieldWithPath("data.score").type(JsonFieldType.NUMBER).description("리뷰 점수"),
-//                                        fieldWithPath("data.imageId").type(JsonFieldType.STRING).description("리뷰 이미지 URL"), Todo
+                                        fieldWithPath("data.imageId").type(JsonFieldType.STRING).description("리뷰 이미지 URL"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("리뷰 생성 날짜"),
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정 날짜"),
                                         fieldWithPath("data.reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
