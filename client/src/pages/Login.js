@@ -1,11 +1,15 @@
 import styled from 'styled-components';
-import Main from '../components/main/Main';
-import MainHeader from '../components/main/MainHeader';
-import { Link } from 'react-router-dom';
-import logo1 from '../img/logo1.png';
+import Cookies from 'js-cookie';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+
+import Main from '../components/main/Main';
+import MainHeader from '../components/main/MainHeader';
+import logo1 from '../img/logo1.png';
+import axios from 'axios';
 
 const LoginLayout = styled.div`
   height: 100%;
@@ -97,8 +101,23 @@ const Login = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post(`/members/login`, {
+        email: data.email,
+        password: data.password,
+      });
+      const decodedToken = jwt_decode(res.headers.authorization);
+      const expire = new Date(decodedToken.exp * 1000);
+      Cookies.set('accessToken', res.headers.authorization, true, {
+        expire: expire,
+      });
+      Cookies.set('refreshToken', res.headers.refresh, true, {
+        expire: expire,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -167,3 +186,11 @@ const Login = () => {
 };
 
 export default Login;
+
+//로그인 데이터를 서버에 post한다
+//서버에서 액세스토큰과 리프레시토큰을 받아 저장한다(아마 쿠키)
+
+//또 다른 api.js 를 만든다
+//api.js 에서는 axios.create , interceptors(?)를 이용하여 액세스토큰이 만료되면 자동으로 토큰들을 서버에 주는 로직을 담고있다
+//로그인 한 유저가 액세스토큰값이 있어야만 확인 할 수 있는데이터는
+//axios.get이 아니라 아니라 api.get를 이용해서 서버에서 데이터를 받아온다
