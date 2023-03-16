@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
+
 import Main from '../components/main/Main';
 import logo1 from '../img/logo1.png';
-import { useForm } from 'react-hook-form';
 import MainHeader from '../components/main/MainHeader';
 
 const SignUpLayout = styled.div`
@@ -68,8 +70,17 @@ const SignUp = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      await axios.post(`/members/signup`, {
+        email: data.email,
+        password: data.password,
+        nickname: data.name,
+      });
+      console.log('성공');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Main>
