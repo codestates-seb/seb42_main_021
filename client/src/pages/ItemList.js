@@ -1,12 +1,18 @@
 import styled from 'styled-components';
-import Main from '../components/main/Main';
-import { FaSistrix } from 'react-icons/fa';
-import CategoryContainer from '../components/itemList/CategoryContainer';
-import { useState } from 'react';
-import ItemListItem from '../components/itemList/ItemListItem';
-// import { useStore } from 'zustand';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import {
+  getProductList,
+  searchProductList,
+  categoryProductList,
+} from '../components/api/itemAPI';
+import CategoryContainer from '../components/itemList/CategoryContainer';
+import ItemListItem from '../components/itemList/ItemListItem';
+import Main from '../components/main/Main';
 import Footer from '../components/main/Footer';
+import { FaSistrix } from 'react-icons/fa';
 
 const ItemListContainerWrap = styled.div`
   padding: 0 16px;
@@ -64,63 +70,77 @@ const ItemHeaderContainer = styled.div`
     font-size: 12px;
   }
 `;
-const itemList = [
-  {
-    itemId: 1,
-    subtitle: 'test1',
-    title: '1번네임입니다',
-    rates: '9%',
-    value: '1,490,000원',
-  },
-  {
-    itemId: 2,
-    subtitle: 'test2',
-    title: '2번네임입니다',
-    rates: '16%',
-    value: '1억원',
-  },
-  {
-    itemId: 3,
-    subtitle: 'test3',
-    title: '3번네임입니다',
-    rates: '30%',
-    value: '10억원',
-  },
-  {
-    itemId: 4,
-    subtitle: 'test4',
-    title: '4번네임입니다',
-    rates: '20%',
-    value: '100억원',
-  },
-];
 
 const ItemBodyContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  position: relative;
   justify-content: space-evenly;
-  height: 100%;
+  height: 80%;
+  background-color: whitesmoke;
   margin-top: 20px;
 `;
 
 const ItemList = () => {
-  // 5개 종류 Filter
-  // const [filterOption, setFilterOption] = useStore(0);
+  const [items, setItems] = useState([]);
+  const page = 0; // setState 없을시 useState X
+  const size = 10;
 
-  const [items, setItems] = useState(itemList);
   const [searchValue, setSearchValue] = useState('');
+  const [keyword, setKeyword] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      setSearchValue(event.target.value);
+      const filterProductName = items.filter((item) => {
+        return item.name.toLowerCase().includes(searchValue.toLowerCase());
+      })[0];
+      setKeyword((previousItems) => [...previousItems, filterProductName]);
     }
   };
+
   const handleChange = (e) => {
     setSearchValue(e.target.value);
   };
 
-  const filterItemList = items.filter((item) => {
-    return item.title.toLowerCase().includes(searchValue.toLowerCase());
-  });
+  useEffect(() => {
+    const getProductListFilter = async () => {
+      const response = await getProductList(page, size);
+      console.log(response.data);
+      // setItems((prevItems) => [...prevItems, ...response.data]);
+      // setItems(response.상품목록);
+      setItems(response.data);
+    };
+    getProductListFilter();
+  }, [page, size]);
+
+  useEffect(() => {
+    if (categoryFilter.length > 0) {
+      const categoryProductListFilter = async () => {
+        // console.log(categoryFilter);
+        const response = await categoryProductList(categoryFilter);
+        // console.log(response.data);
+        setItems(response.data);
+        // 키: value 형태 X 덮어씌우기 아님, [id]: data
+      };
+      categoryProductListFilter();
+    }
+  }, [categoryFilter]);
+
+  useEffect(() => {
+    if (keyword.length > 0) {
+      const searchProductListFilter = async () => {
+        // console.log(keyword);
+        const response = await searchProductList(keyword);
+        // console.log(response.data);
+        setItems(response.상품목록);
+        // setItems((prevItems) => [...prevItems, ...response.data]);
+        // 키: value 형태 X 덮어씌우기 아님, [id]: data
+      };
+      searchProductListFilter();
+    }
+  }, [keyword]);
+
   return (
     <>
       <Main>
@@ -134,20 +154,18 @@ const ItemList = () => {
               onKeyDown={handleKeyDown}
             />
           </SearchContainer>
-          <CategoryContainer />
+          <CategoryContainer
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+          />
           <ItemHeaderContainer>
             <h3>전체 상품</h3>
-            {/* 토큰여부로 보이는 거 설정하기. */}
             <Link to="/admin-item/:id">상품 등록하기</Link>
           </ItemHeaderContainer>
           <ItemBodyContainer>
-            {filterItemList.length > 0
-              ? filterItemList.map((item) => (
-                  <ItemListItem key={item.itemId} list={item} />
-                ))
-              : items.map((item) => (
-                  <ItemListItem key={item.itemId} list={item} />
-                ))}
+            {items?.map((item) => (
+              <ItemListItem key={item.productId} item={item} />
+            ))}
           </ItemBodyContainer>
           <Footer />
         </ItemListContainerWrap>
