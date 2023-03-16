@@ -40,21 +40,21 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity updateMember(@Valid @RequestBody MemberDto.Patch patch) {
-        memberService.updateMember(mapper.memberToMemberPatchDto(patch));
-        return new ResponseEntity(HttpStatus.OK);
+        Member updatedMember = memberService.updateMember(mapper.memberPatchDtoToMember(patch));
+        return new ResponseEntity(new SingleResponseDto<>(mapper.memberToMemberResponseDto(updatedMember)), HttpStatus.OK);
     }
 
-    @GetMapping("/mypage")
-    public ResponseEntity getMember () {
-        Member findMember = memberService.findByEmail();
+    @GetMapping("/mypage/{member-id}")
+    public ResponseEntity getMember (@PathVariable ("member-id") long memberId) {
+        Member findMember = memberService.findMember(memberId);
         MemberDto.Response response = mapper.memberToMemberResponseDto(findMember);
         return new ResponseEntity(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity deleteMember (HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization").substring(7);
+        //String accessToken = request.getHeader("Authorization").substring(7);
         memberService.deleteMember(request);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
