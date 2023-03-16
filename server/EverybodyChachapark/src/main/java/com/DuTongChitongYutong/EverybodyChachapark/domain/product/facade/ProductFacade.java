@@ -5,8 +5,11 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPatchDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPostDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.ProductCategory;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -30,7 +33,21 @@ public class ProductFacade {
         return product.toDto();
     }
 
-    // public ProductDto readProducts
+        public Page<Product> readProducts(Pageable pageable){
+
+        Page<Product> productPage = productService.readProducts(pageable);
+
+        return productPage;
+
+        }
+
+        public Page<Product> readProducts(ProductCategory productCategory, Pageable pageable){
+
+        Page<Product> productPage = productService.readProducts(productCategory, pageable);
+
+        return productPage;
+    }
+
 
     public ProductDto updateProduct(long productId, ProductPatchDto productPatchDto){
         Product product = productService.readProduct(productId);
