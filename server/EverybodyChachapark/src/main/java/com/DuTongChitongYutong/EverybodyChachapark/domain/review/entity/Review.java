@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -24,7 +25,8 @@ public class Review extends BaseTime {
     @Column(nullable = false)
     private int score;
 
-    //    private String imageURL;  // Todo: 이미지 식별자
+    @Column(nullable = false)
+    private String imageURL = "[]";  // Todo: 이미지 식별자
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
@@ -40,6 +42,7 @@ public class Review extends BaseTime {
             this.member.getReviews().add(this);
         }
     }
+
 //
 //    public void setProduct(Product product) { // 양방향 매핑
 //        this.product = product;

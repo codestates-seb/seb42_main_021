@@ -42,6 +42,10 @@ public class ErrorResponse {
         return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
     }
 
+    public static ErrorResponse of (StorageExceptionCode exceptionCode) {
+        return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
+    }
+
     public static ErrorResponse of (HttpStatus httpStatus) {
         return new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase());
     }

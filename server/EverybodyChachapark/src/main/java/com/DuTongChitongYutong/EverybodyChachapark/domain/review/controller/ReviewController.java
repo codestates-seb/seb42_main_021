@@ -10,10 +10,12 @@ import com.DuTongChitongYutong.EverybodyChachapark.util.UriCreator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -30,16 +32,16 @@ public class ReviewController {
     final private ReviewMapper mapper;
 
     @PostMapping
-    public ResponseEntity postReview(@Valid @RequestBody ReviewDto.Post requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
-        Review review = reviewService.createReview(mapper.reviewPostDtoToReview(requestBody));
+    public ResponseEntity postReview(@Valid @RequestPart ReviewDto.Post requestBody, @RequestPart MultipartFile imageFile) {
+        Review review = reviewService.createReview(mapper.reviewPostDtoToReview(requestBody), imageFile);
         URI location = UriCreator.createUri(REVIEW_DEFAULT_URL, review.getReviewId());
 
         return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{review-id}")
-    public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId, @Valid @RequestBody ReviewDto.Patch requestBody) { // Todo: image 기능 구현 완료 후 Multipart 구현
-        Review review = reviewService.updateReview(reviewId, mapper.reviewPatchDtoToReview(requestBody));
+    public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId, @Valid @RequestPart ReviewDto.Patch requestBody, @RequestPart MultipartFile imageFile) {
+        Review review = reviewService.updateReview(reviewId, mapper.reviewPatchDtoToReview(requestBody), imageFile);
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(review)), HttpStatus.OK);
     }
