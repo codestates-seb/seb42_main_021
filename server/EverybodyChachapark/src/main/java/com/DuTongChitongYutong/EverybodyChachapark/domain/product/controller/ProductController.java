@@ -62,9 +62,9 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestBody ProductPatchDto productPatchDto){
+    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestPart ProductPatchDto productPatchDto, @RequestPart MultipartFile thumbnailImageFile){
 
-        return new ResponseEntity<>(new SingleResponseDto<>(productFacade.updateProduct(productId, productPatchDto)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(productFacade.updateProduct(productId, productPatchDto, thumbnailImageFile)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")

@@ -33,8 +33,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -136,12 +135,17 @@ public class MemberControllerTest {
 
         given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(patchResponse);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
+
         //when
         ResultActions patchAction = mockMvc.perform(
                 patch("/members")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content)
+                        .headers(headers)
                 );
 
         patchAction
@@ -153,6 +157,13 @@ public class MemberControllerTest {
                 .andDo(document("patch-member",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        requestHeaders(
+                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                "Refresh Token (Ex. eyJhbG...)")
+                                )
+                        ),
                         requestFields(
                                 List.of(
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").optional(),
@@ -184,18 +195,31 @@ public class MemberControllerTest {
 
         given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(getResponse);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
+
         //when
         ResultActions getAction = mockMvc.perform(
                 get("/members/mypage")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .headers(headers)
                 );
 
         getAction
                 .andExpect(status().isOk())
                 .andDo(
                 document("get-member",
+                        getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        requestHeaders(
+                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                "Refresh Token (Ex. eyJhbG...)")
+                                )
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
@@ -214,11 +238,16 @@ public class MemberControllerTest {
     @Test
     public void deleteMemberTest() throws Exception {
         // given
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
+
         doNothing().when(memberService).deleteMember(Mockito.any());
         //when
         ResultActions deleteAction = mockMvc.perform(
                 delete("/members")
                         .accept(MediaType.APPLICATION_JSON)
+                        .headers(headers)
                 );
 
         deleteAction
@@ -226,7 +255,15 @@ public class MemberControllerTest {
                 .andDo(
                         document("delete-member",
                                 getRequestPreProcessor(),
-                                getResponsePreProcessor())
+                                getResponsePreProcessor(),
+                                requestHeaders(
+                                        List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                        "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                                headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                        "Refresh Token (Ex. eyJhbG...)")
+                                        )
+                                )
+                        )
                 );
     }
 }

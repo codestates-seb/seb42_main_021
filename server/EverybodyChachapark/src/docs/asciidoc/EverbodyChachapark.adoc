@@ -68,6 +68,9 @@ include::{snippets}/patch-review/request-headers.adoc[]
 .path-parameters
 include::{snippets}/patch-review/path-parameters.adoc[]
 
+.request-parts
+include::{snippets}/patch-review/request-parts.adoc[]
+
 .request-fields
 include::{snippets}/patch-review/request-fields.adoc[]
 
@@ -100,6 +103,12 @@ include::{snippets}/post-product/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-product/http-request.adoc[]
+
+.request-headers
+include::{snippets}/post-product/request-headers.adoc[]
+
+.request-parts
+include::{snippets}/patch-product/request-parts.adoc[]
 
 .request-fields
 include::{snippets}/post-product/request-fields.adoc[]
@@ -168,8 +177,14 @@ include::{snippets}/patch-product/curl-request.adoc[]
 .http-request
 include::{snippets}/patch-product/http-request.adoc[]
 
+.request-headers
+include::{snippets}/patch-product/request-headers.adoc[]
+
 .path-parameters
 include::{snippets}/patch-product/path-parameters.adoc[]
+
+.request-parts
+include::{snippets}/patch-product/request-parts.adoc[]
 
 .request-fields
 include::{snippets}/patch-product/request-fields.adoc[]
@@ -186,6 +201,9 @@ include::{snippets}/delete-product/curl-request.adoc[]
 
 .http-request
 include::{snippets}/delete-product/http-request.adoc[]
+
+.request-headers
+include::{snippets}/delete-product/request-headers.adoc[]
 
 .path-parameters
 include::{snippets}/delete-product/path-parameters.adoc[]
@@ -217,6 +235,9 @@ include::{snippets}/patch-member/curl-request.adoc[]
 .http-request
 include::{snippets}/patch-member/http-request.adoc[]
 
+.request-headers
+include::{snippets}/patch-member/request-headers.adoc[]
+
 .request-fields
 include::{snippets}/patch-member/request-fields.adoc[]
 
@@ -233,6 +254,9 @@ include::{snippets}/get-member/curl-request.adoc[]
 .http-request
 include::{snippets}/get-member/http-request.adoc[]
 
+.request-headers
+include::{snippets}/get-member/request-headers.adoc[]
+
 .http-response
 include::{snippets}/get-member/http-response.adoc[]
 
@@ -245,6 +269,9 @@ include::{snippets}/delete-member/curl-request.adoc[]
 
 .http-request
 include::{snippets}/delete-member/http-request.adoc[]
+
+.request-headers
+include::{snippets}/delete-member/request-headers.adoc[]
 
 .http-response
 include::{snippets}/delete-member/http-response.adoc[]

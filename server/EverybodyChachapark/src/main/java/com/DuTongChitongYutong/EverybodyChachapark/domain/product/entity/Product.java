@@ -50,7 +50,7 @@ public class Product extends BaseTime {
         this.thumbnailImageURL = thumbnailImageURL;
     }
 
-    public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus){
+    public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL){
         this.productId = productId;
         this.productName = productName;
         this.price = price;
@@ -58,13 +58,11 @@ public class Product extends BaseTime {
         this.productScore = productScore;
         this.productCategory = productCategory;
         this.productStatus = productStatus;
-
-
+        this.thumbnailImageURL = thumbnailImageURL;
     }
 
     public ProductDto toDto(){
         return new ProductDto(productId, productName, price, productView, productScore,productCategory, productStatus, thumbnailImageURL, getCreatedAt(), getModifiedAt());
     }
 
-
-    }
+}
