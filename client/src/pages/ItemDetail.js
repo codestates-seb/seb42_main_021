@@ -1,25 +1,14 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { Rating } from 'react-simple-star-rating';
-import { useProduct } from '../components/store';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+
 import { FaShoppingCart } from 'react-icons/fa';
 import Footer from '../components/main/Footer';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
-
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: right;
-  margin: 10px 0;
-  padding: 0 16px;
-  > button {
-    margin-left: 10px;
-  }
-  #cancelButton {
-    background-color: var(--red);
-  }
-`;
+import ReviewForm from '../components/review/ReviewForm';
+import ReadReviews from '../components/review/ReadReviews';
 
 const ImageBox = styled.div`
   width: 100%;
@@ -49,88 +38,9 @@ const ProductInformation = styled.div`
   }
 `;
 
-const PurchaseButton = styled.button``;
-
 const ProductDescription = styled.p`
   margin: 20px 0;
   word-break: break-all;
-`;
-
-const ReviewContainer = styled.ul`
-  padding: 0 16px;
-`;
-
-const ReviewBox = styled.li`
-  display: flex;
-  width: 100%;
-  height: 100px;
-  margin: 16px 0;
-  padding: 10px 0;
-  border-top: 2px solid var(--border);
-  #reviewContents {
-    width: 80%;
-    flex-direction: row;
-    margin-right: 10px;
-  }
-  #userInformation {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin-right: 0px;
-    align-items: center;
-    > img {
-      width: 40px;
-      height: 40px;
-    }
-    > * {
-      margin-right: 10px;
-    }
-    #reviewDate {
-      margin-top: 20px;
-      width: 80%;
-      color: var(--gray);
-      font-size: small;
-    }
-    #reviewEdit {
-      display: flex;
-      justify-content: center;
-      width: 30%;
-      > div {
-        color: var(--gray);
-        font-size: small;
-        margin: auto;
-      }
-    }
-  }
-  #review {
-    margin-top: 10px;
-  }
-  > img {
-    width: 100px;
-    height: 100px;
-  }
-`;
-
-const WriteReviewButton = styled.button`
-  width: 100px;
-  height: 40px;
-  border-radius: var(--bd-rd);
-  background-color: var(--blue);
-  color: var(--white);
-`;
-
-const WriteReviewContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  padding: 0 16px;
-  > textarea {
-    height: 150px;
-    resize: none;
-    margin: 10px 0;
-  }
-  #reviewButtonBox {
-    margin-top: 50px;
-  }
 `;
 
 const Modal = styled.div`
@@ -165,163 +75,128 @@ const Modal = styled.div`
   }
 `;
 
+const ReviewContainer = styled.div`
+  > h3 {
+    margin: 30px 16px;
+    padding: 16px 0;
+    border-bottom: 2px solid var(--border);
+  }
+`;
+
 const ItemDetail = () => {
-  const [isClicked, setIsClicked] = useState(false);
-  const [rating, setRating] = useState(0);
+  const [productDetail, setProductDetail] = useState(null);
+  const [productReviews, setProductReviews] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [text, setText] = useState('');
-  const [image, setImage] = useState(null);
-  const { addProduct } = useProduct((state) => state);
+  const [isEditClicked, setIsEditClicked] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
+
   const navigate = useNavigate();
 
-  const handleTextChange = (event) => {
-    setText(event.target.value);
-  };
-
-  const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append('rating', rating);
-    formData.append('text', text);
-    formData.append('image', image);
-    setIsClicked(!isClicked);
-    // try {
-    //   const response = await axios.post('/api/review', formData);
-    //   console.log(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  };
-
-  const handleDismiss = (event) => {
-    event.preventDefault();
-    setRating(0);
-    setText('');
-    setImage(null);
-    setIsClicked(!isClicked);
-  };
-
-  const handleWriteButton = () => {
-    setIsClicked(!isClicked);
-  };
-
-  const handleRating = (rate) => {
-    setRating(rate);
-  };
-
-  const handlePurchase = () => {
-    setIsModalOpen(true);
-  };
+  const { id } = useParams();
 
   const handleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    setIsModalOpen((isOpen) => !isOpen); //콜백함수 사용하기
     navigate('/shoppingcart/1');
   };
 
-  const handleShoppingBag = () => {
-    //if 중복되지 않게 하기
-    addProduct({
-      id: 1,
-      item: '상품명',
-      price: '39000',
-      img: 'img',
-    });
-    handlePurchase();
+  const handleShoppingBag = (event) => {
+    event.preventDefault();
+    //추후 수정
+    // const data = {
+    //   memberId: 1,
+    //   products: [
+    //     {
+    //       productId: list.productId,
+    //       productName: list.productName,
+    //       price: list.price,
+    //       quantity: 1,
+    //     },
+    //   ],
+    // };
+    // axios.post(`/orders`, data, {
+    //   headers: {
+    //     'ngrok-skip-browser-warning': '12',
+    //   },
+    // });
+    setIsModalOpen(true);
   };
+
+  const findProductByProductId = async (productId) => {
+    const { data } = await axios.get(`/products/${productId}`, {
+      headers: {
+        'ngrok-skip-browser-warning': '12',
+      },
+    });
+    return data.data;
+  };
+
+  const getProductReviews = async (productId) => {
+    try {
+      const { data } = await axios.get(`/reviews/${productId}?page=1&size=10`);
+      return data.data;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    findProductByProductId(id).then((productInformation) => {
+      setProductDetail(productInformation);
+    });
+    getProductReviews(id).then((productReviewList) =>
+      setProductReviews(productReviewList)
+    );
+  }, [id]);
 
   return (
     <Main>
       <MainLayout>
-        <ImageBox>
-          <img alt="텐트1"></img>
-        </ImageBox>
-        <ProductInformation>
+        {productDetail && (
           <div>
-            <div id="productName">상품명</div>
-            <div id="productPrice">39,000원</div>
-          </div>
-          <PurchaseButton onClick={handleShoppingBag}>
-            <FaShoppingCart size="40px" />
-          </PurchaseButton>
-          {isModalOpen && (
-            <Modal>
+            <ImageBox>
+              <img alt="텐트1"></img>
+            </ImageBox>
+            <ProductInformation>
               <div>
-                <div>장바구니에 추가되었습니다.</div>
-                <div>
-                  <button onClick={handleModal}>확인</button>
+                <div id="productName">{productDetail.name}</div>
+                <div id="productPrice">
+                  {productDetail.price.toLocaleString('ko-KR')}원
                 </div>
               </div>
-            </Modal>
-          )}
-        </ProductInformation>
-        <ProductDescription>
-          ABC 캠핑 텐트는 캠핑, 하이킹 등 야외활동에 적합한 2인용 텐트입니다.
-          경량으로 제작되어 휴대가 용이하며, 내구성이 뛰어나므로 장기간 사용
-          가능합니다. 방수 처리가 되어 비오는 날에도 사용 가능합니다. 쉽게
-          설치할 수 있으며, 설치 도구가 필요하지 않습니다. 2개의 출입구가 있어
-          편리하게 이용할 수 있습니다. 내부에 수납공간이 있어 소품 등을 보관할
-          수 있습니다. 안정성이 높아 바람이 강한 날에도 사용 가능합니다.
-        </ProductDescription>
-        <ReviewContainer>
-          <ReviewBox>
-            <div id="reviewContents">
-              <div id="userInformation">
-                <img alt="유저 프로필"></img>
-                <div id="userBox">
-                  <Rating
-                    size="15px"
-                    fillColor="#61a0ff"
-                    emptyColor="#C9C9C9"
-                    initialValue={rating}
-                    readonly="true"
-                  />
-                  <div>유저명</div>
-                </div>
-                <div id="reviewDate">2023.03.15</div>
-                <div id="reviewEdit">
-                  <div>수정</div>
-                  <div>삭제</div>
-                </div>
-              </div>
-              <div id="review">리뷰내용</div>
-            </div>
-            <img alt="리뷰사진"></img>
-          </ReviewBox>
-        </ReviewContainer>
-        <ButtonBox>
-          {!isClicked && (
-            <WriteReviewButton onClick={handleWriteButton}>
-              리뷰 작성하기
-            </WriteReviewButton>
-          )}
-        </ButtonBox>
-        {isClicked && (
-          <WriteReviewContainer onSubmit={handleSubmit}>
-            <Rating
-              size="25px"
-              fillColor="#61a0ff"
-              emptyColor="#C9C9C9"
-              onClick={handleRating}
-              initialValue={rating}
-            />
-            <textarea value={text} onChange={handleTextChange} />
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            <ButtonBox>
-              <WriteReviewButton type="submit">등록하기</WriteReviewButton>
-              <WriteReviewButton
-                id="cancelButton"
-                type="button"
-                onClick={handleDismiss}
-              >
-                취소
-              </WriteReviewButton>
-            </ButtonBox>
-          </WriteReviewContainer>
+              <button type="button" onClick={handleShoppingBag}>
+                <FaShoppingCart size="40px" />
+              </button>
+              {isModalOpen && (
+                <Modal>
+                  <div>
+                    <div>장바구니에 추가되었습니다.</div>
+                    <div>
+                      <button onClick={handleModal}>확인</button>
+                    </div>
+                  </div>
+                </Modal>
+              )}
+            </ProductInformation>
+            <ProductDescription>
+              {productDetail.productDetail}
+            </ProductDescription>
+          </div>
         )}
+        <ReviewContainer>
+          <h3>상품 리뷰</h3>
+          <ReviewForm
+            productId={productDetail?.productId}
+            isEditClicked={isEditClicked}
+            setIsEditClicked={setIsEditClicked}
+            editingReview={editingReview}
+          />
+          <ReadReviews
+            productReviews={productReviews}
+            setEditingReview={setEditingReview}
+            setIsEditClicked={setIsEditClicked}
+          />
+        </ReviewContainer>
         <Footer />
       </MainLayout>
     </Main>
