@@ -10,6 +10,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.facade.ProductFacade;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
+import com.DuTongChitongYutong.EverybodyChachapark.util.GetMockMultipartFile;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,15 +78,26 @@ public class ProductControllerTest {
 
         ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", 500000, 0, 0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, LocalDateTime.now(), LocalDateTime.now());
 
-        given(productFacade.createProduct(Mockito.any(ProductPostDto.class))).willReturn(mockResultProduct);
+        given(productFacade.createProduct(Mockito.any(ProductPostDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultProduct);
 
         ResultActions postAction =
                 mockMvc.perform(
-                        post(PRODUCT_DEFAULT_URL)
+                        multipart(PRODUCT_DEFAULT_URL)
+                                .file(GetMockMultipartFile.getMockMultipartJson("requestBody", content))
+                                .file(GetMockMultipartFile.getMockMultipartFile("thumbnailImageFile"))
+                                .content(content)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
                 );
+
+/*multipart(REVIEW_DEFAULT_URL)
+                                .file(GetMockMultipartFile.getMockMultipartJson("requestBody", content))
+                                .file(GetMockMultipartFile.getMockMultipartFile("imageFile"))
+                                .content(content)
+                                .accept(MediaType.MULTIPART_FORM_DATA)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
+                                .headers(headers)*/
 
 
         postAction

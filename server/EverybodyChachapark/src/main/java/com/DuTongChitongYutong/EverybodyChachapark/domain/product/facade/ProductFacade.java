@@ -1,6 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.product.facade;
 
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPatchDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPostDto;
@@ -11,16 +12,21 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Service
 public class ProductFacade {
 
     private final ProductService productService;
+    private final FacadeImage facadeImage;
 
-    public ProductDto createProduct(ProductPostDto productPostDto){
+    public ProductDto createProduct(ProductPostDto productPostDto, MultipartFile thumbnailImageFile){
+        String thumbnailImageURL = facadeImage.createImageURL(List.of(thumbnailImageFile)); // 이미지 저장
 
-        Product product = productService.createProduct(productPostDto);
+        Product product = productService.createProduct(productPostDto, thumbnailImageURL);
 
         return product.toDto();
     }

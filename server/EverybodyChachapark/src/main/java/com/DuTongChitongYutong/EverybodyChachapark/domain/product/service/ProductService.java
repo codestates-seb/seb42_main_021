@@ -27,8 +27,8 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public Product createProduct(ProductPostDto productPostDto){
-        Product product = new Product(productPostDto.getName(), productPostDto.getPrice());
+    public Product createProduct(ProductPostDto productPostDto, String thumbnailImageURL){
+        Product product = new Product(productPostDto.getName(), productPostDto.getPrice(), thumbnailImageURL);
 
         Optional.ofNullable(productPostDto.getProductCategory()).ifPresent(product::setProductCategory);
         Optional.ofNullable(productPostDto.getProductStatus()).ifPresent(product::setProductStatus);

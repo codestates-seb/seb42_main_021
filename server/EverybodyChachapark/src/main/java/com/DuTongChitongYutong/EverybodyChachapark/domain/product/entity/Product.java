@@ -33,6 +33,10 @@ public class Product extends BaseTime {
     @Column(name = "product_score")
     private int productScore;
 
+    // Todo: 주연님 여기에 imageURL 넣겠습니다!
+    @Column(name = "thumbnail_imageURL")
+    private String thumbnailImageURL;
+
     @Column(name = "product_category")
     @Enumerated(value = EnumType.STRING)
     private ProductCategory productCategory = ProductCategory.NO_CATEGORY;
@@ -40,9 +44,10 @@ public class Product extends BaseTime {
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
 
-    public Product(String productName, int price){
+    public Product(String productName, int price, String thumbnailImageURL){
         this.productName = productName;
         this.price = price;
+        this.thumbnailImageURL = thumbnailImageURL;
     }
 
     public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus){
@@ -58,7 +63,7 @@ public class Product extends BaseTime {
     }
 
     public ProductDto toDto(){
-        return new ProductDto(productId, productName, price, productView, productScore,productCategory, productStatus, getCreatedAt(), getModifiedAt());
+        return new ProductDto(productId, productName, price, productView, productScore,productCategory, productStatus, thumbnailImageURL, getCreatedAt(), getModifiedAt());
     }
 
 
