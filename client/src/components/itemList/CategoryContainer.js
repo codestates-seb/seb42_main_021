@@ -14,6 +14,9 @@ const ImgButton = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
+  :hover {
+    background-color: var(--grayblue);
+  }
   img {
     width: 50px;
     height: 50px;
@@ -24,29 +27,53 @@ const ImgButton = styled.button`
     font-weight: bold;
     color: var(--gray);
   }
+  .option {
+    box-shadow: 7px 3px 3px var(--blue200);
+  }
 `;
+
 // api 받은 후 setFilterOption 테스트하기.
-const CategoryContainer = ({ setFilterOption }) => {
+const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
   return (
     <CategoryContainerDiv>
-      <ImgButton onClick={() => setFilterOption(0)}>
-        <img src={tent} alt="텐트" />
+      <ImgButton onClick={() => setCategoryFilter('TENT')}>
+        <img
+          src={tent}
+          alt="텐트"
+          className={categoryFilter === 0 ? 'option' : null}
+        />
         <p>텐트</p>
       </ImgButton>
-      <ImgButton onClick={() => setFilterOption(1)}>
-        <img src={chair} alt="의자" />
+      <ImgButton onClick={() => setCategoryFilter('CHAIR')}>
+        <img
+          src={chair}
+          alt="의자"
+          className={categoryFilter === 1 ? 'option' : null}
+        />
         <p>체어</p>
       </ImgButton>
-      <ImgButton onClick={() => setFilterOption(2)}>
-        <img src={table} alt="테이블" />
+      <ImgButton onClick={() => setCategoryFilter('TABLE')}>
+        <img
+          src={table}
+          alt="테이블"
+          className={categoryFilter === 2 ? 'option' : null}
+        />
         <p>테이블</p>
       </ImgButton>
-      <ImgButton onClick={() => setFilterOption(3)}>
-        <img src={light} alt="조명" />
+      <ImgButton onClick={() => setCategoryFilter('LIGHT')}>
+        <img
+          src={light}
+          alt="조명"
+          className={categoryFilter === 3 ? 'option' : null}
+        />
         <p>조명</p>
       </ImgButton>
-      <ImgButton onClick={() => setFilterOption(4)}>
-        <img src={campingbulmung} alt="화로대" />
+      <ImgButton onClick={() => setCategoryFilter('FIRE')}>
+        <img
+          src={campingbulmung}
+          alt="화로대"
+          className={categoryFilter === 4 ? 'option' : ''}
+        />
         <p>화로대</p>
       </ImgButton>
     </CategoryContainerDiv>
