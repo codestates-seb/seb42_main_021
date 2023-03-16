@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
+
 import shoppingCartItem from '../../img/shoppingCartItem.png';
 import { useProduct } from '../store';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
-  .noProduct {
+  .no-product {
     margin: 50px 0 50px 150px;
     font-size: 20px;
     color: var(--gray);
@@ -17,7 +19,7 @@ const AllCheckContainer = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgb(201, 201, 201);
-  .allCheckText {
+  .all-checkText {
     margin-left: 20px;
     font-size: 15px;
     color: var(--gray);
@@ -56,11 +58,11 @@ const ItemInformationBox = styled.div`
   margin-left: 30px;
   width: 230px;
   flex-wrap: wrap;
-  .singleCheckText {
+  .single-checkText {
     font-size: 18px;
     color: var(--black);
   }
-  .itemPrice {
+  .item-price {
     margin-top: 30px;
     font-size: 20px;
   }
@@ -82,14 +84,14 @@ const ItemNumberChangeContainer = styled.div`
   margin-top: 20px;
   border: 1px solid rgb(201, 201, 201);
   border-radius: var(--bd-rd);
-  .itemPlus,
-  .itemMinus {
+  .item-plus,
+  .item-minus {
     width: 40px;
     height: 40px;
     font-size: 20px;
     color: var(--gray);
   }
-  .itemNumber {
+  .item-number {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,105 +102,88 @@ const ItemNumberChangeContainer = styled.div`
 `;
 
 const ShoppingItems = ({ setOrderPrice }) => {
-  //마이페이지에 주문 이력을 보내줘야함
-  //상품명 , 수량 , 가격 ,아이디
-  //id가 1이 체크드아이템에 존재 한다면
-  //for(let i of checkdItem)
-  //product.filter((el) => el.id === i)) 상품이름 가격 아이디값추출
-  //counts[i]+1 수량 추출
-
-  const items = {
-    memberId: 1,
-    orders: [
-      // {
-      //   productId: 6,
-      //   productName: '차량용텐트1',
-      //   price: 50000,
-      //   quantity: 1,
-      // },
-      // {
-      //   productId: 2,
-      //   productName: '차량용텐트2',
-      //   price: 1000,
-      //   quantity: 5,
-      // },
-      // {
-      //   productId: 1,
-      //   productName: '차량용텐트1',
-      //   price: 2000,
-      //   quantity: 2,
-      // },
-    ],
-  };
-
   const { removeProduct } = useProduct((state) => state);
-  const product = items.orders;
+  const [product, setProduct] = useState([]);
   const [counts, setCounts] = useState({});
-  const [checkdItem, setCheckedItem] = useState(
-    product.map((el) => el.productId)
-  );
+  const [checkedItem, setCheckedItem] = useState([]);
 
-  useEffect(() => {
-    product.forEach((el) => {
-      setCounts((pre) => ({
-        ...pre,
-        [el.productId]: el.quantity,
+  const isAllCheckd = product.length === checkedItem.length ? true : false; // 영어로..
+  //수량 변화가 있을 때마다 서버에 저장(post) => 다시 get해서 내용 뿌려주기 => 비효율적
+  //화면에서 벗어났을 때만 변경 내용을 서버에 저장하고싶음
+  //마운트 언마운트 ???
+  // useEffect winddow.location.path로 현재 경로페이지 확인하기
+
+  const readItemList = async () => {
+    const { data } = await axios.get(`/members/1/orders`, {
+      headers: { 'ngrok-skip-browser-warning': '12' },
+    }); //사이드이펙트 방지하기위해 return값 주고
+    setProduct(data.orders);
+    setCheckedItem(data.orders.map((element) => element.productId));
+    data.orders.forEach((element) => {
+      setCounts((previosCount) => ({
+        ...previosCount,
+        [element.productId]: element.quantity,
       }));
     });
+  };
+
+  useEffect(() => {
+    (async () => {
+      await readItemList();
+    })();
   }, []);
 
-  function handleIncreaseCount(id) {
-    setCounts((prevCounts) => ({
-      ...prevCounts,
-      [id]: prevCounts[id] + 1,
+  const handleIncreaseCount = (id) => {
+    setCounts((previosCount) => ({
+      ...previosCount,
+      [id]: previosCount[id] + 1,
     }));
-  }
+  };
 
   const handleDecreaseCount = (id) => {
-    if (counts[id] > 1) {
-      setCounts((prevCounts) => ({
-        ...prevCounts,
-        [id]: prevCounts[id] - 1,
-      }));
-    }
+    if (counts[id] <= 1) return;
+
+    return setCounts((previosCount) => ({
+      ...previosCount,
+      [id]: previosCount[id] - 1,
+    }));
   };
 
   const handleAllCheck = (checked) => {
-    if (checked) {
-      setCheckedItem(product.map((el) => el.productId));
-    } else {
-      setCheckedItem([]);
-    }
+    if (!checked) return setCheckedItem([]);
+
+    return setCheckedItem(product.map((el) => el.productId));
   };
 
   const handleSingleCheck = (checked, id) => {
-    if (checked) {
-      setCheckedItem([...checkdItem, id]);
-    } else {
-      setCheckedItem(checkdItem.filter((el) => el !== id));
-    }
+    if (!checked) return setCheckedItem(checkedItem.filter((el) => el !== id));
+
+    return setCheckedItem([...checkedItem, id]);
   };
 
   const handleDelte = (id) => {
     removeProduct(id);
   };
   const totalPrice = () => {
-    const itemArr = product.map((el) => el.productId);
-    let newTotalPrice = 0;
-    for (let i of itemArr) {
-      if (checkdItem.includes(i)) {
-        let quantity = counts[i];
-        let price = product.filter((el) => el.productId === i)[0].price;
-        newTotalPrice += quantity * price;
+    const productIds = product.map((element) => element.productId);
+
+    let newTotalPrice = productIds.reduce((output, currentValue) => {
+      if (checkedItem.includes(currentValue)) {
+        let quantity = counts[currentValue];
+        let price = product.filter(
+          (element) => element.productId === currentValue
+        )[0].price;
+        output += quantity * price;
       }
-    }
-    return newTotalPrice;
+      return output;
+    }, 0);
+    return newTotalPrice.toLocaleString('ko-KR');
   };
   const total = totalPrice();
 
   useEffect(() => {
     setOrderPrice(total);
-  }, [total]);
+  }, [total, setOrderPrice]);
 
   return (
     <ShoppingItemLayout>
@@ -207,44 +192,45 @@ const ShoppingItems = ({ setOrderPrice }) => {
           <input
             type={'checkbox'}
             id={'allCheckBox'}
-            checked={product.length === checkdItem.length ? true : false}
+            checked={isAllCheckd}
             onChange={(e) => handleAllCheck(e.target.checked)}
           />
         </CheckBoxContainer>
-        <label className="allCheckText" htmlFor={'allCheckBox'}>
+        <label className="all-checkText" htmlFor={'allCheckBox'}>
           {'전체선택'}
         </label>
       </AllCheckContainer>
 
       <h2 className="item">배송상품</h2>
       {product.length === 0 ? (
-        <div className="noProduct">주문 할 제품이 없습니다</div>
+        <div className="no-product">주문 할 제품이 없습니다</div>
       ) : (
-        product &&
-        product.map((el) => (
-          <ShoppingItemContainer key={el.productId}>
+        product?.map((element) => (
+          <ShoppingItemContainer key={element.productId}>
             <EachItemContainer>
               <CheckBoxContainer>
                 <input
                   type={'checkbox'}
-                  id={el.productId}
-                  checked={checkdItem.includes(el.productId) ? true : false}
-                  onChange={(e) => {
-                    handleSingleCheck(e.target.checked, el.productId);
+                  id={element.productId}
+                  checked={checkedItem.includes(element.productId)}
+                  onChange={(event) => {
+                    handleSingleCheck(event.target.checked, element.productId);
                   }}
                 />
               </CheckBoxContainer>
               <ItemImgBox alt={'shoppingItem'} src={shoppingCartItem} />
               <ItemInformationBox>
-                <label className="singleCheckText" htmlFor={el.productId}>
-                  {el.productName}
+                <label className="single-checkText" htmlFor={element.productId}>
+                  {element.productName}
                 </label>
-                <div className="itemPrice">{el.price}원</div>
+                <div className="item-price">
+                  {element.price.toLocaleString('ko-KR')}원
+                </div>
               </ItemInformationBox>
               <div
                 className="cancel"
                 onClick={() => {
-                  handleDelte(el.productId);
+                  handleDelte(element.productId);
                 }}
               >
                 x
@@ -252,15 +238,15 @@ const ShoppingItems = ({ setOrderPrice }) => {
             </EachItemContainer>
             <ItemNumberChangeContainer>
               <button
-                className="itemPlus"
-                onClick={() => handleIncreaseCount(el.productId)}
+                className="item-plus"
+                onClick={() => handleIncreaseCount(element.productId)}
               >
                 +
               </button>
-              <div className="itemNumber">{counts[el.productId]}</div>
+              <div className="item-number">{counts[element.productId]}</div>
               <button
-                className="itemMinus"
-                onClick={() => handleDecreaseCount(el.productId)}
+                className="item-minus"
+                onClick={() => handleDecreaseCount(element.productId)}
               >
                 -
               </button>
@@ -273,9 +259,3 @@ const ShoppingItems = ({ setOrderPrice }) => {
 };
 
 export default ShoppingItems;
-
-//첫 화면에서 모두 체크박스는 표시되어 있다
-//checkitem 에 아이디 값이 저장
-//allcheck는 체크값이 프로덕트 길이 === 체크아이템 길이 참
-
-//개별체크박스는

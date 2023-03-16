@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+
 import DaumPostCode from './DaumPostCode';
 
 const ShippingLayout = styled.div`
@@ -35,7 +36,7 @@ const WriteAddressContainer = styled.div`
     border-radius: var(--bd-rd);
     font-size: 20px;
   }
-  .findAdress {
+  .find-adress {
     width: 100px;
     height: 40px;
     margin-left: 30px;
@@ -53,7 +54,7 @@ const OrderContainer = styled.div`
   background-color: var(--blue);
   border-radius: var(--bd-rd);
 
-  .orderPrice {
+  .order-price {
     font-size: 25px;
     font-weight: 500;
     color: var(--white);
@@ -100,23 +101,20 @@ const PopupText = styled.p`
 `;
 
 const ShippingInformation = ({ orderPrice }) => {
-  //form으로 만들면 랜더링 되면서 장바구니 목록이 사라짐 (zustand내용이 날아감)
-  //서버에게 보내줄게 아니라면  그냥 페이지전환만 되도록 ??
-
   const [receiver, setReceiver] = useState('');
   const [address, setAddress] = useState('');
   const [popAddress, setPopAddress] = useState(false);
   const [alarmPop, setAlarmPop] = useState(false);
   const [popContent, setPopContent] = useState(null);
 
-  const handleReceiver = (e) => {
-    e.preventDefault();
-    setReceiver(e.target.value);
+  const handleReceiver = (event) => {
+    event.preventDefault();
+    setReceiver(event.target.value);
   };
 
-  const handleAdress = (e) => {
-    e.preventDefault();
-    setAddress(e.target.value);
+  const handleAdress = (event) => {
+    event.preventDefault();
+    setAddress(event.target.value);
   };
 
   const popupOpen = (content) => {
@@ -130,13 +128,15 @@ const ShippingInformation = ({ orderPrice }) => {
   };
 
   const handleSubmit = () => {
+    if (orderPrice !== 0) return;
     if (!address && !receiver) {
       popupOpen('받는 사람과 주소를 입력해주세요');
-    } else if (address && !receiver) {
+    }
+    if (address && !receiver) {
       popupOpen('받는 사람을 입력해주세요');
-    } else if (!address && receiver) {
+    }
+    if (!address && receiver) {
       popupOpen('주소를 입력해주세요');
-    } else {
     }
     if (orderPrice === 0) {
       popupOpen('주문할 상품이 없습니다');
@@ -154,7 +154,7 @@ const ShippingInformation = ({ orderPrice }) => {
             placeholder="  홍길동"
             value={receiver}
             onChange={handleReceiver}
-          ></input>
+          />
         </WriteNameContainer>
         <WriteAddressContainer>
           <h3 className="address"> 배송지 입력</h3>
@@ -163,9 +163,9 @@ const ShippingInformation = ({ orderPrice }) => {
             placeholder=" 서울 강남구 영동대로 513 "
             value={address}
             onChange={handleAdress}
-          ></input>
+          />
           <button
-            className="findAdress"
+            className="find-adress"
             type="button"
             onClick={() => setPopAddress(!popAddress)}
           >
@@ -179,7 +179,7 @@ const ShippingInformation = ({ orderPrice }) => {
         </WriteAddressContainer>
 
         <OrderContainer>
-          <button className="orderPrice" onClick={handleSubmit}>
+          <button className="order-price" onClick={handleSubmit}>
             {orderPrice}원 주문하기
           </button>
         </OrderContainer>
