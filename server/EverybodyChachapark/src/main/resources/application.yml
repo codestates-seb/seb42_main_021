@@ -22,6 +22,11 @@ logging:
 account:
   admin: admin@gmail.com
 
+image:
+  local-path: "src/main/resources/file"
+  server-url: http://localhost:8080/images/
+
+
 jwt:
   key: kim123412341234123456789567895678956789
   access-token-expiration-minutes: 30

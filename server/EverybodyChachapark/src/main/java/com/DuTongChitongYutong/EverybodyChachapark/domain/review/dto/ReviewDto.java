@@ -35,8 +35,7 @@ public class ReviewDto {
         private Long reviewId;
         private String content;
         private int score;
-
-//        private String imageURL;
+        private String imageURL;
 
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

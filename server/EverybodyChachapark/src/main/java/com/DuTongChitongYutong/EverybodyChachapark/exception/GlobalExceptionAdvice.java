@@ -37,6 +37,13 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler
+    public ResponseEntity handleStroageException(StorageException e) {
+        final ErrorResponse response = ErrorResponse.of(e.getStorageExceptionCode());
+
+        return new ResponseEntity(response, HttpStatus.valueOf(e.getStorageExceptionCode().getStatus()));
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED);
