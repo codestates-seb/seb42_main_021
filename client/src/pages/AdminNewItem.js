@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import axios from 'axios';
 import ReactQuill from 'react-quill';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -171,13 +172,23 @@ const AdminNewItem = () => {
     formData.append('price', price);
     formData.append('image', image);
     formData.append('text', text);
-
-    // try {
-    //   const response = await axios.post('/api/review', formData);
-    //   console.log(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    const header = {
+      headers: {
+        'ngrok-skip-browser-warning': '12',
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axios.post('/products', formData, header);
+      console.log(response.data);
+      setCategory('선택해주세요');
+      setName('');
+      setPrice('');
+      setImage('');
+      setText('');
+    } catch (error) {
+      console.error(error);
+    }
     navigate('/product');
   };
 

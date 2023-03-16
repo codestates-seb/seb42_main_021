@@ -41,7 +41,7 @@ const ItemValueBox = styled.div`
     font-weight: bold;
   }
 `;
-const ItemListItem = ({ list }) => {
+const ItemListItem = ({ item }) => {
   return (
     <ItemLayout to="/">
       <ItemImgBox>
@@ -49,12 +49,12 @@ const ItemListItem = ({ list }) => {
       </ItemImgBox>
       <ItemBodyContainer>
         <ItemTitleBox>
-          <h2>{list.title}</h2>
-          <p>{list.subtitle}</p>
+          <h2>{item.name}</h2>
+          <p>{item.productDetail}</p>
         </ItemTitleBox>
         <ItemValueBox>
-          <span>{list.rates} </span>
-          <b>{list.value}</b>
+          {/* <span>{list.rates} </span> */}
+          <b>{item.price}</b>
         </ItemValueBox>
       </ItemBodyContainer>
     </ItemLayout>
