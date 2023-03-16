@@ -176,9 +176,8 @@ public class MemberControllerTest {
     @Test
     public void getMemberTest() throws Exception {
         //given
-        long memberId = 1L;
 
-        given(memberService.findMember(Mockito.anyLong())).willReturn(new Member());
+        given(memberService.findByEmail()).willReturn(new Member());
 
         MemberDto.Response getResponse = new MemberDto.Response(1, "user@gmail.com", "user",
                 "Img.link", Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
@@ -187,7 +186,7 @@ public class MemberControllerTest {
 
         //when
         ResultActions getAction = mockMvc.perform(
-                get("/members/mypage/{member-id}", memberId)
+                get("/members/mypage")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                 );
@@ -197,9 +196,6 @@ public class MemberControllerTest {
                 .andDo(
                 document("get-member",
                         getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("member-id").description("회원 식별자 ID")
-                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),

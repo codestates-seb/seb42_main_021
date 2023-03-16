@@ -44,9 +44,9 @@ public class MemberController {
         return new ResponseEntity(new SingleResponseDto<>(mapper.memberToMemberResponseDto(updatedMember)), HttpStatus.OK);
     }
 
-    @GetMapping("/mypage/{member-id}")
-    public ResponseEntity getMember (@PathVariable ("member-id") long memberId) {
-        Member findMember = memberService.findMember(memberId);
+    @GetMapping("/mypage")
+    public ResponseEntity getMember () {
+        Member findMember = memberService.findByEmail();
         MemberDto.Response response = mapper.memberToMemberResponseDto(findMember);
         return new ResponseEntity(new SingleResponseDto<>(response), HttpStatus.OK);
     }
