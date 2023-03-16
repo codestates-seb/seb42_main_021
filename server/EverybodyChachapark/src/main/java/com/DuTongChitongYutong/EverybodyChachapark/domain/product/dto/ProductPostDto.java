@@ -20,7 +20,6 @@ public class ProductPostDto {
 
     private ProductCategory productCategory;
 
-
     private ProductStatus productStatus;
 
 

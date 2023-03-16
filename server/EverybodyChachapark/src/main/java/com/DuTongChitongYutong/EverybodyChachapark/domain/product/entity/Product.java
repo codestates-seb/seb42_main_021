@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -42,6 +43,18 @@ public class Product extends BaseTime {
     public Product(String productName, int price){
         this.productName = productName;
         this.price = price;
+    }
+
+    public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus){
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.productView = productView;
+        this.productScore = productScore;
+        this.productCategory = productCategory;
+        this.productStatus = productStatus;
+
+
     }
 
     public ProductDto toDto(){

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProductDto {
 
-    private long id;
+    private long ProductId;
 
     private String name;
 
