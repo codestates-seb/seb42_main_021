@@ -24,7 +24,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,8 +80,8 @@ public class ReviewControllerTest {
         given(reviewService.createReview(Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(mockResultReview);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer ".concat("adfadf"));
-        headers.add("Refresh", "adasdsad");
+        headers.add("Authorization", "Bearer ".concat("12345"));
+        headers.add("Refresh", "123456");
 
         // when
         ResultActions postAction =
@@ -110,6 +109,7 @@ public class ReviewControllerTest {
                                         headerWithName("Refresh").description("토큰 재발급에 필요한 " +
                                                 "Refresh Token (Ex. eyJhbG...)")
                                         )
+
                         ),
                         requestParts(
                                 List.of(partWithName("requestBody").description("리뷰 등록 Json Request Fields"),
@@ -138,26 +138,18 @@ public class ReviewControllerTest {
         given(reviewMapper.reviewPatchDtoToReview(Mockito.any(ReviewDto.Patch.class))).willReturn(new Review());
         given(reviewService.updateReview(Mockito.anyLong(), Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(new Review());
 
-        ReviewDto.Response response =  new ReviewDto.Response(1L,"Stub 리뷰 수정합니다!", 0, "imageUrl", LocalDateTime.now(), LocalDateTime.now(),
+        ReviewDto.Response response =  new ReviewDto.Response(1L,"Stub 리뷰 수정합니다!", 0, , LocalDateTime.now(), LocalDateTime.now(),
                 new ReviewDto.Response.ReviewMember(1L, "legendpaino"));
 
         given(reviewMapper.reviewToReviewResponseDto(Mockito.any(Review.class))).willReturn(response);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer ".concat("adfadf"));
-        headers.add("Refresh", "adasdsad");
-
         // when
         ResultActions patchAction =
                 mockMvc.perform(
-                        multipart(REVIEW_DEFAULT_URL + "/{review-id}", 1L)
-                                .file(GetMockMultipartFile.getMockMultipartJson("requestBody", content))
-                                .file(GetMockMultipartFile.getMockMultipartFile("imageFile"))
-                                .content(content)
+                        patch(REVIEW_DEFAULT_URL + "/{review-id}", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .headers(headers)
-                                .with(request -> { request.setMethod("PATCH"); return request; })
+                                .content(content)
                 );
 
         // then
@@ -168,13 +160,6 @@ public class ReviewControllerTest {
                         "patch-review",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        requestHeaders(
-                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
-                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
-                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
-                                                "Refresh Token (Ex. eyJhbG...)")
-                                )
-                        ),
                         pathParameters(
                                 parameterWithName("review-id").description("수정할 리뷰 식별자 ID")
                         ),
@@ -189,7 +174,7 @@ public class ReviewControllerTest {
                                         fieldWithPath("data.reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별 ID"),
                                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("리뷰 내용"),
                                         fieldWithPath("data.score").type(JsonFieldType.NUMBER).description("리뷰 점수"),
-                                        fieldWithPath("data.imageURL").type(JsonFieldType.STRING).description("리뷰 이미지 URL"),
+                                        fieldWithPath("data.imageId").type(JsonFieldType.STRING).description("리뷰 이미지 URL"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("리뷰 생성 날짜"),
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정 날짜"),
                                         fieldWithPath("data.reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
@@ -213,11 +198,11 @@ public class ReviewControllerTest {
 
         given(reviewService.findReviews(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
 
-        List<ReviewDto.Response> responseReviewList = List.of(new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")));
+        List<ReviewDto.Response> responseReviewList = List.of(new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
+                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
+                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
+        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
+        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")));
 
 
         given(reviewMapper.reviewToReviewResponseDtos(Mockito.anyList())).willReturn(responseReviewList);
@@ -256,7 +241,7 @@ public class ReviewControllerTest {
                                         fieldWithPath("data[].reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별 ID"),
                                         fieldWithPath("data[].content").type(JsonFieldType.STRING).description("리뷰 내용"),
                                         fieldWithPath("data[].score").type(JsonFieldType.NUMBER).description("리뷰 점수"),
-                                        fieldWithPath("data[].imageURL").type(JsonFieldType.STRING).description("리뷰 이미지 URL"),
+//                                        fieldWithPath("data[].imageId").type(JsonFieldType.STRING).description("리뷰 이미지 URL"), Todo
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("리뷰 생성 날짜"),
                                         fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정 날짜"),
                                         fieldWithPath("data[].reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
@@ -280,17 +265,11 @@ public class ReviewControllerTest {
     public void deleteReviewTest() throws Exception {
         // given
         doNothing().when(reviewService).deleteReview(Mockito.anyLong());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer ".concat("adfadf"));
-        headers.add("Refresh", "adasdsad");
-
         // when
         ResultActions deleteAction =
                 mockMvc.perform(
                         delete(REVIEW_DEFAULT_URL + "/{review-id}", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .headers(headers)
                 );
 
         // then
@@ -299,17 +278,10 @@ public class ReviewControllerTest {
                                 "delete-review",
                                 getRequestPreProcessor(),
                                 getResponsePreProcessor(),
-                        requestHeaders(
-                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
-                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
-                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
-                                                "Refresh Token (Ex. eyJhbG...)")
+                                pathParameters(
+                                        parameterWithName("review-id").description("삭제할 리뷰 식별 ID")
                                 )
-                        ),
-                        pathParameters(
-                                parameterWithName("review-id").description("삭제할 리뷰 식별 ID")
                         )
-                )
-        );
+                );
     }
 }
