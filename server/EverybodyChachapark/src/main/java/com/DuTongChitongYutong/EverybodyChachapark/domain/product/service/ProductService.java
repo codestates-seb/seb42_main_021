@@ -37,7 +37,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product readProduct(long productId){
         return productRepository.findByProductId(productId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND));
     }
     // 추후 예외처리 다시
 

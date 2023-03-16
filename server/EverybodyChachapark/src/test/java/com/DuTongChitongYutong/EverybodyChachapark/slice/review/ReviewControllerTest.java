@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.review.dto.ReviewDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.mapper.ReviewMapper;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.service.ReviewService;
+import com.DuTongChitongYutong.EverybodyChachapark.util.GetMockMultipartFile;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -18,13 +19,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Part;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +40,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -66,6 +69,8 @@ public class ReviewControllerTest {
     @Test
     public void postReviewTest() throws Exception {
         // given
+        MultiValueMap<String, MockMultipartFile> parmValue = new LinkedMultiValueMap<>();
+
         ReviewDto.Post createReview = new ReviewDto.Post(1L, "Stub 리뷰 작성합니다!", 5);
         String content = gson.toJson(createReview);
 
@@ -74,15 +79,22 @@ public class ReviewControllerTest {
         Review mockResultReview = new Review();
         mockResultReview.setReviewId(1L);
 
-        given(reviewService.createReview(Mockito.any(Review.class))).willReturn(mockResultReview);
+        given(reviewService.createReview(Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(mockResultReview);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("12345"));
+        headers.add("Refresh", "123456");
 
         // when
         ResultActions postAction =
                 mockMvc.perform(
-                        post(REVIEW_DEFAULT_URL)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON)
+                        multipart(REVIEW_DEFAULT_URL)
+                                .file(GetMockMultipartFile.getMockMultipartJson("requestBody", content))
+                                .file(GetMockMultipartFile.getMockMultipartFile("imageFile"))
                                 .content(content)
+                                .accept(MediaType.MULTIPART_FORM_DATA)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
+                                .headers(headers)
                 );
 
         // then
@@ -93,6 +105,19 @@ public class ReviewControllerTest {
                         "post-review",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        requestHeaders(
+                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                        "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                "Refresh Token (Ex. eyJhbG...)")
+                                        )
+
+                        ),
+                        requestParts(
+                                List.of(partWithName("requestBody").description("리뷰 등록 Json Request Fields"),
+                                        partWithName("imageFile").description("이미지 첨부 파일")
+                                )
+                        ),
                         requestFields(
                                 List.of(fieldWithPath("productId").type(JsonFieldType.NUMBER).description("상품 식별 ID"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("리뷰 내용"),
@@ -173,7 +198,7 @@ public class ReviewControllerTest {
         queryParams.add("page", page);
         queryParams.add("size", size);
 
-//        given(reviewService.findReviews(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
+        given(reviewService.findReviews(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
 
         List<ReviewDto.Response> responseReviewList = List.of(new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
                 new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
@@ -247,7 +272,6 @@ public class ReviewControllerTest {
                 mockMvc.perform(
                         delete(REVIEW_DEFAULT_URL + "/{review-id}", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .param("memberId", "1")
                 );
 
         // then

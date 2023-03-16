@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +26,11 @@ public class ReviewService {
     final private ReviewRepository reviewRepository;
     final private MemberService memberService;
     final private ProductService productService;
+    final private FacadeImage facadeImage;
 
-    public Review createReview(Review review) {
+    public Review createReview(Review review, MultipartFile imageFile) {
+        String imageURL = facadeImage.createImageURL(List.of(imageFile));
+        review.setImageURL(imageURL);
         review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
         verifyReview(review); // 작성자, 상품 검증

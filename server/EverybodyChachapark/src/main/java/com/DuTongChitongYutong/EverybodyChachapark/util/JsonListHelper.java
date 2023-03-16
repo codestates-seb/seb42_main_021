@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,11 @@ public class JsonListHelper {
         } catch (JsonProcessingException e) {
             throw new BusinessLogicException(ExceptionCode.JSON_CANNOT_WRITE_IMAGE_URLS);
         }
+    }
+
+    public String StringToJson(String str) {
+        Gson gson = new Gson();
+        return gson.toJson(str);
     }
 
 }

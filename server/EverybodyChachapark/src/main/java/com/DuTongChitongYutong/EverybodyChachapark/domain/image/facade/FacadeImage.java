@@ -16,11 +16,7 @@ public class FacadeImage {
     final private StorageService storageService;
     final private JsonListHelper jsonListHelper;
 
-    public String createImageURL(MultipartFile file) {
-        return storageService.store(file);
-    }
-
-    public String createImageURLs(List<MultipartFile> files) {
+    public String createImageURL(List<MultipartFile> files) {
         return Optional.ofNullable(files).map(storageService::store).map(jsonListHelper::listToJson).orElse(null);
     }
 

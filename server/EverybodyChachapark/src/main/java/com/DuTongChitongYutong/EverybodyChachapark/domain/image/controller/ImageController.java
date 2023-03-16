@@ -23,7 +23,7 @@ public class ImageController {
     final private JsonListHelper jsonListHelper;
 
     @PostMapping // Image Upload Test
-    public ResponseEntity postImage(@RequestPart MultipartFile imageFile) {
+    public ResponseEntity postImage(@RequestPart List<MultipartFile> imageFile) {
         String imageURL = facadeImage.createImageURL(imageFile);
 
         return new ResponseEntity<>(new SingleResponseDto<>(imageURL), HttpStatus.CREATED);

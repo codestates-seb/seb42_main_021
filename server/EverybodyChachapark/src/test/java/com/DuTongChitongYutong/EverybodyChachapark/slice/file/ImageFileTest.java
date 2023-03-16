@@ -16,9 +16,10 @@ public class ImageFileTest {
     @Test
     public void getMockExcelUploadTest() throws IOException {
         /*MockMultipartHttpServletRequest multipartHttpServletRequest = new MockMultipartHttpServletRequest();*/ // controller test 시 사용
-        String fileName = "1da132fb-23a4-41ad-a696-f4877e35d9201111";
-        String contentType = "gif";
-        String filePath = "src/test/resources/1da132fb-23a4-41ad-a696-f4877e35d9201.gif";
+        String fileName = "e7dd60dc-45ab-473a-a752-dc356f48a77e";
+        String mimeType = "image/";
+        String contentType = "jpg";
+        String filePath = "src/test/resources/file/" + fileName + "." + contentType;
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
 
         String getFileName = mockMultipartFile.getOriginalFilename().toLowerCase();

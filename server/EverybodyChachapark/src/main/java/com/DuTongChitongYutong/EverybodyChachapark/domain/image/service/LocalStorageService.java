@@ -36,38 +36,12 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
     }
 
     @Override
-    public String store(MultipartFile file) {
-        Map<String, MultipartFile> fileMap = new HashMap<>();
-        if(file.isEmpty()) { // 이미지를 첨부하지 않았다면 더미 페이지 리턴
-            return localPath + "e7dd60dc-45ab-473a-a752-dc356f48a77e.jpg";
-        }
-
-        if(!file.getContentType().startsWith("image")) {
-            throw new StorageException(StorageExceptionCode.FILE_TYPE_ONLY_IMAGE);
-        }
-
-        String imageName = file.getOriginalFilename();
-
-        // 사용할 파일 이름, UUID 사용
-        String fileName = UUID.randomUUID() + ".";
-        fileName = fileName + imageName.substring(imageName.lastIndexOf(".") + 1).toLowerCase().replace("jepg", "jpg");
-
-        // 파일 이름과 MultipartFile 저장
-        fileMap.put(fileName, file);
-
-        publisher.publishEvent(new FileCopyEvent(this, fileMap)); // 이벤트 실행
-
-        // Todo: 이미지 URL 리턴
-        return serverUrl + fileName;
-    }
-
-    @Override
     public List<String> store(List<MultipartFile> files) {
         List<String> imageURLs = new ArrayList<>();
         Map<String, MultipartFile> fileMap = new HashMap<>();
         for (MultipartFile file: files) {
             if(file.isEmpty()) {
-                log.error("File isEmpty");
+                imageURLs.add(localPath + "e7dd60dc-45ab-473a-a752-dc356f48a77e.jpg");
                 continue;
             }
 
