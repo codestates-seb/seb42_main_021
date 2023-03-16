@@ -226,6 +226,11 @@ public class MemberControllerTest {
                 );
 
         deleteAction
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(
+                        document("delete-member",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor())
+                );
     }
 }
