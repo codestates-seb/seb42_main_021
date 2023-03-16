@@ -221,9 +221,6 @@ include::{snippets}/get-member/curl-request.adoc[]
 .http-request
 include::{snippets}/get-member/http-request.adoc[]
 
-.path-parameters
-include::{snippets}/get-member/path-parameters.adoc[]
-
 .request-parameters
 include::{snippets}/get-member/request-parameters.adoc[]
 
