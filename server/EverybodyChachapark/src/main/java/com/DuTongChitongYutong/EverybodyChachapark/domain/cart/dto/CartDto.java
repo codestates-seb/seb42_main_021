@@ -29,6 +29,7 @@ public class CartDto {
         private long memberId;
         private long productId;
         private String productName;
+        private String imageUrl;
         private Integer price;
         private int quantity;
         private LocalDateTime createAt;
