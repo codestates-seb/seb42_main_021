@@ -1,6 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.product.facade;
 
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPatchDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPostDto;
@@ -11,16 +12,22 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class ProductFacade {
 
     private final ProductService productService;
+    private final FacadeImage facadeImage;
 
-    public ProductDto createProduct(ProductPostDto productPostDto){
+    public ProductDto createProduct(ProductPostDto productPostDto, MultipartFile thumbnailImageFile){
+        String thumbnailImageURL = facadeImage.createImageURL(List.of(thumbnailImageFile)); // 이미지 저장
 
-        Product product = productService.createProduct(productPostDto);
+        Product product = productService.createProduct(productPostDto, thumbnailImageURL);
 
         return product.toDto();
     }
@@ -49,10 +56,10 @@ public class ProductFacade {
     }
 
 
-    public ProductDto updateProduct(long productId, ProductPatchDto productPatchDto){
-        Product product = productService.readProduct(productId);
+    public ProductDto updateProduct(long productId, ProductPatchDto productPatchDto, MultipartFile thumbnailImageFile){
+        String imageURL = thumbnailImageFile.isEmpty() ? "" : facadeImage.createImageURL(List.of( thumbnailImageFile)); // File이 첨부되면 이미지 저장 및 URL생성 그게 아니면 빈 문자""
 
-        Product updatedProduct = productService.updateProduct(productId, productPatchDto);
+        Product updatedProduct = productService.updateProduct(productId, productPatchDto, imageURL); // 썸네일 수정
 
         return updatedProduct.toDto();
     }

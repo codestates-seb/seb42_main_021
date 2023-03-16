@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -34,9 +35,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<SingleResponseDto<ProductDto>> postProduct(@Valid @RequestBody ProductPostDto productPostDto){
+    public ResponseEntity<SingleResponseDto<ProductDto>> postProduct(@Valid @RequestPart ProductPostDto productPostDto, @RequestPart MultipartFile thumbnailImageFile){
 
-        return new ResponseEntity<>(new SingleResponseDto<>(productFacade.createProduct(productPostDto)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(productFacade.createProduct(productPostDto, thumbnailImageFile)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{productId}")
@@ -61,9 +62,9 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestBody ProductPatchDto productPatchDto){
+    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestPart ProductPatchDto productPatchDto, @RequestPart MultipartFile thumbnailImageFile){
 
-        return new ResponseEntity<>(new SingleResponseDto<>(productFacade.updateProduct(productId, productPatchDto)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(productFacade.updateProduct(productId, productPatchDto, thumbnailImageFile)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")

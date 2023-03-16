@@ -10,6 +10,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.facade.ProductFacade;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
+import com.DuTongChitongYutong.EverybodyChachapark.util.GetMockMultipartFile;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +34,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,6 +45,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -74,18 +79,25 @@ public class ProductControllerTest {
         ProductPostDto productPostDto = new ProductPostDto("짱비싼 텐트", 500000, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE);
         String content = gson.toJson(productPostDto);
 
-        ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", 500000, 0, 0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", 500000, 0, 0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", LocalDateTime.now(), LocalDateTime.now());
 
-        given(productFacade.createProduct(Mockito.any(ProductPostDto.class))).willReturn(mockResultProduct);
+        given(productFacade.createProduct(Mockito.any(ProductPostDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultProduct);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
 
         ResultActions postAction =
                 mockMvc.perform(
-                        post(PRODUCT_DEFAULT_URL)
+                        multipart(PRODUCT_DEFAULT_URL)
+                                .file(GetMockMultipartFile.getMockMultipartJson("productPostDto", content))
+                                .file(GetMockMultipartFile.getMockMultipartFile("thumbnailImageFile"))
+                                .content(content)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
+                                .headers(headers)
                 );
-
 
         postAction
                 .andExpect(status().isCreated())
@@ -94,6 +106,18 @@ public class ProductControllerTest {
                         "post-product",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        requestHeaders(
+                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                "Refresh Token (Ex. eyJhbG...)")
+                                )
+                        ),
+                        requestParts(
+                                List.of(partWithName("productPostDto").description("상품 등록 Json Request Fields"),
+                                        partWithName("thumbnailImageFile").description("썸네일 이미지 첨부 파일")
+                                )
+                        ),
                         requestFields(
                                 List.of(fieldWithPath("name").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격"),
@@ -110,6 +134,7 @@ public class ProductControllerTest {
                                         fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
                                         fieldWithPath("data.productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data.productStatus").type(JsonFieldType.STRING).description("상품 상태"),
+                                        fieldWithPath("data.thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 날짜"),
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("수정 날짜")
 
@@ -126,15 +151,23 @@ public class ProductControllerTest {
         ProductPatchDto productPatchDto = new ProductPatchDto("짱비싼 의자", 400000, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT);
         String content = gson.toJson(productPatchDto);
 
-        ProductDto mockResultPatchProduct = new ProductDto(2, "짱비싼 의자", 400000, 5, 5, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT, LocalDateTime.now(), LocalDateTime.now());
-        given(productFacade.updateProduct(Mockito.anyLong(), Mockito.any(ProductPatchDto.class))).willReturn(mockResultPatchProduct);
+        ProductDto mockResultPatchProduct = new ProductDto(2, "짱비싼 의자", 400000, 5, 5, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT,"[\"imageURL\"]", LocalDateTime.now(), LocalDateTime.now());
+        given(productFacade.updateProduct(Mockito.anyLong(), Mockito.any(ProductPatchDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultPatchProduct);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
 
         ResultActions patchAction =
                 mockMvc.perform(
-                        patch(PRODUCT_DEFAULT_URL + "/{productId}", 2L)
+                        multipart(PRODUCT_DEFAULT_URL + "/{productId}", 2L)
+                                .file(GetMockMultipartFile.getMockMultipartJson("productPatchDto", content))
+                                .file(GetMockMultipartFile.getMockMultipartFile("thumbnailImageFile"))
+                                .content(content)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(content)
+                                .headers(headers)
+                                .with(request -> { request.setMethod("PATCH"); return request; })
                 );
 
         patchAction
@@ -144,8 +177,20 @@ public class ProductControllerTest {
                         "patch-product",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        requestHeaders(
+                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                "Refresh Token (Ex. eyJhbG...)")
+                                )
+                        ),
                         pathParameters(
                                 parameterWithName("productId").description("수정할 상품 ID")
+                        ),
+                        requestParts(
+                                List.of(partWithName("productPatchDto").description("상품 수정 Json Request Fields"),
+                                        partWithName("thumbnailImageFile").description("썸네일 이미지 첨부 파일")
+                                )
                         ),
                         requestFields(
                                 List.of(fieldWithPath("name").type(JsonFieldType.STRING).description("상품 이름"),
@@ -162,6 +207,7 @@ public class ProductControllerTest {
                                         fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
                                         fieldWithPath("data.productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data.productStatus").type(JsonFieldType.STRING).description("상품 상태"),
+                                        fieldWithPath("data.thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 날짜"),
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("수정 날짜")
 
@@ -180,7 +226,7 @@ public class ProductControllerTest {
 
         long productId = 1L;
 
-        ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", 0, 0, 0, ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", 0, 0, 0, ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", LocalDateTime.now(), LocalDateTime.now());
 
         given(productFacade.readProduct(Mockito.anyLong())).willReturn(mockResultProductReadDto);
 
@@ -210,6 +256,7 @@ public class ProductControllerTest {
                                         fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
                                         fieldWithPath("data.productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data.productStatus").type(JsonFieldType.STRING).description("상품 상태"),
+                                        fieldWithPath("data.thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
                                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 날짜"),
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("수정 날짜")
                                 )
@@ -234,11 +281,11 @@ public class ProductControllerTest {
         queryParams.add("size", size);
 
         List<Product> products = List.of(
-                new Product(1, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(2, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(3, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(4, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(5, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE)
+                new Product(1, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(2, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(3, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(4, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(5, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10), products.size());
@@ -274,15 +321,16 @@ public class ProductControllerTest {
                         ),
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.ARRAY).description("결과 데이터"),
+                                        fieldWithPath("data[].productId").type(JsonFieldType.NUMBER).description("상품 ID"),
                                         fieldWithPath("data[].name").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
                                         fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
                                         fieldWithPath("data[].productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data[].productStatus").type(JsonFieldType.STRING).description("상품 상태"),
+                                        fieldWithPath("data[].thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("상품 등록 날짜").optional(),
                                         fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("상품 수정 날짜").optional(),
-                                        fieldWithPath("data[].productId").type(JsonFieldType.NUMBER).description("상품 ID"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 수"),
@@ -306,11 +354,11 @@ public class ProductControllerTest {
         queryParams.add("size", size);
 
         List<Product> products = List.of(
-                new Product(1, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(2, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(3, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(4, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE),
-                new Product(5, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE)
+                new Product(1, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(2, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(3, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(4, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]"),
+                new Product(5, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10), products.size());
@@ -355,6 +403,7 @@ public class ProductControllerTest {
                                         fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
                                         fieldWithPath("data[].productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data[].productStatus").type(JsonFieldType.STRING).description("상품 상태"),
+                                        fieldWithPath("data[].thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("상품 등록 날짜").optional(),
                                         fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("상품 수정 날짜").optional(),
                                         fieldWithPath("data[].productId").type(JsonFieldType.NUMBER).description("상품 ID"),
@@ -375,23 +424,36 @@ public class ProductControllerTest {
     @Test
     public void deleteProduct() throws Exception{
         doNothing().when(productService).deleteProduct(Mockito.anyLong());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
+
         // when
         ResultActions deleteAction =
                 mockMvc.perform(
                         delete(PRODUCT_DEFAULT_URL + "/{productId}", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
+                                .headers(headers)
                 );
 
         // then
         deleteAction.andExpect(status().isNoContent())
                 .andDo(document(
-                                "delete-product",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                pathParameters(
-                                        parameterWithName("productId").description("삭제할 상품 ID")
-                                )
-                        )
+                            "delete-product",
+                            getRequestPreProcessor(),
+                            getResponsePreProcessor(),
+                            requestHeaders(
+                                    List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                    "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                            headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                    "Refresh Token (Ex. eyJhbG...)")
+                                    )
+                            ),
+                            pathParameters(
+                                    parameterWithName("productId").description("삭제할 상품 ID")
+                            )
+                    )
                 );
     }
 

@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.product.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductPatchDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.ProductCategory;
@@ -26,9 +27,10 @@ import java.util.Set;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final FacadeImage facadeImage;
 
-    public Product createProduct(ProductPostDto productPostDto){
-        Product product = new Product(productPostDto.getName(), productPostDto.getPrice());
+    public Product createProduct(ProductPostDto productPostDto, String thumbnailImageURL){
+        Product product = new Product(productPostDto.getName(), productPostDto.getPrice(), thumbnailImageURL);
 
         Optional.ofNullable(productPostDto.getProductCategory()).ifPresent(product::setProductCategory);
         Optional.ofNullable(productPostDto.getProductStatus()).ifPresent(product::setProductStatus);
@@ -53,7 +55,7 @@ public class ProductService {
         return productRepository.findByProductCategory(productCategory, pageable);
     }
 
-    public Product updateProduct(long productId, ProductPatchDto productPatchDto){
+    public Product updateProduct(long productId, ProductPatchDto productPatchDto, String thumbnailimageURL){
         Product product = readProduct(productId);
 
         Optional<ProductPatchDto> optionalProductPatchDto = Optional.ofNullable(productPatchDto);
@@ -61,6 +63,13 @@ public class ProductService {
         optionalProductPatchDto.map(ProductPatchDto::getPrice).ifPresent(product::setPrice);
         optionalProductPatchDto.map(ProductPatchDto::getProductCategory).ifPresent(product::setProductCategory);
         optionalProductPatchDto.map(ProductPatchDto::getProductStatus).ifPresent(product::setProductStatus);
+
+        if(!thumbnailimageURL.isEmpty()) { // 이미지 바꾸기 로직
+           String imageURL =  product.getThumbnailImageURL();
+            facadeImage.deleteImage(imageURL);
+
+            product.setThumbnailImageURL(thumbnailimageURL);
+        }
 
         return product;
     }

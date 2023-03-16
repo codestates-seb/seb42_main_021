@@ -178,6 +178,11 @@ public class ReviewControllerTest {
                         pathParameters(
                                 parameterWithName("review-id").description("수정할 리뷰 식별자 ID")
                         ),
+                        requestParts(
+                                List.of(partWithName("requestBody").description("리뷰 수정 Json Request Fields"),
+                                        partWithName("imageFile").description("이미지 첨부 파일")
+                                )
+                        ),
                         requestFields(
                                 List.of(fieldWithPath("reviewId").type(JsonFieldType.NUMBER).description("수정할 리뷰의 식별 ID").ignored(),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 리뷰 내용"),
