@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
-    default Member memberToMemberPostDto(MemberDto.Post post) {
+    default Member memberPostDtoToMember(MemberDto.Post post) {
 
         Member member = new Member();
         member.setEmail(post.getEmail());
@@ -20,7 +20,7 @@ public interface MemberMapper {
         return member;
     }
 
-    default Member memberToMemberPatchDto(MemberDto.Patch patch) {
+    default Member memberPatchDtoToMember(MemberDto.Patch patch) {
         Member member = new Member();
         member.setPassword(patch.getPassword());
         member.setNickname(patch.getNickname());

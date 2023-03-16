@@ -107,7 +107,7 @@ public class MemberService {
     }
 
     public void deleteMember(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization").substring(7);
+        //String accessToken = request.getHeader("Authorization").substring(7);
         Member findMember = findByEmail();
 
         memberRepository.delete(findMember);
