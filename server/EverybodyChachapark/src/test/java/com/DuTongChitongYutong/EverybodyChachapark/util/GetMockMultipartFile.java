@@ -13,7 +13,7 @@ public class GetMockMultipartFile {
 
     public static MockMultipartFile getMockMultipartFile(String paramName) throws IOException {
 
-        String fileName = "e7dd60dc-45ab-473a-a752-dc356f48a77e";
+        String fileName = "NotfoundImage";
         String mimeType = "image/";
         String contentType = "jpg";
         String filePath = "src/test/resources/file/" + fileName + "." + contentType;

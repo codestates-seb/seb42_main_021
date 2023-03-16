@@ -62,6 +62,9 @@ include::{snippets}/patch-review/curl-request.adoc[]
 .http-request
 include::{snippets}/patch-review/http-request.adoc[]
 
+.request-headers
+include::{snippets}/patch-review/request-headers.adoc[]
+
 .path-parameters
 include::{snippets}/patch-review/path-parameters.adoc[]
 
@@ -74,12 +77,15 @@ include::{snippets}/patch-review/http-response.adoc[]
 .response-fields
 include::{snippets}/patch-review/response-fields.adoc[]
 
+
 === 리뷰 삭제
 .curl-request
 include::{snippets}/delete-review/curl-request.adoc[]
-
 .http-request
 include::{snippets}/delete-review/http-request.adoc[]
+
+.request-headers
+include::{snippets}/delete-review/request-headers.adoc[]
 
 .path-parameters
 include::{snippets}/delete-review/path-parameters.adoc[]
