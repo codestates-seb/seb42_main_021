@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.slice.review;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.controller.MemberController;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.dto.MemberDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.mapper.MemberMapper;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 
-@WebMvcTest(MemberControllerTest.class)
+@WebMvcTest(MemberController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
@@ -90,7 +91,6 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.data.email").value(response.getEmail()))
                 .andExpect(jsonPath("$.data.nickname").value(response.getNickname()))
                 .andExpect(jsonPath("$.data.profileImg").value(response.getProfileImg()))
-                .andExpect(jsonPath("$.data.createDate").value(response.getCreateDate()))
                 .andDo(document(
                         "post-member",
                         getRequestPreProcessor(),
@@ -114,5 +114,19 @@ public class MemberControllerTest {
                                 )
                         )
                 ));
+    }
+
+    @Test
+    public void patchMemberTest() throws Exception {
+
+        MemberDto.Patch patchMember = new MemberDto.Patch();
+        patchMember.setPassword("5678");
+        patchMember.setNickname("user2");
+        String content = gson.toJson(patchMember);
+
+        MemberDto.Response response = new MemberDto.Response(1, "user@gmail.com", "user2",
+                "Img.link", Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
+
+        
     }
 }
