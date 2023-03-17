@@ -13,7 +13,7 @@ public class ProductDto {
 
     private long ProductId;
 
-    private String name;
+    private String productName;
 
     private int price;
 
@@ -26,6 +26,8 @@ public class ProductDto {
     private ProductStatus productStatus;
 
     private String thumbnailImageURL;
+
+    private String productDetail;
 
     private LocalDateTime createdAt;
 
