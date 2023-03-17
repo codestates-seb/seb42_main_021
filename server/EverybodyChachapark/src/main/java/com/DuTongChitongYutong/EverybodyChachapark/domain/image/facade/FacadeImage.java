@@ -39,6 +39,6 @@ public class FacadeImage {
 
     public String makeProfileImage() { // 랜덤 이미지 생성기
         int randomIndex = new Random().nextInt(10);
-        return serverUrl + "profile-" + randomIndex;
+        return serverUrl + "profile-" + randomIndex + ".jpg";
     }
 }
