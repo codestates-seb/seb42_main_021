@@ -1,10 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.member.service;
 
-<<<<<<< HEAD
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.dto.MemberDto;
-=======
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
->>>>>>> b23ead1fa7582de0d05e1ffa27a8696e544d351c
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
@@ -67,8 +63,6 @@ public class MemberService {
 
         Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
         Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
-<<<<<<< HEAD
-=======
 
         if(!profileImageFile.isEmpty()) { // 이미지 변경
             String imageURL = findMember.getProfileImg();
@@ -77,7 +71,6 @@ public class MemberService {
             imageURL = facadeImage.createImageURL(List.of(profileImageFile));
             findMember.setProfileImg(imageURL);
         }
->>>>>>> b23ead1fa7582de0d05e1ffa27a8696e544d351c
 
         return memberRepository.save(findMember);
     }
