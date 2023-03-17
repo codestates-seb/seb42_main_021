@@ -83,6 +83,14 @@ const ReviewContainer = styled.div`
   }
 `;
 
+const StyledButton = styled.button`
+  width: 100px;
+  height: 40px;
+  border-radius: var(--bd-rd);
+  background-color: var(--blue);
+  color: var(--white);
+`;
+
 const ItemDetail = () => {
   const [productDetail, setProductDetail] = useState(null);
   const [productReviews, setProductReviews] = useState(null);
@@ -95,30 +103,37 @@ const ItemDetail = () => {
   const { id } = useParams();
 
   const handleModal = () => {
-    setIsModalOpen((isOpen) => !isOpen); //콜백함수 사용하기
+    setIsModalOpen((isOpen) => !isOpen);
     navigate('/shoppingcart/1');
   };
 
-  const handleShoppingBag = (event) => {
-    event.preventDefault();
-    //추후 수정
-    // const data = {
-    //   memberId: 1,
-    //   products: [
-    //     {
-    //       productId: list.productId,
-    //       productName: list.productName,
-    //       price: list.price,
-    //       quantity: 1,
-    //     },
-    //   ],
-    // };
-    // axios.post(`/orders`, data, {
-    //   headers: {
-    //     'ngrok-skip-browser-warning': '12',
-    //   },
-    // });
+  const handleShoppingBag = () => {
+    //상품 하나만 담을 수 있게 하는 로직 추가
+    const item = {
+      productId: productDetail.productId,
+      quantity: 1,
+    };
+    axios.post(`/carts`, item, {
+      headers: {
+        Authorization: `Bearer `,
+        Refresh: `Bearer `,
+      },
+    });
     setIsModalOpen(true);
+  };
+
+  const handleEditProductDetail = () => {
+    navigate(`/admin-item/${id}`);
+  };
+
+  const handleDeleteProductDetail = () => {
+    axios.post(`products/${productDetail.productId}`, {
+      headers: {
+        Authorization: `Bearer `,
+        Refresh: `Bearer `,
+      },
+    });
+    navigate('/product');
   };
 
   const findProductByProductId = async (productId) => {
@@ -167,6 +182,12 @@ const ItemDetail = () => {
               <button type="button" onClick={handleShoppingBag}>
                 <FaShoppingCart size="40px" />
               </button>
+              <StyledButton type="button" onClick={handleEditProductDetail}>
+                상품 수정하기
+              </StyledButton>
+              <StyledButton type="button" onClick={handleDeleteProductDetail}>
+                상품 삭제하기
+              </StyledButton>
               {isModalOpen && (
                 <Modal>
                   <div>
