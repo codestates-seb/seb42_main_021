@@ -21,10 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -95,7 +92,6 @@ public class ProductControllerTest {
                                 .content(content)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(content)
                                 .headers(headers)
                 );
 
@@ -119,7 +115,7 @@ public class ProductControllerTest {
                                 )
                         ),
                         requestFields(
-                                List.of(fieldWithPath("name").type(JsonFieldType.STRING).description("상품 이름"),
+                                List.of(fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("productStatus").type(JsonFieldType.STRING).description("상품 상태"),
@@ -129,7 +125,7 @@ public class ProductControllerTest {
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
                                         fieldWithPath("data.productId").type(JsonFieldType.NUMBER).description("상품 ID"),
-                                        fieldWithPath("data.name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("data.productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data.productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
                                         fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
@@ -195,7 +191,7 @@ public class ProductControllerTest {
                                 )
                         ),
                         requestFields(
-                                List.of(fieldWithPath("name").type(JsonFieldType.STRING).description("상품 이름"),
+                                List.of(fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("productStatus").type(JsonFieldType.STRING).description("상품 상태"),
@@ -205,7 +201,7 @@ public class ProductControllerTest {
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
                                         fieldWithPath("data.productId").type(JsonFieldType.NUMBER).description("상품 ID"),
-                                        fieldWithPath("data.name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("data.productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data.productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
                                         fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
@@ -255,7 +251,7 @@ public class ProductControllerTest {
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
                                         fieldWithPath("data.productId").type(JsonFieldType.NUMBER).description("상품 ID"),
-                                        fieldWithPath("data.name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("data.productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data.productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
                                         fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
@@ -328,7 +324,7 @@ public class ProductControllerTest {
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.ARRAY).description("결과 데이터"),
                                         fieldWithPath("data[].productId").type(JsonFieldType.NUMBER).description("상품 ID"),
-                                        fieldWithPath("data[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("data[].productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
                                         fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
@@ -352,6 +348,85 @@ public class ProductControllerTest {
 
     @Test
     public void readProducts() throws Exception{
+
+        String page = "1";
+        String size = "10";
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("searchKeyword", "텐트");
+        queryParams.add("page", page);
+        queryParams.add("size", size);
+
+
+        List<Product> products = List.of(
+                new Product(1, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+        );
+
+        Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10, Sort.by("productId").ascending()), products.size());
+
+        given(productFacade.searchProducts(Mockito.anyString(), Mockito.any(Pageable.class))).willReturn(productPage);
+
+
+        // when
+        ResultActions getsActions =
+                mockMvc.perform(
+                        get(PRODUCT_DEFAULT_URL + "/search")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .params(queryParams)
+                );
+
+        // then
+        MvcResult mvcResult = getsActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isArray())
+                .andReturn();
+
+        List list = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.data"); // mvcResult.getResponse().getContentAsString()으로 ResponseBody 값을 Json으로 parse하고 "$.data"부분만 가져온다.
+        assertThat(list.size(), is(5)); // 가져온 Json 배열의 수가 5칸인지 테스트
+
+        getsActions.andDo(
+                document(
+                        "get-search-products",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestParameters(
+                                List.of(parameterWithName("searchKeyword").description("검색 키워드"),
+                                        parameterWithName("page").description("Page 번호"),
+                                        parameterWithName("size").description("Size 크기"))
+                        ),
+                        responseFields(
+                                List.of(fieldWithPath("data").type(JsonFieldType.ARRAY).description("결과 데이터"),
+                                        fieldWithPath("data[].productName").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
+                                        fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
+                                        fieldWithPath("data[].productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
+                                        fieldWithPath("data[].productStatus").type(JsonFieldType.STRING).description("상품 상태"),
+                                        fieldWithPath("data[].thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
+                                        fieldWithPath("data[].productDetail").type(JsonFieldType.STRING).description("상품 상세 내용"),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("상품 등록 날짜").optional(),
+                                        fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("상품 수정 날짜").optional(),
+                                        fieldWithPath("data[].productId").type(JsonFieldType.NUMBER).description("상품 ID"),
+
+                                        fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 수"),
+                                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("총 요소"),
+                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("총 페이지")
+                                )
+                        )
+                )
+        );
+
+
+    }
+
+    @Test
+    public void readSearchProducts() throws Exception{
 
         String page = "1";
         String size = "10";
@@ -404,7 +479,7 @@ public class ProductControllerTest {
                         ),
                         responseFields(
                                 List.of(fieldWithPath("data").type(JsonFieldType.ARRAY).description("결과 데이터"),
-                                        fieldWithPath("data[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("data[].productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
                                         fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
