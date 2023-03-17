@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import Main from '../components/main/Main';
 import logo1 from '../img/logo1.png';
@@ -69,6 +70,7 @@ const SignUp = () => {
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -78,6 +80,7 @@ const SignUp = () => {
         nickname: data.name,
       });
       console.log('성공');
+      navigate('../login');
     } catch (error) {
       console.log(error);
     }

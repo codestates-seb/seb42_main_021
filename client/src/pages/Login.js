@@ -121,7 +121,7 @@ const Login = () => {
       setCookie('refreshToken', res.headers.refresh, {
         expires: refreshTokenExpire,
       });
-      navigate('./product');
+      navigate('../product');
     } catch (error) {
       console.log(error);
     }
