@@ -113,7 +113,7 @@ public class ReviewControllerTest {
                         ),
                         requestParts(
                                 List.of(partWithName("requestBody").description("리뷰 등록 Json Request Fields"),
-                                        partWithName("imageFile").description("이미지 첨부 파일")
+                                        partWithName("imageFile").description("이미지 첨부 파일(NULL 가능)")
                                 )
                         ),
                         requestFields(
@@ -139,7 +139,7 @@ public class ReviewControllerTest {
         given(reviewService.updateReview(Mockito.anyLong(), Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(new Review());
 
         ReviewDto.Response response =  new ReviewDto.Response(1L,"Stub 리뷰 수정합니다!", 0, "imageUrl", LocalDateTime.now(), LocalDateTime.now(),
-                new ReviewDto.Response.ReviewMember(1L, "legendpaino"));
+                new ReviewDto.Response.ReviewMember(1L, "legendpaino", "imageUrl"));
 
         given(reviewMapper.reviewToReviewResponseDto(Mockito.any(Review.class))).willReturn(response);
 
@@ -180,13 +180,13 @@ public class ReviewControllerTest {
                         ),
                         requestParts(
                                 List.of(partWithName("requestBody").description("리뷰 수정 Json Request Fields"),
-                                        partWithName("imageFile").description("이미지 첨부 파일")
+                                        partWithName("imageFile").description("수정할 이미지 첨부 파일(NULL 가능)")
                                 )
                         ),
                         requestFields(
                                 List.of(fieldWithPath("reviewId").type(JsonFieldType.NUMBER).description("수정할 리뷰의 식별 ID").ignored(),
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 리뷰 내용"),
-                                        fieldWithPath("score").type(JsonFieldType.NUMBER).description("수정할 리뷰 점수")
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 리뷰 내용(선택)"),
+                                        fieldWithPath("score").type(JsonFieldType.NUMBER).description("수정할 리뷰 점수(선택)")
                                 )
                         ),
                         responseFields(
@@ -199,8 +199,8 @@ public class ReviewControllerTest {
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정 날짜"),
                                         fieldWithPath("data.reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
                                         fieldWithPath("data.reviewMember.memberId").type(JsonFieldType.NUMBER).description("회원 식별 ID"),
-                                        fieldWithPath("data.reviewMember.nickname").type(JsonFieldType.STRING).description("회원 닉네임")
-//                                        fieldWithPath("data.answerMember.memberImgId").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL") Todo
+                                        fieldWithPath("data.reviewMember.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                        fieldWithPath("data.reviewMember.memberImageURL").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL")
                                 )
                         )
                 ));
@@ -218,11 +218,11 @@ public class ReviewControllerTest {
 
         given(reviewService.findReviews(Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(new PageImpl<>(new ArrayList<>()));
 
-        List<ReviewDto.Response> responseReviewList = List.of(new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")),
-        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1")));
+        List<ReviewDto.Response> responseReviewList = List.of(new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1", "imageUrl")),
+                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1", "imageUrl")),
+                new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1", "imageUrl")),
+        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1", "imageUrl")),
+        new ReviewDto.Response(1L, "Answer Get 태스트 입니다", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(), new ReviewDto.Response.ReviewMember(1L, "testUser1", "imageUrl")));
 
 
         given(reviewMapper.reviewToReviewResponseDtos(Mockito.anyList())).willReturn(responseReviewList);
@@ -267,7 +267,7 @@ public class ReviewControllerTest {
                                         fieldWithPath("data[].reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
                                         fieldWithPath("data[].reviewMember.memberId").type(JsonFieldType.NUMBER).description("회원 식별 ID"),
                                         fieldWithPath("data[].reviewMember.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
-//                                        fieldWithPath("data.answerMember.memberImgId").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL"), Todo
+                                        fieldWithPath("data[].reviewMember.memberImageURL").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL"),
 
                                         fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 수"),

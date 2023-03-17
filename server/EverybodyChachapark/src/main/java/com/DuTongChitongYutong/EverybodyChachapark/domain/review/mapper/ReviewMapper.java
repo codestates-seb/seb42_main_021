@@ -42,6 +42,7 @@ public interface ReviewMapper {
 
     @Mapping(source = "member.nickname", target = "reviewMember.nickname")
     @Mapping(source = "member.memberId", target = "reviewMember.memberId")
+    @Mapping(source = "member.profileImg", target = "reviewMember.memberImageURL")
     ReviewDto.Response reviewToReviewResponseDto(Review review);
 
     List<ReviewDto.Response> reviewToReviewResponseDtos(List<Review> reviews);

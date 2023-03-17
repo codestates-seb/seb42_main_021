@@ -46,7 +46,7 @@ public class ReviewDto {
         public static class ReviewMember {
             private Long memberId;
             private String nickname;
-//            private String memberImageURL;
+            private String memberImageURL;
 
         }
     }

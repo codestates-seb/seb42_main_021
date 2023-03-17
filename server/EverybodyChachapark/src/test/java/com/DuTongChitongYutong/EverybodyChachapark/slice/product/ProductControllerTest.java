@@ -111,7 +111,7 @@ public class ProductControllerTest {
                         ),
                         requestParts(
                                 List.of(partWithName("productPostDto").description("상품 등록 Json Request Fields"),
-                                        partWithName("thumbnailImageFile").description("썸네일 이미지 첨부 파일")
+                                        partWithName("thumbnailImageFile").description("썸네일 이미지 첨부 파일(NULL 가능)")
                                 )
                         ),
                         requestFields(
@@ -187,15 +187,15 @@ public class ProductControllerTest {
                         ),
                         requestParts(
                                 List.of(partWithName("productPatchDto").description("상품 수정 Json Request Fields"),
-                                        partWithName("thumbnailImageFile").description("썸네일 이미지 첨부 파일")
+                                        partWithName("thumbnailImageFile").description("수정할 썸네일 이미지 첨부 파일(NULL 가능)")
                                 )
                         ),
                         requestFields(
-                                List.of(fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름"),
-                                        fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격"),
-                                        fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리: NO_CATEGORY, TENT, LIGHT, TABLE, CHAIR, FIREPLACE"),
-                                        fieldWithPath("productStatus").type(JsonFieldType.STRING).description("상품 상태"),
-                                        fieldWithPath("productDetail").type(JsonFieldType.STRING).description("상품 상세 내용")
+                                List.of(fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름(선택)"),
+                                        fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격(선택)"),
+                                        fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리: NO_CATEGORY, TENT, LIGHT, TABLE, CHAIR, FIREPLACE(선택)"),
+                                        fieldWithPath("productStatus").type(JsonFieldType.STRING).description("상품 상태(선택)"),
+                                        fieldWithPath("productDetail").type(JsonFieldType.STRING).description("상품 상세 내용(선택)")
                                         )
                         ),
                         responseFields(

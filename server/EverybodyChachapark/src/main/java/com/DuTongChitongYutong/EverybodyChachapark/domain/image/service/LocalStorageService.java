@@ -28,6 +28,14 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
     @Value("${image.local-path}")
     private String localPath;
 
+    @Value("${image.dummyImage-name}")
+    private String dummyImageName;
+
+    @Value("${image.profileImage-name}")
+    private String profileImageName;
+
+
+
     private ApplicationEventPublisher publisher; // <- 이벤트 프로그래밍: 고급 기술 블로깅 요망
 
     @Override
@@ -36,12 +44,38 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
     }
 
     @Override
+    public String store(MultipartFile file) {
+        if(file.isEmpty()) {
+            return serverUrl + dummyImageName + ".jpg";
+        }
+
+        if(!file.getContentType().startsWith("image")) {
+            throw new StorageException(StorageExceptionCode.FILE_TYPE_ONLY_IMAGE);
+        }
+
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+
+        String imageName = file.getOriginalFilename();
+
+        // 사용할 파일 이름, UUID 사용
+        String fileName = UUID.randomUUID() + ".";
+        fileName = fileName + imageName.substring(imageName.lastIndexOf(".") + 1).toLowerCase().replace("jepg", "jpg");
+
+        // 파일 이름과 MultipartFile 저장
+        fileMap.put(fileName, file);
+
+        publisher.publishEvent(new FileCopyEvent(this, fileMap)); // 이벤트 실행
+
+        return serverUrl + fileName;
+    }
+
+    @Override
     public List<String> store(List<MultipartFile> files) {
         List<String> imageURLs = new ArrayList<>();
         Map<String, MultipartFile> fileMap = new HashMap<>();
         for (MultipartFile file: files) {
             if(file.isEmpty()) {
-                imageURLs.add(serverUrl+ "NotfoundImage.jpg");
+                imageURLs.add(serverUrl + dummyImageName);
                 continue;
             }
 
@@ -86,11 +120,19 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
     }
 
     @Override
+    public void delete(String imageURL) {
+        String filename = imageURL.replace(serverUrl, "");
+        filename = filename.startsWith(profileImageName) || filename.startsWith(dummyImageName) ? "" : filename;
+
+        publisher.publishEvent(new FileDeletesEvent(this, List.of(filename))); // 이벤트 실행
+    }
+
+    @Override
     public void delete(List<String> imageURLs) {
         List<String> filenames = imageURLs.stream()
                 .map(imageURL -> {
                     imageURL.replaceFirst(serverUrl, "");
-                    imageURL = imageURL.startsWith("profile") || imageURL.equals("NotfoundImage.jpg") ? "" : imageURL;
+                    imageURL = imageURL.startsWith(profileImageName) || imageURL.startsWith(dummyImageName) ? "" : imageURL;
                     return imageURL;
                 }).collect(Collectors.toList());
 

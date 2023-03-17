@@ -25,7 +25,7 @@ public class ProductFacade {
     private final FacadeImage facadeImage;
 
     public ProductDto createProduct(ProductPostDto productPostDto, MultipartFile thumbnailImageFile){
-        String thumbnailImageURL = facadeImage.createImageURL(List.of(thumbnailImageFile)); // 이미지 저장
+        String thumbnailImageURL = facadeImage.createImageURL(thumbnailImageFile); // 이미지 저장
 
         Product product = productService.createProduct(productPostDto, thumbnailImageURL);
 
@@ -64,7 +64,7 @@ public class ProductFacade {
 
 
     public ProductDto updateProduct(long productId, ProductPatchDto productPatchDto, MultipartFile thumbnailImageFile){
-        String imageURL = thumbnailImageFile.isEmpty() ? "" : facadeImage.createImageURL(List.of( thumbnailImageFile)); // File이 첨부되면 이미지 저장 및 URL생성 그게 아니면 빈 문자""
+        String imageURL = thumbnailImageFile.isEmpty() ? "" : facadeImage.createImageURL(thumbnailImageFile); // File이 첨부되면 이미지 저장 및 URL생성 그게 아니면 빈 문자""
 
         Product updatedProduct = productService.updateProduct(productId, productPatchDto, imageURL); // 썸네일 수정
 
