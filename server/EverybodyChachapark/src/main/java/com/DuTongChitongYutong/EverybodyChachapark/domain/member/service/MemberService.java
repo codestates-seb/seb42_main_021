@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.member.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.dto.MemberDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
@@ -50,12 +51,12 @@ public class MemberService {
     public Member updateMember(Member member) {
         Member findMember = findByEmail();
 
-        Optional.ofNullable(passwordEncoder.encode(member.getPassword()))
-                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
+        if (member.getPassword() != null) {
+            findMember.setPassword(passwordEncoder.encode(member.getPassword()));
+        }
+
         Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
         Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
-        /*findMember.setPassword(passwordEncoder.encode(member.getPassword()));
-        findMember.setNickname(member.getNickname());*/
 
         return memberRepository.save(findMember);
     }
