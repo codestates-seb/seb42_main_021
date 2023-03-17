@@ -1,0 +1,16 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Authorization: Bearer eyJhbGciOiJIU
+Refresh: eyJhbGciOiJIUzI1NiJ9
+Content-Type: application/json
+Content-Length: 187
+
+{
+    "httpStatus": 200,
+    "message": "로그인 되었습니다."
+}
+----

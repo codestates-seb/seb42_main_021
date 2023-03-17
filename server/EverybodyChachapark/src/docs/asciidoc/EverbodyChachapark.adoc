@@ -254,6 +254,9 @@ include::{snippets}/patch-member/http-request.adoc[]
 .request-headers
 include::{snippets}/patch-member/request-headers.adoc[]
 
+.request-parts
+include::{snippets}/patch-member/request-parts.adoc[]
+
 .request-fields
 include::{snippets}/patch-member/request-fields.adoc[]
 
@@ -291,6 +294,26 @@ include::{snippets}/delete-member/request-headers.adoc[]
 
 .http-response
 include::{snippets}/delete-member/http-response.adoc[]
+
+=== 회원 로그인
+.curl-request
+include::{snippets}/post-member-login/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-member-login/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-member-login/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-member-login/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-member-login/response-fields.adoc[]
+
+.response-headers
+include::{snippets}/post-member-login/response-headers.adoc[]
+
 
 == CartController
 === 장바구니 등록
