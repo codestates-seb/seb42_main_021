@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.member.service;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -24,12 +26,15 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
+    private final FacadeImage facadeImage;
+
     public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher,
-                         PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
+                         PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, FacadeImage facadeImage) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
+        this.facadeImage = facadeImage;
     }
 
     public Member createMember(Member member) {
@@ -41,20 +46,31 @@ public class MemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
 
+        member.setProfileImg(facadeImage.makeProfileImage());
+
         Member savedMember = memberRepository.save(member);
         //publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
 
         return savedMember;
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, MultipartFile profileImageFile) {
         Member findMember = findByEmail();
 
-        Optional.ofNullable(passwordEncoder.encode(member.getPassword()))
-                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
+        if (member.getPassword() != null) {
+            findMember.setPassword(passwordEncoder.encode(member.getPassword()));
+        }
+
         Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
-        /*findMember.setPassword(passwordEncoder.encode(member.getPassword()));
-        findMember.setNickname(member.getNickname());*/
+        Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
+
+        if(!profileImageFile.isEmpty()) { // 이미지 변경
+            String imageURL = findMember.getProfileImg();
+            facadeImage.deleteImage(imageURL);
+
+            imageURL = facadeImage.createImageURL(List.of(profileImageFile));
+            findMember.setProfileImg(imageURL);
+        }
 
         return memberRepository.save(findMember);
     }

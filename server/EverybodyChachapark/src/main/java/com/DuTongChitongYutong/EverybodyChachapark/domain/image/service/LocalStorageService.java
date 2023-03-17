@@ -88,7 +88,11 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
     @Override
     public void delete(List<String> imageURLs) {
         List<String> filenames = imageURLs.stream()
-                .map(imageURL -> imageURL.replaceFirst(serverUrl, "")).collect(Collectors.toList());
+                .map(imageURL -> {
+                    imageURL.replaceFirst(serverUrl, "");
+                    imageURL = imageURL.startsWith("profile") || imageURL.equals("NotfoundImage.jpg") ? "" : imageURL;
+                    return imageURL;
+                }).collect(Collectors.toList());
 
         publisher.publishEvent(new FileDeletesEvent(this, filenames)); // 이벤트 실행
     }

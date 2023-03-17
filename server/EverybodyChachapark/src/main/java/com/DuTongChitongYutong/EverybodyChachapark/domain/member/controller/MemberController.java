@@ -9,6 +9,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.util.UriCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -39,8 +40,8 @@ public class MemberController {
     }
 
     @PatchMapping
-    public ResponseEntity updateMember(@Valid @RequestBody MemberDto.Patch patch) {
-        Member updatedMember = memberService.updateMember(mapper.memberPatchDtoToMember(patch));
+    public ResponseEntity updateMember(@Valid @RequestPart MemberDto.Patch patch, @RequestPart MultipartFile profileImageFile) {
+        Member updatedMember = memberService.updateMember(mapper.memberPatchDtoToMember(patch), profileImageFile);
         return new ResponseEntity(new SingleResponseDto<>(mapper.memberToMemberResponseDto(updatedMember)), HttpStatus.OK);
     }
 
