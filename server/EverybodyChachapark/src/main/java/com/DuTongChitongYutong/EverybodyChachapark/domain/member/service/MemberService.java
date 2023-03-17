@@ -39,6 +39,7 @@ public class MemberService {
 
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
+        verifyExistsNickName(member.getNickname());
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
@@ -54,7 +55,7 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member, MultipartFile profileImageFile) {
+    /*public Member updateMember(Member member, MultipartFile profileImageFile) {
         Member findMember = findByEmail();
 
         if (member.getPassword() != null) {
@@ -62,7 +63,9 @@ public class MemberService {
         }
 
         Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
+        verifyExistsNickName(member.getNickname());
         Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
+
 
         if(!profileImageFile.isEmpty()) { // 이미지 변경
             String imageURL = findMember.getProfileImg();
@@ -73,12 +76,22 @@ public class MemberService {
         }
 
         return memberRepository.save(findMember);
+    }*/
+
+    public Member updateMember(Member member) {
+        Member findMember = findByEmail();
+
+        if (member.getPassword() != null) {
+            findMember.setPassword(passwordEncoder.encode(member.getPassword()));
+        }
+        Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
+        verifyExistsNickName(member.getNickname());
+        Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
+
+        return memberRepository.save(findMember);
     }
 
-    /*@Transactional(readOnly = true)
-    public Member findMember(long memberId) {
-        return findVerifiedMember(memberId);
-    }*/
+
 
     @Transactional(readOnly = true)
     public Member findMember (long memberId) {
@@ -104,6 +117,12 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    private void verifyExistsNickName(String nickname) {
+        Optional<Member> member = memberRepository.findByNickname(nickname);
+        if (member.isPresent())
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NICKNAME_EXISTS);
     }
 
     public Member findByEmail() {

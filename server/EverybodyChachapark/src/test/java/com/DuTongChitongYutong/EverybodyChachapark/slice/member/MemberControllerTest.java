@@ -135,7 +135,8 @@ public class MemberControllerTest {
 
         given(memberMapper.memberPatchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
 
-        given(memberService.updateMember(Mockito.any(Member.class), Mockito.any(MultipartFile.class))).willReturn(new Member());
+        //given(memberService.updateMember(Mockito.any(Member.class), Mockito.any(MultipartFile.class))).willReturn(new Member());
+        given(memberService.updateMember(Mockito.any(Member.class))).willReturn(new Member());
 
         given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(patchResponse);
 

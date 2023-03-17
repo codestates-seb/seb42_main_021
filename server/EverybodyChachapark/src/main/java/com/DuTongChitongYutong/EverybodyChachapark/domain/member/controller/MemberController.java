@@ -39,9 +39,15 @@ public class MemberController {
         return new ResponseEntity(new SingleResponseDto<>(mapper.createMemberToMemberResponseDto(createdMember)),HttpStatus.CREATED);
     }
 
-    @PatchMapping
+    /*@PatchMapping
     public ResponseEntity updateMember(@Valid @RequestPart MemberDto.Patch patch, @RequestPart MultipartFile profileImageFile) {
         Member updatedMember = memberService.updateMember(mapper.memberPatchDtoToMember(patch), profileImageFile);
+        return new ResponseEntity(new SingleResponseDto<>(mapper.memberToMemberResponseDto(updatedMember)), HttpStatus.OK);
+    }*/
+
+    @PatchMapping
+    public ResponseEntity updateMember(@RequestBody MemberDto.Patch patch) {
+        Member updatedMember = memberService.updateMember(mapper.memberPatchDtoToMember(patch));
         return new ResponseEntity(new SingleResponseDto<>(mapper.memberToMemberResponseDto(updatedMember)), HttpStatus.OK);
     }
 
