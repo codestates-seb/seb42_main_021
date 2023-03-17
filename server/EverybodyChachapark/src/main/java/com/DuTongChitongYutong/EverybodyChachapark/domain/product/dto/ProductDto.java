@@ -27,6 +27,8 @@ public class ProductDto {
 
     private String thumbnailImageURL;
 
+    private String productDetail;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;

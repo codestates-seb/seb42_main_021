@@ -1,6 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto;
 
-import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderpProductStatus;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderProductStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,7 +16,7 @@ public class OrderProductDto {
 
     private int price;
 
-    private OrderpProductStatus orderpProductStatus;
+    private OrderProductStatus orderpProductStatus;
 
     private LocalDateTime createdAt;
 

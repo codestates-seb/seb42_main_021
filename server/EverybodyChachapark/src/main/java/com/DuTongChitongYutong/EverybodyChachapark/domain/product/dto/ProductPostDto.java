@@ -22,6 +22,7 @@ public class ProductPostDto {
 
     private ProductStatus productStatus;
 
+    private String productDetail;
 
 
 }

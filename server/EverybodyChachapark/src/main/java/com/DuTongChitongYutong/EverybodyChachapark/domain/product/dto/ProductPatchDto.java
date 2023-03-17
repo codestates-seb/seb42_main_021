@@ -20,4 +20,7 @@ public class ProductPatchDto {
 
     private ProductStatus productStatus;
 
+    private String productDetail;
+
+
 }

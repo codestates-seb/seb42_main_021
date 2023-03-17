@@ -28,7 +28,7 @@ public class OrderProduct {
     private int quantity;
 
     @Enumerated(EnumType.STRING)
-    private OrderpProductStatus orderpProductStatus = OrderpProductStatus.ORDER_WAITING;
+    private OrderProductStatus orderProductStatus = OrderProductStatus.ORDER_WAITING;
 
     public OrderProduct(Order order, int productId, int price, int quantity) {
         this.order = order;

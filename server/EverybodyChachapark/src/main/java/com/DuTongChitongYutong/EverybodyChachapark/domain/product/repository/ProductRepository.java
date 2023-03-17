@@ -21,6 +21,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByProductCategory(ProductCategory productCategory, Pageable pageable);
 
+    Page<Product> findByProductNameLike(String searchName, Pageable pageable);
+
     @Modifying
     @Query("Update Product p SET p.productView = p.productView + 1 WHERE p.productId = :productId ")
     void updateProductView(@Param("productId") Long productId);

@@ -10,9 +10,8 @@ import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicExcept
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ public class ProductService {
     private final FacadeImage facadeImage;
 
     public Product createProduct(ProductPostDto productPostDto, String thumbnailImageURL){
-        Product product = new Product(productPostDto.getName(), productPostDto.getPrice(), thumbnailImageURL);
+        Product product = new Product(productPostDto.getName(), productPostDto.getPrice(), thumbnailImageURL, productPostDto.getProductDetail());
 
         Optional.ofNullable(productPostDto.getProductCategory()).ifPresent(product::setProductCategory);
         Optional.ofNullable(productPostDto.getProductStatus()).ifPresent(product::setProductStatus);
@@ -43,7 +42,7 @@ public class ProductService {
         return productRepository.findByProductId(productId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND));
     }
-    // 추후 예외처리 다시
+
 
     @Transactional(readOnly = true)
     public Page<Product> readProducts(Pageable pageable){
@@ -55,6 +54,11 @@ public class ProductService {
         return productRepository.findByProductCategory(productCategory, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Product> searchProducts(String searchKeyword, Pageable pageable){
+        return productRepository.findByProductNameLike(searchKeyword, pageable);
+    }
+
     public Product updateProduct(long productId, ProductPatchDto productPatchDto, String thumbnailimageURL){
         Product product = readProduct(productId);
 
@@ -63,6 +67,7 @@ public class ProductService {
         optionalProductPatchDto.map(ProductPatchDto::getPrice).ifPresent(product::setPrice);
         optionalProductPatchDto.map(ProductPatchDto::getProductCategory).ifPresent(product::setProductCategory);
         optionalProductPatchDto.map(ProductPatchDto::getProductStatus).ifPresent(product::setProductStatus);
+        optionalProductPatchDto.map(ProductPatchDto::getProductDetail).ifPresent(product::setProductDetail);
 
         if(!thumbnailimageURL.isEmpty()) { // 이미지 바꾸기 로직
            String imageURL =  product.getThumbnailImageURL();
