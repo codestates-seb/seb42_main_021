@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.member.dto.MemberDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.mapper.MemberMapper;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
+import com.DuTongChitongYutong.EverybodyChachapark.util.GetMockMultipartFile;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,8 +39,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -133,7 +135,7 @@ public class MemberControllerTest {
 
         given(memberMapper.memberPatchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
 
-        given(memberService.updateMember(Mockito.any(Member.class))).willReturn(new Member());
+        given(memberService.updateMember(Mockito.any(Member.class), Mockito.any(MultipartFile.class))).willReturn(new Member());
 
         given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(patchResponse);
 
@@ -143,11 +145,14 @@ public class MemberControllerTest {
 
         //when
         ResultActions patchAction = mockMvc.perform(
-                patch("/members")
+                multipart("/members")
+                        .file(GetMockMultipartFile.getMockMultipartJson("patch", content))
+                        .file(GetMockMultipartFile.getMockMultipartFile("profileImageFile"))
+                        .content(content)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
                         .headers(headers)
+                        .with(request -> { request.setMethod("PATCH"); return request; })
                 );
 
         patchAction
@@ -164,6 +169,11 @@ public class MemberControllerTest {
                                                 "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
                                         headerWithName("Refresh").description("토큰 재발급에 필요한 " +
                                                 "Refresh Token (Ex. eyJhbG...)")
+                                )
+                        ),
+                        requestParts(
+                                List.of(partWithName("patch").description("회원 수정 Json Request Fields"),
+                                        partWithName("profileImageFile").description("이미지 첨부 파일")
                                 )
                         ),
                         requestFields(

@@ -6,6 +6,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -69,21 +70,4 @@ public class Member extends BaseTime {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    private static final String[] PROFILE_IMAGE_URLS = {
-            "https://i.ibb.co/fYH5Wv9/1.png",
-            "https://i.ibb.co/5FB24RR/2.png",
-            "https://i.ibb.co/YXRjdgQ/3.png",
-            "https://i.ibb.co/1Z9k49d/4.png",
-            "https://i.ibb.co/G0FHVDB/5.png",
-            "https://i.ibb.co/MP8k0GF/6.png",
-            "https://i.ibb.co/6F9gTGc/7.png",
-            "https://i.ibb.co/W6vW3mN/8.png",
-            "https://i.ibb.co/KFkNYDR/9.png",
-            "https://i.ibb.co/n7tcz4v/10.png"
-    };
-
-    public String getRandomProfileImageUrl() {
-        int randomIndex = new Random().nextInt(PROFILE_IMAGE_URLS.length);
-        return PROFILE_IMAGE_URLS[randomIndex];
-    }
 }

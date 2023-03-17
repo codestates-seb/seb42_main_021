@@ -55,6 +55,13 @@ public class ProductFacade {
         return productPage;
     }
 
+        public Page<Product> searchProducts(String searchKeyword, Pageable pageable){
+
+        Page<Product> productPage = productService.searchProducts(searchKeyword, pageable);
+
+        return productPage;
+        }
+
 
     public ProductDto updateProduct(long productId, ProductPatchDto productPatchDto, MultipartFile thumbnailImageFile){
         String imageURL = thumbnailImageFile.isEmpty() ? "" : facadeImage.createImageURL(List.of( thumbnailImageFile)); // File이 첨부되면 이미지 저장 및 URL생성 그게 아니면 빈 문자""

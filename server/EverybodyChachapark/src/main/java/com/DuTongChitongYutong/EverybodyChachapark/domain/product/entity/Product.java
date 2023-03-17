@@ -5,10 +5,9 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.dto.ProductDto
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+
 
 
 @Entity
@@ -44,13 +43,17 @@ public class Product extends BaseTime {
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
 
-    public Product(String productName, int price, String thumbnailImageURL){
+    @Column(name = "product_detail")
+    private String productDetail;
+
+    public Product(String productName, int price, String thumbnailImageURL, String productDetail){
         this.productName = productName;
         this.price = price;
         this.thumbnailImageURL = thumbnailImageURL;
+        this.productDetail = productDetail;
     }
 
-    public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL){
+    public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
         this.productId = productId;
         this.productName = productName;
         this.price = price;
@@ -59,10 +62,11 @@ public class Product extends BaseTime {
         this.productCategory = productCategory;
         this.productStatus = productStatus;
         this.thumbnailImageURL = thumbnailImageURL;
+        this.productDetail = productDetail;
     }
 
     public ProductDto toDto(){
-        return new ProductDto(productId, productName, price, productView, productScore,productCategory, productStatus, thumbnailImageURL, getCreatedAt(), getModifiedAt());
+        return new ProductDto(productId, productName, price, productView, productScore, productCategory, productStatus, thumbnailImageURL, productDetail, getCreatedAt(), getModifiedAt());
     }
 
 }

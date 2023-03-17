@@ -15,7 +15,6 @@ public interface MemberMapper {
         member.setEmail(post.getEmail());
         member.setPassword(post.getPassword());
         member.setNickname(post.getNickname());
-        member.setProfileImg(member.getRandomProfileImageUrl());
 
         return member;
     }

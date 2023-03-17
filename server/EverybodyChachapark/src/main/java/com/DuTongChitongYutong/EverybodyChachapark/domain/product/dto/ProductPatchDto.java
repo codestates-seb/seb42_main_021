@@ -11,7 +11,7 @@ import javax.validation.constraints.PositiveOrZero;
 @AllArgsConstructor
 public class ProductPatchDto {
 
-    private String name;
+    private String productName;
 
     @PositiveOrZero
     private int price;
@@ -19,5 +19,8 @@ public class ProductPatchDto {
     private ProductCategory productCategory;
 
     private ProductStatus productStatus;
+
+    private String productDetail;
+
 
 }

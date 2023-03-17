@@ -1,0 +1,7 @@
+[source,options="nowrap"]
+----
+{
+    "email" : "legendpaino2@naver.com",
+    "password" : "12345"
+}
+----
