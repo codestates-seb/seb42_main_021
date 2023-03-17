@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 
 import Main from '../components/main/Main';
 import MainHeader from '../components/main/MainHeader';
@@ -100,6 +101,8 @@ const Login = () => {
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -107,19 +110,22 @@ const Login = () => {
         email: data.email,
         password: data.password,
       });
-      const decodedToken = jwt_decode(res.headers.authorization);
-      const expire = new Date(decodedToken.exp * 1000);
-      Cookies.set('accessToken', res.headers.authorization, true, {
-        expire: expire,
+      const decodedAccessToken = jwt_decode(res.headers.authorization);
+      const decodedRefreshToken = jwt_decode(res.headers.refresh);
+      const accesseTokenExpire = new Date(decodedAccessToken.exp * 1000);
+      const refreshTokenExpire = new Date(decodedRefreshToken.exp * 1000);
+
+      setCookie('accessToken', res.headers.authorization.slice(7), {
+        expires: accesseTokenExpire,
       });
-      Cookies.set('refreshToken', res.headers.refresh, true, {
-        expire: expire,
+      setCookie('refreshToken', res.headers.refresh, {
+        expires: refreshTokenExpire,
       });
+      navigate('../product');
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <Main>
       <MainHeader />
