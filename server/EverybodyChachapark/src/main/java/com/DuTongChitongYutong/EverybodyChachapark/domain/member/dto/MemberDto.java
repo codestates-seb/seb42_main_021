@@ -4,6 +4,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,8 @@ public class MemberDto {
         private String password;
         private String nickname;
         private String profileImg;
+        @Nullable
+        private String comment;
     }
 
     @Getter
@@ -23,6 +26,7 @@ public class MemberDto {
     public static class Patch {
         private String password;
         private String nickname;
+        private String comment;
     }
 
     @AllArgsConstructor
@@ -32,6 +36,7 @@ public class MemberDto {
         private String email;
         private String nickname;
         private String profileImg;
+        private String comment;
         private Member.MemberStatus memberStatus;
         private LocalDateTime createDate;
 

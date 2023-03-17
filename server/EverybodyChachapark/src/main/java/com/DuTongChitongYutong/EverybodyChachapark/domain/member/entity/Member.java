@@ -34,6 +34,9 @@ public class Member extends BaseTime {
     @Column(nullable = false)
     private String profileImg;
 
+    @Column(nullable = true)
+    private String comment;
+
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
