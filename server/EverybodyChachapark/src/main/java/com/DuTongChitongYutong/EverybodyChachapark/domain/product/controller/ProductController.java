@@ -13,6 +13,8 @@ import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,7 +43,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<SingleResponseDto<ProductDto>> readProduct(@PathVariable @Positive long productId){
+    public ResponseEntity<SingleResponseDto<ProductDto>> readProduct(@PathVariable @Positive Long productId){
         return new ResponseEntity<>(new SingleResponseDto<>(productFacade.readProduct(productId)), HttpStatus.OK);
     }
 
@@ -61,14 +63,22 @@ public class ProductController {
         return new ResponseEntity<>(new MultiResponseDto<>(list, page), HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<MultiResponseDto<ProductDto>> searchProducts(@RequestParam String searchKeyword, @PageableDefault(sort = "productId", direction = Sort.Direction.ASC, size = 10) Pageable pageable){
+        Page<Product> page = productFacade.searchProducts(searchKeyword, pageable);
+        List<ProductDto> list = page.getContent().stream().map(Product::toDto).collect(Collectors.toList());
+
+        return new ResponseEntity<>(new MultiResponseDto<>(list, page), HttpStatus.OK);
+    }
+
     @PatchMapping("/{productId}")
-    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive long productId, @Valid @RequestPart ProductPatchDto productPatchDto, @RequestPart MultipartFile thumbnailImageFile){
+    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive Long productId, @Valid @RequestPart ProductPatchDto productPatchDto, @RequestPart MultipartFile thumbnailImageFile){
 
         return new ResponseEntity<>(new SingleResponseDto<>(productFacade.updateProduct(productId, productPatchDto, thumbnailImageFile)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity deleteProduct(@PathVariable @Positive long productId){
+    public ResponseEntity deleteProduct(@PathVariable @Positive Long productId){
         productService.deleteProduct(productId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

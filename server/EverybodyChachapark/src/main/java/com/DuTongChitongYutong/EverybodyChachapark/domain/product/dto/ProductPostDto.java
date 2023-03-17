@@ -13,7 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 public class ProductPostDto {
 
     @NotBlank
-    private String name;
+    private String productName;
 
     @PositiveOrZero
     private int price;
@@ -22,6 +22,7 @@ public class ProductPostDto {
 
     private ProductStatus productStatus;
 
+    private String productDetail;
 
 
 }
