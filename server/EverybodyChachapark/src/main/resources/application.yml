@@ -5,7 +5,6 @@ image:
   local-path: "src/main/resources/file"
   server-url: http://legendpano.codns.com:8085/images/
 
-
 jwt:
   key: kim123412341234123456789567895678956789
   access-token-expiration-minutes: 30

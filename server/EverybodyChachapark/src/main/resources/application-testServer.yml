@@ -21,3 +21,4 @@ logging:
 
 server:
   port: 8085
+
