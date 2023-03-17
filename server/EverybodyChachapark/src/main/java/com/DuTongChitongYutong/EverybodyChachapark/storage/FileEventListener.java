@@ -43,7 +43,7 @@ public class FileEventListener {
     @Async
     public void processFileDeleteEvent(FileDeletesEvent event) {
         for (String filename : event.getFiles()) {
-            if(filename.isEmpty() || filename.equals("NotfoundImage.jpg")) {
+            if(filename.isEmpty()) {
                 continue;
             }
 

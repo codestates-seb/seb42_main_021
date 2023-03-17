@@ -1,0 +1,7 @@
+[source,options="nowrap"]
+----
+{
+    "httpStatus": 200,
+    "message": "로그인 되었습니다."
+}
+----
