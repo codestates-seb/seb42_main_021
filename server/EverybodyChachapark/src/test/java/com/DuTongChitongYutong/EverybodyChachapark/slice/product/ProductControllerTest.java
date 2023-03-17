@@ -91,7 +91,7 @@ public class ProductControllerTest {
                                 .file(GetMockMultipartFile.getMockMultipartFile("thumbnailImageFile"))
                                 .content(content)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .headers(headers)
                 );
 
@@ -117,7 +117,7 @@ public class ProductControllerTest {
                         requestFields(
                                 List.of(fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격"),
-                                        fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
+                                        fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리: NO_CATEGORY, TENT, LIGHT, TABLE, CHAIR, FIREPLACE"),
                                         fieldWithPath("productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("productDetail").type(JsonFieldType.STRING).description("상품 상세 내용")
                                 )
@@ -163,7 +163,7 @@ public class ProductControllerTest {
                                 .file(GetMockMultipartFile.getMockMultipartFile("thumbnailImageFile"))
                                 .content(content)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .headers(headers)
                                 .with(request -> { request.setMethod("PATCH"); return request; })
                 );
@@ -193,7 +193,7 @@ public class ProductControllerTest {
                         requestFields(
                                 List.of(fieldWithPath("productName").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("price").type(JsonFieldType.NUMBER).description("상품 가격"),
-                                        fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
+                                        fieldWithPath("productCategory").type(JsonFieldType.STRING).description("상품 카테고리: NO_CATEGORY, TENT, LIGHT, TABLE, CHAIR, FIREPLACE"),
                                         fieldWithPath("productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("productDetail").type(JsonFieldType.STRING).description("상품 상세 내용")
                                         )
@@ -471,7 +471,7 @@ public class ProductControllerTest {
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
                         pathParameters(
-                                parameterWithName("category").description("조회할 상품 카테고리")
+                                parameterWithName("category").description("조회할 상품 카테고리: NO_CATEGORY, TENT, LIGHT, TABLE, CHAIR, FIREPLACE")
                         ),
                         requestParameters(
                                 List.of(parameterWithName("page").description("Page 번호"),

@@ -150,7 +150,7 @@ public class MemberControllerTest {
                         .file(GetMockMultipartFile.getMockMultipartFile("profileImageFile"))
                         .content(content)
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                         .headers(headers)
                         .with(request -> { request.setMethod("PATCH"); return request; })
                 );
