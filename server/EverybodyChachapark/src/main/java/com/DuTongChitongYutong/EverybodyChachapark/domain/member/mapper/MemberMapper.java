@@ -23,6 +23,7 @@ public interface MemberMapper {
         Member member = new Member();
         member.setPassword(patch.getPassword());
         member.setNickname(patch.getNickname());
+        member.setComment(patch.getComment());
         return member;
     }
 
@@ -60,6 +61,7 @@ public interface MemberMapper {
             String email = null;
             String nickname = null;
             String profileImg = null;
+            String comment = null;
             Member.MemberStatus memberStatus = null;
             LocalDateTime createDate = null;
             if (member.getMemberId() != null) {
@@ -69,8 +71,9 @@ public interface MemberMapper {
             nickname = member.getNickname();
             memberStatus = member.getMemberStatus();
             profileImg = member.getProfileImg();
+            comment = member.getComment();
             createDate = member.getCreatedAt();
-            MemberDto.Response response = new MemberDto.Response(memberId, email, nickname, profileImg, memberStatus, createDate);
+            MemberDto.Response response = new MemberDto.Response(memberId, email, nickname, profileImg, comment, memberStatus, createDate);
             return response;
         }
     }

@@ -66,7 +66,8 @@ public class MemberControllerTest {
     @Test
     public void postMemberTest() throws Exception {
         //given
-        MemberDto.Post postMember = new MemberDto.Post("user@gmail.com", "1234", "user", "Image.link");
+        MemberDto.Post postMember = new MemberDto.Post("user@gmail.com", "1234", "user",
+                "Image.link", "comment");
         String content = gson.toJson(postMember);
 
         given(memberMapper.memberPostDtoToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
@@ -104,7 +105,8 @@ public class MemberControllerTest {
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("이미지URL")
+                                        fieldWithPath("profileImg").type(JsonFieldType.STRING).description("이미지URL"),
+                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("소개글 (null 처리 가능하므로 별도 데이터 안주셔도 됩니다)")
                                 )
                         ),
                         responseFields(
@@ -129,7 +131,7 @@ public class MemberControllerTest {
         String content = gson.toJson(patchMember);
 
         MemberDto.Response patchResponse = new MemberDto.Response(1, "user@gmail.com", "user2",
-                "Img.link", Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
+                "Img.link", "comment", Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
 
         given(memberMapper.memberPatchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
 
@@ -176,8 +178,9 @@ public class MemberControllerTest {
                         ),
                         requestFields(
                                 List.of(
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").optional(),
-                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임").optional()
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임").optional(),
+                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("소개글 (null 처리도 가능)").optional()
                                 )
                         ),
                         responseFields(
@@ -187,6 +190,7 @@ public class MemberControllerTest {
                                         fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 ID (이메일)"),
                                         fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                                         fieldWithPath("data.profileImg").type(JsonFieldType.STRING).description("프로필 이미지 URL"),
+                                        fieldWithPath("data.comment").type(JsonFieldType.STRING).description("간단한 자기소개 글"),
                                         fieldWithPath("data.memberStatus").type(JsonFieldType.STRING).description("회원 상태"),
                                         fieldWithPath("data.createDate").type(JsonFieldType.STRING).description("회원 생성 날짜")
                                 )
@@ -201,7 +205,7 @@ public class MemberControllerTest {
         given(memberService.findByEmail()).willReturn(new Member());
 
         MemberDto.Response getResponse = new MemberDto.Response(1, "user@gmail.com", "user",
-                "Img.link", Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
+                "Img.link", "comment" ,Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
 
         given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(getResponse);
 
@@ -237,6 +241,7 @@ public class MemberControllerTest {
                                         fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 ID (이메일)"),
                                         fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
                                         fieldWithPath("data.profileImg").type(JsonFieldType.STRING).description("프로필 이미지 URL"),
+                                        fieldWithPath("data.comment").type(JsonFieldType.STRING).description("간단한 자기소개 글"),
                                         fieldWithPath("data.memberStatus").type(JsonFieldType.STRING).description("회원 상태"),
                                         fieldWithPath("data.createDate").type(JsonFieldType.STRING).description("회원 생성 날짜")
                                 )
