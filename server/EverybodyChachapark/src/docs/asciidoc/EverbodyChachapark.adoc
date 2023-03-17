@@ -275,3 +275,73 @@ include::{snippets}/delete-member/request-headers.adoc[]
 
 .http-response
 include::{snippets}/delete-member/http-response.adoc[]
+
+== CartController
+=== 장바구니 등록
+.curl-request
+include::{snippets}/post-cart/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-cart/http-request.adoc[]
+
+.request-headers
+include::{snippets}/patch-cart/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/post-cart/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-cart/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-cart/response-fields.adoc[]
+
+=== 장바구니 수정
+.curl-request
+include::{snippets}/patch-cart/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-cart/http-request.adoc[]
+
+.request-headers
+include::{snippets}/patch-cart/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/patch-cart/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-cart/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-cart/response-fields.adoc[]
+
+=== 장바구니 조회
+.curl-request
+include::{snippets}/get-cart/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-cart/http-request.adoc[]
+
+.request-headers
+include::{snippets}/get-cart/request-headers.adoc[]
+
+.http-response
+include::{snippets}/get-cart/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-cart/response-fields.adoc[]
+
+=== 장바구니 삭제
+.curl-request
+include::{snippets}/delete-cart/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-cart/http-request.adoc[]
+
+.request-headers
+include::{snippets}/delete-cart/request-headers.adoc[]
+
+.http-response
+include::{snippets}/delete-cart/http-response.adoc[]
+
+
