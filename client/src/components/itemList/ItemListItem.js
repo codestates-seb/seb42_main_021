@@ -43,18 +43,18 @@ const ItemValueBox = styled.div`
 `;
 const ItemListItem = ({ item }) => {
   return (
-    <ItemLayout to="/">
+    <ItemLayout to={`/product/${item.productId}`}>
       <ItemImgBox>
-        <img src={light} alt="" />
+        <img src={item.thumbnailImageURL} alt="" />
       </ItemImgBox>
       <ItemBodyContainer>
         <ItemTitleBox>
-          <h2>{item.name}</h2>
+          <h2>{item.productName}</h2>
           <p>{item.productDetail}</p>
         </ItemTitleBox>
         <ItemValueBox>
           {/* <span>{list.rates} </span> */}
-          <b>{item.price}</b>
+          <b>{Number(item.price).toLocaleString('ko-KR')}원</b>
         </ItemValueBox>
       </ItemBodyContainer>
     </ItemLayout>

@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
 import Footer from '../components/main/Footer';
+import { useCookies } from 'react-cookie';
 
 const PageName = styled.h1`
   margin-bottom: 40px;
@@ -89,8 +90,10 @@ const AdminNewItem = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
   const [text, setText] = useState('');
+  const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const imgRef = useRef();
+  const [cookies, setCookie, removeCookie] = useCookies();
   const modules = {
     toolbar: {
       container: [
@@ -118,6 +121,25 @@ const AdminNewItem = () => {
       ],
     },
   };
+
+  const { state } = useLocation();
+  console.log(state.productId);
+  console.log(state.thumbnailImageURL);
+  useEffect(() => {
+    setName(state.productName);
+    setPrice(state.price);
+    setImage(state.thumbnailImageURL);
+    setCategory(state.productCategory);
+    setText(state.productDetail);
+    setStatus(state.productStatus);
+  }, [
+    state.productName,
+    state.price,
+    state.thumbnailImageURL,
+    state.productCategory,
+    state.productDetail,
+    state.productStatus,
+  ]);
 
   const handleCategory = (event) => {
     setCategory(event.target.value);
@@ -167,17 +189,68 @@ const AdminNewItem = () => {
       return;
     }
     const formData = new FormData();
-    formData.append('category', category);
-    formData.append('name', name);
-    formData.append('price', price);
-    formData.append('image', image);
-    formData.append('text', text);
+
+    formData.append('thumbnailImageFile', image);
+    formData.append(
+      'productPostDto',
+      new Blob(
+        [
+          JSON.stringify({
+            productName: name,
+            price: parseInt(price.replace(/,/g, '')),
+            productCategory: category,
+            productStatus: status,
+            productDetail: text,
+          }),
+        ],
+        {
+          type: 'application/json',
+        }
+      )
+    );
+    // 이미지는 폼데이터에 append, productPostDto JSON.string
+    const accessToken = cookies.accessToken;
+    const refreshToken = cookies.refreshToken;
+    console.log(accessToken);
+    console.log(refreshToken);
     const header = {
       headers: {
-        'ngrok-skip-browser-warning': '12',
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`,
+        Refresh: `${refreshToken}`,
       },
     };
+    if (state.productName) {
+      try {
+        // formData.append('thumbnailImageFile', image);
+        formData.append(
+          'productPatchDto',
+          new Blob(
+            [
+              JSON.stringify({
+                productName: name,
+                price: parseInt(price.replace(/,/g, '')),
+                productCategory: category,
+                productStatus: status,
+                productDetail: text,
+              }),
+            ],
+            {
+              type: 'application/json',
+            }
+          )
+        );
+        const response = await axios.patch(
+          `/products/${state.productId}`,
+          formData,
+          header
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+      navigate('/product');
+    }
     try {
       const response = await axios.post('/products', formData, header);
       console.log(response.data);
@@ -186,6 +259,7 @@ const AdminNewItem = () => {
       setPrice('');
       setImage('');
       setText('');
+      setStatus('');
     } catch (error) {
       console.error(error);
     }
@@ -196,23 +270,30 @@ const AdminNewItem = () => {
     <Main>
       <MainLayout>
         <div>
-          <PageName>상품 등록하기</PageName>
+          <PageName>
+            {state.productCategory ? '상품 수정하기' : '상품 등록하기'}
+          </PageName>
           <ItemInformationContainer onSubmit={handleSubmit}>
             <ItemInformationBox>
               <div>
                 <label>상품 카테고리</label>
                 <select value={category} onChange={handleCategory}>
                   <option value="선택해주세요">선택해주세요</option>
-                  <option value="텐트">텐트</option>
-                  <option value="체어">체어</option>
-                  <option value="테이블">테이블</option>
-                  <option value="조명">조명</option>
-                  <option value="화로대">화로대</option>
+                  <option value="TENT">텐트</option>
+                  <option value="CHAIR">체어</option>
+                  <option value="TABLE">테이블</option>
+                  <option value="LIGHT">조명</option>
+                  <option value="FIREPLACE">화로대</option>
                 </select>
               </div>
               <div>
                 <label htmlFor="상품명">상품명</label>
-                <ContentInput type="text" onChange={handleName} required />
+                <ContentInput
+                  type="text"
+                  onChange={handleName}
+                  value={name}
+                  required
+                />
               </div>
               <div>
                 <label htmlFor="가격">가격</label>
@@ -247,7 +328,9 @@ const AdminNewItem = () => {
               <ItemDescription modules={modules} onChange={handleText} />
             </ItemDescriptionBox>
             <ButtonBox>
-              <button type="submit">등록하기</button>
+              <button type="submit">
+                {state.productCategory ? '상품 수정하기' : '상품 등록하기'}
+              </button>
             </ButtonBox>
           </ItemInformationContainer>
         </div>
