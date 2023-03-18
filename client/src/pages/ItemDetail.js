@@ -18,6 +18,7 @@ import {
 
 const ImageBox = styled.div`
   width: 100%;
+  padding: 30px 0;
   > img {
     width: 100%;
     height: 100%;
@@ -128,7 +129,7 @@ const ItemDetail = () => {
       .catch((error) => {
         console.error(error);
       });
-    console.log(carts);
+
     const isInTheCart = carts?.filter(
       (items) => items.productId === productDetail.productId
     ).length;
@@ -136,6 +137,7 @@ const ItemDetail = () => {
       window.alert('이미 장바구니에 담은 상품입니다.');
       navigate('/shoppingcart');
     }
+
     const item = {
       productId: productDetail.productId,
       quantity: 1,
@@ -186,17 +188,22 @@ const ItemDetail = () => {
     );
   }, [id]);
 
+  console.log(productDetail);
+
   return (
     <Main>
       <MainLayout>
         {productDetail && (
           <div>
             <ImageBox>
-              <img alt="텐트1"></img>
+              <img
+                alt={productDetail.name}
+                src={productDetail.thumbnailImageURL}
+              ></img>
             </ImageBox>
             <ProductInformation>
               <div>
-                <div id="productName">{productDetail.name}</div>
+                <div id="productName">{productDetail.productName}</div>
                 <div id="productPrice">
                   {productDetail.price.toLocaleString('ko-KR')}원
                 </div>

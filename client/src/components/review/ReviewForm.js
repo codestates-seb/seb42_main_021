@@ -150,16 +150,19 @@ function ReviewForm({
         emptyColor="#C9C9C9"
         onClick={(rating) => setRating(rating)}
         initialValue={isEditClicked ? editingReview.score : rating}
+        required
       />
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}
+        required
       />
       <input
         type="file"
         accept="image/*"
         onChange={() => setImage(imgRef.current.files[0])}
         ref={imgRef}
+        required
       />
       <ButtonBox>
         <FormButton type="submit" backgroundColor="#61a0ff">
