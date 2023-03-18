@@ -1,8 +1,9 @@
-import logolast from '../../img/logolast.png';
 import styled from 'styled-components';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
+import logolast3 from '../../img/logolast3.png';
 import back from '../../img/back.svg';
-// import logoChachapark from '../../img/logoChachapark.png';
 
 const MainHeaderLayout = styled.div`
   z-index: 1000;
@@ -26,13 +27,16 @@ const MainHeaderContainer = styled.div`
   position: relative;
   justify-content: space-between;
   align-items: center;
+  img {
+    width: 100px;
+    height: 80px;
+    object-fit: scale-down;
+  }
 `;
 
 const LogoBox = styled.div`
   transform: translateX(5px);
-  border: 1px solid var(--border);
   cursor: pointer;
-  /* border-radius: var(--bd-rd); */
   margin-left: 12px;
   margin-top: 1px;
 `;
@@ -87,6 +91,8 @@ const BackBox = styled.div`
 const SubHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const accessToken = cookies.accessToken;
   return (
     <MainHeaderLayout>
       <MainHeaderContainer>
@@ -97,25 +103,32 @@ const SubHeader = () => {
               <img className="back" src={back} alt="" />
             </BackBox>
             <LogoBox onClick={() => navigate('/')}>
-              <img className="logo5" src={logolast} alt="" />
+              <img className="logo5" src={logolast3} alt="" />
             </LogoBox>
           </>
         ) : (
           <LogoBox onClick={() => navigate('/')}>
-            <img className="logo5" src={logolast} alt="" />
+            <img className="logo5" src={logolast3} alt="" />
           </LogoBox>
         )}
         <LoginBox>
-          <LoginLink to="/login" className="logout">
-            로그인
-          </LoginLink>
-          <LoginLink to="/singup" className="signup">
-            회원가입
-          </LoginLink>
-          {/* <img src={logolast} alt="프로필" />
-          <LoginLink to="/login" className="logout">
-            로그아웃
-          </LoginLink> */}
+          {accessToken ? (
+            <div>
+              <img src={logolast3} alt="프로필" />
+              <LoginLink to="/login" className="logout">
+                로그아웃
+              </LoginLink>
+            </div>
+          ) : (
+            <div>
+              <LoginLink to="/login" className="logout">
+                로그인
+              </LoginLink>
+              <LoginLink to="/singup" className="signup">
+                회원가입
+              </LoginLink>
+            </div>
+          )}
         </LoginBox>
       </MainHeaderContainer>
     </MainHeaderLayout>

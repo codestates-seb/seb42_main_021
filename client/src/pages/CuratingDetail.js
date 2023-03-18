@@ -1,12 +1,14 @@
 import styled from 'styled-components';
-import SubCarousel from '../components/ui/SubCarousel';
-import locationImg from '../img/location.png';
-import Footer from '../components/main/Footer';
-import { curationList } from '../assets/curationState';
-import { useParams } from 'react-router-dom';
-import Location from '../components/mapApi/Location';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import Location from '../components/mapApi/Location';
+import { curationList } from '../assets/curationState';
+
+import locationImg from '../img/location.png';
+import SubCarousel from '../components/ui/SubCarousel';
 import CuratingBodyImg from '../components/curating/CuratingBodyImg';
+import Footer from '../components/main/Footer';
 
 const CuratingDetailLayout = styled.div`
   width: 100%;
@@ -19,7 +21,6 @@ const Main = styled.div`
   max-width: 530px;
   background-color: var(--white);
   border-radius: var(--bd-rd);
-  /* padding-top: 79px; */
   padding-bottom: 90px;
   overflow-y: scroll;
   -ms-overflow-style: none;

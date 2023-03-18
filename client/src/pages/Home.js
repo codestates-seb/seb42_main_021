@@ -10,7 +10,6 @@ const Main = styled.div`
   max-width: 530px;
   background-color: var(--white);
   border-radius: var(--bd-rd);
-  /* padding-top: 79px; */
   padding-bottom: 90px;
   overflow-y: scroll;
   -ms-overflow-style: none;
@@ -25,7 +24,6 @@ const MainCarouselContentBox = styled.div`
   height: 35px;
   margin-top: 20px;
   margin-bottom: 60px;
-  /* background-color: var(--whitegray200); */
   color: black;
   text-align: center;
   vertical-align: center;
@@ -37,7 +35,6 @@ const MainCarouselContentBox = styled.div`
 
 const ExplainLayout = styled.div`
   width: 100%;
-  /* height: 100%; */
   margin-top: 20px;
   padding: 0 20px;
 `;

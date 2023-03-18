@@ -152,7 +152,8 @@ const ItemDetail = () => {
   };
 
   const handleEditProductDetail = () => {
-    navigate(`/admin-item/${id}`);
+    navigate(`/admin-item/${id}`, { state: productDetail });
+    console.log({ state: productDetail });
   };
 
   const handleDeleteProductDetail = () => {

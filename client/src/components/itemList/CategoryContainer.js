@@ -68,7 +68,7 @@ const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
         />
         <p>조명</p>
       </ImgButton>
-      <ImgButton onClick={() => setCategoryFilter('FIRE')}>
+      <ImgButton onClick={() => setCategoryFilter('FIREPLACE')}>
         <img
           src={campingbulmung}
           alt="화로대"
