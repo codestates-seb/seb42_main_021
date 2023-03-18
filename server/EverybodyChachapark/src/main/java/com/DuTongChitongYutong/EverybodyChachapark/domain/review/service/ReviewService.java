@@ -31,7 +31,7 @@ public class ReviewService {
     final private FacadeImage facadeImage;
 
     public Review createReview(Review review, MultipartFile imageFile) {
-        String imageURL = facadeImage.createImageURL(imageFile);
+        String imageURL = facadeImage. createImageURL(imageFile);
         review.setImageURL(imageURL);
         review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
@@ -70,7 +70,7 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public Page<Review> findReviews(Long productId, int page, int size) {
-        return reviewRepository.findPageByProduct_ProductId(productId, PageRequest.of(page-1, size, Sort.by("reviewId")));
+        return reviewRepository.findPageByProduct_ProductId(productId, PageRequest.of(page, size, Sort.by("reviewId")));
     }
 
     public void deleteReview(Long reviewId) {

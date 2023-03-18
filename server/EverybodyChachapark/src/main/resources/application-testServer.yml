@@ -1,3 +1,6 @@
+server:
+  port: 8085
+
 spring:
   h2:
     console:
@@ -18,7 +21,3 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
-
-server:
-  port: 8085
-

@@ -1,3 +1,9 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
 account:
   admin: admin@gmail.com
 
@@ -7,7 +13,6 @@ image:
   server-url: http://legendpano.codns.com:8085/images/
   profileImage-name: profile-
   dummyImage-name: not-found
-
 
 jwt:
   key: kim123412341234123456789567895678956789
