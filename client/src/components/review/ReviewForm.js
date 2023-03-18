@@ -1,6 +1,10 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
+
+import { getProductReviews } from '../api/itemDetailAPI';
+
 import { Rating } from 'react-simple-star-rating';
 
 const ReviewFormContainer = styled.form`
@@ -12,33 +16,26 @@ const ReviewFormContainer = styled.form`
     resize: none;
     margin: 10px 0;
   }
-  #reviewButtonBox {
-    margin-top: 50px;
-  }
 `;
 
 const ButtonBox = styled.div`
   display: flex;
   justify-content: right;
   margin: 10px 0;
-  > button {
-    margin-left: 10px;
-  }
-  #cancelButton {
-    background-color: var(--red);
-  }
 `;
 
-const ReviewFormButton = styled.button`
+const FormButton = styled.button`
   width: 100px;
   height: 40px;
   border-radius: var(--bd-rd);
-  background-color: var(--blue);
+  background-color: ${(props) => props.backgroundColor};
   color: var(--white);
+  margin-left: 10px;
 `;
 
 function ReviewForm({
   productId,
+  setProductReviews,
   isEditClicked,
   editingReview,
   setIsEditClicked,
@@ -47,65 +44,100 @@ function ReviewForm({
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
 
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const accessToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
+
+  const imgRef = useRef();
+
   useEffect(() => {
     if (!isEditClicked) {
       setText('');
     } else setText(editingReview.content);
-  }, [isEditClicked]);
-
-  const handleRating = (rate) => {
-    setRating(rate);
-  };
-
-  const handleImage = (event) => {
-    setImage(event.target.files[0]);
-  };
+  }, [editingReview?.content, isEditClicked]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const formData = new FormData();
-    formData.append('score', rating);
-    formData.append('content', text);
-    formData.append('reviewImage', image);
+    formData.append('imageFile', image);
 
     if (!isEditClicked) {
-      formData.append('productId', productId);
-      try {
-        const response = await axios.post('/reviews', formData, {
+      formData.append(
+        'requestBody',
+        new Blob(
+          [JSON.stringify({ productId, content: text, score: rating })],
+          {
+            type: 'application/json',
+          }
+        )
+      );
+      return axios
+        .post('/reviews', formData, {
           headers: {
             'content-type': 'multipart/form-data',
+            Accept: 'multipart/form-data',
+            Authorization: `Bearer ${accessToken}`,
+            Refresh: `${refreshToken}`,
           },
+        })
+        .then(() => {
+          getProductReviews(productId).then((productReviewList) =>
+            setProductReviews(productReviewList)
+          );
+          setRating(0);
+          setImage(null);
+          imgRef.current.value = '';
+          setText('');
+        })
+        .catch((error) => {
+          console.error(error);
         });
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-      return;
     }
 
-    formData.append('reviewId', editingReview.reveiwId);
-    try {
-      const response = await axios.post(
-        `/reviews/${editingReview.reveiwId}`,
-        formData,
+    formData.append(
+      'requestBody',
+      new Blob(
+        [
+          JSON.stringify({
+            reviewId: editingReview.reviewId,
+            content: text,
+            score: rating,
+          }),
+        ],
         {
-          headers: {
-            'content-type': 'multipart/form-data',
-          },
+          type: 'application/json',
         }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-    setIsEditClicked(false);
+      )
+    );
+
+    axios
+      .patch(`/reviews/${editingReview.reviewId}`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: `Bearer ${accessToken}`,
+          Refresh: `${refreshToken}`,
+        },
+      })
+      .then(() => {
+        getProductReviews(productId).then((productReviewList) =>
+          setProductReviews(productReviewList)
+        );
+        setRating(0);
+        setImage(null);
+        imgRef.current.value = '';
+        setText('');
+        setIsEditClicked(false);
+      })
+      .catch((error) => {
+        console.error('리뷰 수정 실패:', error);
+      });
   };
 
   const handleDismiss = (event) => {
     event.preventDefault();
     setRating(0);
     setImage(null);
+    imgRef.current.value = '';
     setText('');
     setIsEditClicked(false);
   };
@@ -116,25 +148,30 @@ function ReviewForm({
         size="25px"
         fillColor="#61a0ff"
         emptyColor="#C9C9C9"
-        onClick={handleRating}
+        onClick={(rating) => setRating(rating)}
         initialValue={isEditClicked ? editingReview.score : rating}
       />
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}
       />
-      <input type="file" accept="image/*" onChange={handleImage} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={() => setImage(imgRef.current.files[0])}
+        ref={imgRef}
+      />
       <ButtonBox>
-        <ReviewFormButton type="submit">
+        <FormButton type="submit" backgroundColor="#61a0ff">
           {isEditClicked ? '수정하기' : '등록하기'}
-        </ReviewFormButton>
-        <ReviewFormButton
-          id="cancelButton"
+        </FormButton>
+        <FormButton
           type="button"
+          backgroundColor="#ff0000"
           onClick={handleDismiss}
         >
           취소
-        </ReviewFormButton>
+        </FormButton>
       </ButtonBox>
     </ReviewFormContainer>
   );

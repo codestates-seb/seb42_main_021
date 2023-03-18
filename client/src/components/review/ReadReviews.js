@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 import { Rating } from 'react-simple-star-rating';
+
+import { getProductReviews } from '../api/itemDetailAPI';
 
 const ReviewContainer = styled.ul`
   padding: 0 16px;
@@ -44,13 +47,13 @@ const UserInformation = styled.div`
     width: 40px;
     height: 40px;
   }
-  #reviewDate {
+  #review-date {
     margin-top: 20px;
     width: 35%;
     color: var(--gray);
     font-size: x-small;
   }
-  #reviewEdit {
+  #review-edit {
     display: flex;
     justify-content: center;
     width: 15%;
@@ -63,17 +66,33 @@ const UserInformation = styled.div`
   }
 `;
 
-function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
+function ReadReviews({
+  productId,
+  productReviews,
+  setProductReviews,
+  setEditingReview,
+  setIsEditClicked,
+}) {
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const accessToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
+
   const handeleDeleteReview = (reviewId) => {
-    console.log(reviewId);
-    // axios
-    //   .delete(`/reviews/${reviewId}`)
-    //   .then((response) => {
-    //     console.log('리뷰 삭제 완료');
-    //   })
-    //   .catch((error) => {
-    //     console.error('리뷰 삭제 실패:', error);
-    //   });
+    axios
+      .delete(`/reviews/${reviewId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Refresh: `${refreshToken}`,
+        },
+      })
+      .then(() => {
+        getProductReviews(productId).then((productReviewList) =>
+          setProductReviews(productReviewList)
+        );
+      })
+      .catch((error) => {
+        console.error('리뷰 삭제 실패:', error);
+      });
   };
 
   const handleEditReview = (reviewData) => {
@@ -94,7 +113,7 @@ function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
             <ReviewContents>
               <UserInformation>
                 <img alt="유저 프로필"></img>
-                <div id="userBox">
+                <div>
                   <Rating
                     size="15px"
                     fillColor="#61a0ff"
@@ -104,10 +123,10 @@ function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
                   />
                   <div>{review.reviewMember.nickname}</div>
                 </div>
-                <div id="reviewDate">
+                <div id="review-date">
                   {new Date(review.createdAt).toLocaleString('ko-KR')}
                 </div>
-                <div id="reviewEdit">
+                <div id="review-edit">
                   <button
                     type="button"
                     onClick={() => handleEditReview(review)}
@@ -124,7 +143,7 @@ function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
               </UserInformation>
               <div id="review">{review.content}</div>
             </ReviewContents>
-            <img alt="리뷰사진"></img>
+            <img alt="리뷰사진" src={review.imageURL.slice(2, -2)}></img>
           </ReviewBox>
         );
       })}

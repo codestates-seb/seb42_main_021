@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
 import { FaShoppingCart } from 'react-icons/fa';
@@ -9,6 +10,11 @@ import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
 import ReviewForm from '../components/review/ReviewForm';
 import ReadReviews from '../components/review/ReadReviews';
+
+import {
+  findProductByProductId,
+  getProductReviews,
+} from '../components/api/itemDetailAPI';
 
 const ImageBox = styled.div`
   width: 100%;
@@ -83,20 +89,27 @@ const ReviewContainer = styled.div`
   }
 `;
 
-const StyledButton = styled.button`
+const FormButton = styled.button`
   width: 100px;
   height: 40px;
   border-radius: var(--bd-rd);
-  background-color: var(--blue);
+  background-color: ${(props) => props.backgroundColor};
   color: var(--white);
+  margin-left: 10px;
 `;
 
 const ItemDetail = () => {
   const [productDetail, setProductDetail] = useState(null);
   const [productReviews, setProductReviews] = useState(null);
+  const [carts, setCarts] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  const accessToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
 
   const navigate = useNavigate();
 
@@ -108,15 +121,29 @@ const ItemDetail = () => {
   };
 
   const handleShoppingBag = () => {
-    //상품 하나만 담을 수 있게 하는 로직 추가
+    getCartItems()
+      .then((cartItems) => {
+        setCarts(cartItems);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    console.log(carts);
+    const isInTheCart = carts?.filter(
+      (items) => items.productId === productDetail.productId
+    ).length;
+    if (isInTheCart > 0) {
+      window.alert('이미 장바구니에 담은 상품입니다.');
+      navigate('/shoppingcart');
+    }
     const item = {
       productId: productDetail.productId,
       quantity: 1,
     };
     axios.post(`/carts`, item, {
       headers: {
-        Authorization: `Bearer `,
-        Refresh: `Bearer `,
+        Authorization: `Bearer ${accessToken}`,
+        Refresh: `${refreshToken}`,
       },
     });
     setIsModalOpen(true);
@@ -136,22 +163,17 @@ const ItemDetail = () => {
     navigate('/product');
   };
 
-  const findProductByProductId = async (productId) => {
-    const { data } = await axios.get(`/products/${productId}`, {
-      headers: {
-        'ngrok-skip-browser-warning': '12',
-      },
-    });
-    return data.data;
-  };
-
-  const getProductReviews = async (productId) => {
+  const getCartItems = async () => {
     try {
-      const { data } = await axios.get(`/reviews/${productId}?page=1&size=10`);
+      const { data } = await axios.get('/carts', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          refreshToken: `${refreshToken}`,
+        },
+      });
       return data.data;
     } catch (error) {
       console.error(error);
-      return [];
     }
   };
 
@@ -179,15 +201,29 @@ const ItemDetail = () => {
                   {productDetail.price.toLocaleString('ko-KR')}원
                 </div>
               </div>
-              <button type="button" onClick={handleShoppingBag}>
-                <FaShoppingCart size="40px" />
-              </button>
-              <StyledButton type="button" onClick={handleEditProductDetail}>
-                상품 수정하기
-              </StyledButton>
-              <StyledButton type="button" onClick={handleDeleteProductDetail}>
-                상품 삭제하기
-              </StyledButton>
+              {!accessToken && (
+                <button type="button" onClick={handleShoppingBag}>
+                  <FaShoppingCart size="40px" />
+                </button>
+              )}
+              {accessToken && (
+                <>
+                  <FormButton
+                    type="button"
+                    backgroundColor="#61a0ff"
+                    onClick={handleEditProductDetail}
+                  >
+                    상품 수정하기
+                  </FormButton>
+                  <FormButton
+                    type="button"
+                    backgroundColor="#ff0000"
+                    onClick={handleDeleteProductDetail}
+                  >
+                    상품 삭제하기
+                  </FormButton>
+                </>
+              )}
               {isModalOpen && (
                 <Modal>
                   <div>
@@ -208,12 +244,15 @@ const ItemDetail = () => {
           <h3>상품 리뷰</h3>
           <ReviewForm
             productId={productDetail?.productId}
+            setProductReviews={setProductReviews}
             isEditClicked={isEditClicked}
             setIsEditClicked={setIsEditClicked}
             editingReview={editingReview}
           />
           <ReadReviews
+            productId={productDetail?.productId}
             productReviews={productReviews}
+            setProductReviews={setProductReviews}
             setEditingReview={setEditingReview}
             setIsEditClicked={setIsEditClicked}
           />
