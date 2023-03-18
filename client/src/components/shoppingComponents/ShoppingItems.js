@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -102,24 +103,36 @@ const ItemNumberChangeContainer = styled.div`
 `;
 
 const ShoppingItems = ({ setOrderPrice }) => {
-  const { removeProduct } = useProduct((state) => state);
   const [product, setProduct] = useState([]);
   const [counts, setCounts] = useState({});
   const [checkedItem, setCheckedItem] = useState([]);
+  //delete나 patch 시 화면에 반영되도록 하는 state 값
+  const [updateProduct, setUpdateProdcut] = useState(1);
 
-  const isAllCheckd = product.length === checkedItem.length ? true : false; // 영어로..
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  const accesseToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
+  const doneAllCheckd = product.length === checkedItem.length ? true : false;
+
   //수량 변화가 있을 때마다 서버에 저장(post) => 다시 get해서 내용 뿌려주기 => 비효율적
   //화면에서 벗어났을 때만 변경 내용을 서버에 저장하고싶음
   //마운트 언마운트 ???
   // useEffect winddow.location.path로 현재 경로페이지 확인하기
 
-  const readItemList = async () => {
-    const { data } = await axios.get(`/members/1/orders`, {
-      headers: { 'ngrok-skip-browser-warning': '12' },
+  const readProductList = async () => {
+    const { data } = await axios.get(`/carts`, {
+      headers: {
+        Authorization: `Bearer ${accesseToken} `,
+        Refresh: `${refreshToken}`,
+      },
     }); //사이드이펙트 방지하기위해 return값 주고
-    setProduct(data.orders);
-    setCheckedItem(data.orders.map((element) => element.productId));
-    data.orders.forEach((element) => {
+
+    setProduct(data.data);
+
+    setCheckedItem(data.data.map((element) => element.productId));
+
+    data.data.forEach((element) => {
       setCounts((previosCount) => ({
         ...previosCount,
         [element.productId]: element.quantity,
@@ -127,26 +140,44 @@ const ShoppingItems = ({ setOrderPrice }) => {
     });
   };
 
-  useEffect(() => {
-    (async () => {
-      await readItemList();
-    })();
-  }, []);
-
-  const handleIncreaseCount = (id) => {
-    setCounts((previosCount) => ({
-      ...previosCount,
-      [id]: previosCount[id] + 1,
-    }));
+  const sendCountInformation = async (cartId, quantity) => {
+    await axios.patch(
+      `/carts/${cartId}`,
+      { quantity },
+      {
+        headers: {
+          Authorization: `Bearer ${accesseToken} `,
+          Refresh: `${refreshToken}`,
+        },
+      }
+    );
+    setUpdateProdcut(0);
   };
 
-  const handleDecreaseCount = (id) => {
-    if (counts[id] <= 1) return;
+  useEffect(() => {
+    (async () => {
+      await readProductList();
+    })();
+    setUpdateProdcut(1);
+  }, [updateProduct]);
 
-    return setCounts((previosCount) => ({
+  const handleIncreaseCount = ({ productId, cartId }) => {
+    setCounts((previosCount) => ({
       ...previosCount,
-      [id]: previosCount[id] - 1,
+      [productId]: previosCount[productId] + 1,
     }));
+
+    sendCountInformation(cartId, counts[productId] + 1);
+  };
+
+  const handleDecreaseCount = ({ productId, cartId }) => {
+    if (counts[productId] <= 1) return;
+
+    setCounts((previosCount) => ({
+      ...previosCount,
+      [productId]: previosCount[productId] - 1,
+    }));
+    sendCountInformation(cartId, counts[productId] - 1);
   };
 
   const handleAllCheck = (checked) => {
@@ -161,9 +192,16 @@ const ShoppingItems = ({ setOrderPrice }) => {
     return setCheckedItem([...checkedItem, id]);
   };
 
-  const handleDelte = (id) => {
-    removeProduct(id);
+  const handleDelte = async (cartId) => {
+    await axios.delete(`/carts/${cartId}`, {
+      headers: {
+        Authorization: `Bearer ${accesseToken} `,
+        Refresh: `${refreshToken}`,
+      },
+    });
+    setUpdateProdcut(0);
   };
+
   const totalPrice = () => {
     const productIds = product.map((element) => element.productId);
 
@@ -192,7 +230,7 @@ const ShoppingItems = ({ setOrderPrice }) => {
           <input
             type={'checkbox'}
             id={'allCheckBox'}
-            checked={isAllCheckd}
+            checked={doneAllCheckd}
             onChange={(e) => handleAllCheck(e.target.checked)}
           />
         </CheckBoxContainer>
@@ -230,7 +268,7 @@ const ShoppingItems = ({ setOrderPrice }) => {
               <div
                 className="cancel"
                 onClick={() => {
-                  handleDelte(element.productId);
+                  handleDelte(element.cartId);
                 }}
               >
                 x
@@ -239,14 +277,14 @@ const ShoppingItems = ({ setOrderPrice }) => {
             <ItemNumberChangeContainer>
               <button
                 className="item-plus"
-                onClick={() => handleIncreaseCount(element.productId)}
+                onClick={() => handleIncreaseCount(element)}
               >
                 +
               </button>
               <div className="item-number">{counts[element.productId]}</div>
               <button
                 className="item-minus"
-                onClick={() => handleDecreaseCount(element.productId)}
+                onClick={() => handleDecreaseCount(element)}
               >
                 -
               </button>

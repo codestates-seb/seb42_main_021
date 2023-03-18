@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
 import Footer from '../components/main/Footer';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
-import profileImage from '../img/shoppingCartItem.png';
+import island from '../img/island.jpg';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 const ProfileImageContainer = styled.div`
   display: flex;
@@ -130,18 +132,52 @@ const Circle = styled.div`
   position: absolute;
   left: 5%;
   transition: all 0.5s ease-in-out;
-  transform: ${(props) => props.toggle && 'translate(25px, 0)'};
+  transform: ${(props) => props.toggle && 'translate(22px, 0)'};
 `;
 
 const Mypage = () => {
   const [toggle, setToggle] = useState(false);
-  const [image, setImage] = useState(profileImage);
-  const [nameEdit, setNameEdit] = useState(false);
-  const [editedName, setEditedName] = useState('유저 닉네임'); //서버에서 받아온 이름 초기값으로 넣기
-  const [introEdit, setIntroEdit] = useState(false);
-  const [editedIntro, setEditedIntro] = useState('등록해주세요.'); //서버에서 받아온 소개글 초기값으로 넣기
+  const [Image, setImage] = useState(null);
+  const [name, setName] = useState(null); //서버에서 받아온 이름 초기값으로 넣기
+  const [comment, setComment] = useState(null); //서버에서 받아온 소개글 초기값으로 넣기
+  const [updateProduct, setUpdateProdcut] = useState(1);
 
-  const fileInput = useRef(null);
+  const [nameEdit, setNameEdit] = useState(false);
+  const [introEdit, setIntroEdit] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  const accesseToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
+
+  const fileInput = useRef();
+
+  const readUserInfomation = async () => {
+    const { data } = await axios.get(`/members/mypage`, {
+      headers: {
+        Authorization: `Bearer ${accesseToken} `,
+        Refresh: `${refreshToken}`,
+      },
+    });
+    return data;
+  };
+
+  // const readOrderData = async () => {
+  //   const { data } = await axios.get(`/members/1/orders`);
+  //   console.log(data);
+  // };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await readUserInfomation();
+
+      setName(data.data.nickname);
+      setImage(data.data.profileImg);
+      setComment(data.data.comment || '등록해주세요!');
+    };
+    fetchData();
+    setUpdateProdcut(1);
+    // await readOrderData();
+  }, [updateProduct]);
 
   const clickedToggle = () => {
     setToggle(!toggle);
@@ -155,47 +191,70 @@ const Mypage = () => {
     setIntroEdit(!introEdit);
   };
 
-  const handleSubmitEditedName = (event) => {
-    event.preventDefalt();
+  const handleSubmitEditedName = async (event) => {
     //서버에 수정된 이름 제출하기
+    try {
+      axios.patch(
+        '/members/info',
+        { nickname: name },
+        {
+          headers: {
+            Authorization: `Bearer ${accesseToken} `,
+            Refresh: `${refreshToken}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    setUpdateProdcut(0);
+    handleNameEdit();
   };
 
   const handleSubmitEditedIntro = (event) => {
-    event.preventDefalt();
+    // event.preventDefalt();
     //서버에 수정된 소개 제출하기
+    console.log(comment);
+    try {
+      axios.patch(
+        '/members/info',
+        { comment: comment },
+        {
+          headers: {
+            Authorization: `Bearer ${accesseToken} `,
+            Refresh: `${refreshToken}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    setUpdateProdcut(0);
+    handleIntroEdit();
   };
 
   const handleImage = (event) => {
-    if (event.target.files[0]) {
-      setImage(event.target.files[0]);
-    } else {
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(event.target.files[0]);
-
     //서버에 새로 등록된 이미지 보내주기
     const formData = new FormData();
-    formData.append('profileImg', image);
-    // /* key 확인하기 */
-    // for (let key of formData.keys()) {
-    //   console.log(key);
-    // }
-    // /* value 확인하기 */
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
-    // const config = {
-    //   headers: {
-    //     'content-type': 'multipart/form-data',
-    //   },
-    // };
-    // axios.post(`uploadAPI`, formData, config);
+    formData.append('profileImageFile', event.target.files[0]);
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accesseToken}`,
+        Refresh: `${refreshToken}`,
+      },
+    };
+
+    axios
+      .patch('/members/profile-image', formData, config)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    setUpdateProdcut(0);
   };
 
   return (
@@ -204,7 +263,7 @@ const Mypage = () => {
         <ProfileImageContainer>
           <div>
             <div id="imageBox">
-              <img alt="프로필 이미지" src={image}></img>
+              <img alt="프로필 이미지" src={Image}></img>
               <input
                 type="file"
                 style={{ display: 'none' }}
@@ -226,13 +285,16 @@ const Mypage = () => {
         </ProfileImageContainer>
         <ProfileContainer>
           {nameEdit ? (
-            <form className="profileBox" onSubmit={handleSubmitEditedName}>
+            <form className="profileBox">
               <label>닉네임</label>
               <input
-                value={editedName}
-                onChange={(event) => setEditedName(event.target.value)}
+                value={name}
+                onChange={(event) => setName(event.target.value)}
               />
-              <button type="submit">
+              <button
+                type="button"
+                onClick={() => handleSubmitEditedName(name)}
+              >
                 <FaChevronRight
                   className="iconCell"
                   color="#c9c9c9"
@@ -243,7 +305,7 @@ const Mypage = () => {
           ) : (
             <div className="profileBox">
               <label>닉네임</label>
-              <span>서버 유저 이름</span>
+              <span>{name}</span>
               <button type="button" onClick={handleNameEdit}>
                 <FaChevronRight
                   className="iconCell"
@@ -254,13 +316,13 @@ const Mypage = () => {
             </div>
           )}
           {introEdit ? (
-            <form className="profileBox" onSubmit={handleSubmitEditedIntro}>
+            <form className="profileBox">
               <label>한 줄 소개</label>
               <input
-                value={editedIntro}
-                onChange={(event) => setEditedIntro(event.target.value)}
+                value={comment}
+                onChange={(event) => setComment(event.target.value)}
               />
-              <button type="submit">
+              <button type="button" onClick={() => handleSubmitEditedIntro()}>
                 <FaChevronRight
                   className="iconCell"
                   color="#c9c9c9"
@@ -271,7 +333,7 @@ const Mypage = () => {
           ) : (
             <div className="profileBox">
               <label>한 줄 소개</label>
-              <span>서버에서 받아온 소개</span>
+              <span>{comment}</span>
               <button type="button" onClick={handleIntroEdit}>
                 <FaChevronRight
                   className="iconCell"
@@ -305,34 +367,6 @@ const Mypage = () => {
         <ListContainer>
           <h1>최근 주문내역</h1>
           <ul>
-            <li>
-              <div>공기청정기 외 5건</div>
-              <div>
-                <div id="price">58,000원</div>
-                <div id="date">2023.03.15(수)</div>
-              </div>
-            </li>
-            <li>
-              <div>공기청정기 외 5건</div>
-              <div>
-                <div id="price">58,000원</div>
-                <div id="date">2023.03.15(수)</div>
-              </div>
-            </li>
-            <li>
-              <div>공기청정기 외 5건</div>
-              <div>
-                <div id="price">58,000원</div>
-                <div id="date">2023.03.15(수)</div>
-              </div>
-            </li>
-            <li>
-              <div>공기청정기 외 5건</div>
-              <div>
-                <div id="price">58,000원</div>
-                <div id="date">2023.03.15(수)</div>
-              </div>
-            </li>
             <li>
               <div>공기청정기 외 5건</div>
               <div>
