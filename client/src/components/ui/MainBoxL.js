@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
 import camping2 from '../../img/camping2.jpg';
 
@@ -10,8 +9,6 @@ const MainPageBox = styled.div`
   background-image: ${(props) =>
     props.width === 'width' ? `url(${camping2})` : ''};
   background-size: cover;
-  /* vertical-align: center; */
-  /* line-height: 100px; */
 `;
 const MainPageContent = styled.p`
   text-align: center;
