@@ -2,8 +2,9 @@ account:
   admin: admin@gmail.com
 
 image:
-  local-path: src/main/resources/file
-  server-url: http://localhost:8080/images/
+  local-path: src/main/resources/file/
+#  server-url: http://localhost:8080/images/
+  server-url: http://legendpano.codns.com/images/
   profileImage-name: profile-
   dummyImage-name: not-found
 
