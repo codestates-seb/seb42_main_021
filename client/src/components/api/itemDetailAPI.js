@@ -11,7 +11,7 @@ export const findProductByProductId = async (productId) => {
 
 export const getProductReviews = async (productId) => {
   try {
-    const { data } = await axios.get(`/reviews/${productId}?page=1&size=10`);
+    const { data } = await axios.get(`/reviews/${productId}?page=0&size=100`);
     return data.data;
   } catch (error) {
     console.error(error);
