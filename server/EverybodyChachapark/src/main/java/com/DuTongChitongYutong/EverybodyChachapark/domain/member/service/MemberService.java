@@ -54,7 +54,7 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member, MultipartFile profileImageFile) {
+    public Member updateMemberInfo(Member member) {
         Member findMember = findByEmail();
 
         if (member.getPassword() != null) {
@@ -64,11 +64,17 @@ public class MemberService {
         Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
         Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
 
+        return memberRepository.save(findMember);
+    }
+
+    public Member updateMemberImage(MultipartFile profileImageFile) {
+        Member findMember = findByEmail();
+
         if(!profileImageFile.isEmpty()) { // 이미지 변경
             String imageURL = findMember.getProfileImg();
             facadeImage.deleteImage(imageURL);
 
-            imageURL = facadeImage.createImageURL(List.of(profileImageFile));
+            imageURL = facadeImage.createImageURL(profileImageFile);
             findMember.setProfileImg(imageURL);
         }
 

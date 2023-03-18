@@ -2,8 +2,11 @@ account:
   admin: admin@gmail.com
 
 image:
-  local-path: "src/main/resources/file"
-  server-url: http://legendpano.codns.com:8085/images/
+  local-path: src/main/resources/file
+  server-url: http://localhost:8080/images/
+  profileImage-name: profile-
+  dummyImage-name: not-found
+
 
 jwt:
   key: kim123412341234123456789567895678956789

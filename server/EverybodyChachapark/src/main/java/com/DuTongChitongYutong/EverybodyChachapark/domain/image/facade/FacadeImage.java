@@ -24,8 +24,13 @@ public class FacadeImage {
         this.jsonListHelper = jsonListHelper;
     }
 
-    public String createImageURL(List<MultipartFile> files) {
-        return Optional.ofNullable(files).map(storageService::store).map(jsonListHelper::listToJson).orElse(null);
+    public String createImageURL(MultipartFile file) {
+        return storageService.store(file);
+    }
+
+    public String createImageURLs(List<MultipartFile> files) {
+        List<String> imageURLs = storageService.store(files);
+        return jsonListHelper.listToJson(imageURLs);
     }
 
     public byte[] loadImage(String imageURL) {
@@ -33,12 +38,16 @@ public class FacadeImage {
     }
 
     public void deleteImage(String imageURL) {
+        storageService.delete(imageURL);
+    }
+
+    public void deleteImages(String imageURL) {
         List<String> imageURLList = jsonListHelper.jsonToList(imageURL);
         storageService.delete(imageURLList);
     }
 
     public String makeProfileImage() { // 랜덤 이미지 생성기
-        int randomIndex = new Random().nextInt(10);
-        return serverUrl + "profile-" + randomIndex;
+        int randomIndex = new Random().nextInt(10) + 1;
+        return serverUrl + "profile-" + randomIndex + ".jpg";
     }
 }

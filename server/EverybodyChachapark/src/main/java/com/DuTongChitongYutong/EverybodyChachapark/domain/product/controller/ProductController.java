@@ -37,7 +37,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<SingleResponseDto<ProductDto>> postProduct(@Valid @RequestPart ProductPostDto productPostDto, @RequestPart MultipartFile thumbnailImageFile){
+    public ResponseEntity<SingleResponseDto<ProductDto>> postProduct(@Valid @RequestPart(name = "productPostDto") ProductPostDto productPostDto, @RequestPart(name = "thumbnailImageFile", required = false) MultipartFile thumbnailImageFile){
 
         return new ResponseEntity<>(new SingleResponseDto<>(productFacade.createProduct(productPostDto, thumbnailImageFile)), HttpStatus.CREATED);
     }
@@ -72,7 +72,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive Long productId, @Valid @RequestPart ProductPatchDto productPatchDto, @RequestPart MultipartFile thumbnailImageFile){
+    public ResponseEntity<SingleResponseDto<ProductDto>> updateProduct(@PathVariable @Positive Long productId, @Valid @RequestPart(name = "productPatchDto") ProductPatchDto productPatchDto, @RequestPart(name = "thumbnailImageFile", required = false) MultipartFile thumbnailImageFile){
 
         return new ResponseEntity<>(new SingleResponseDto<>(productFacade.updateProduct(productId, productPatchDto, thumbnailImageFile)), HttpStatus.OK);
     }
