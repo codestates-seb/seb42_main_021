@@ -31,7 +31,7 @@ public class ReviewService {
     final private FacadeImage facadeImage;
 
     public Review createReview(Review review, MultipartFile imageFile) {
-        String imageURL = facadeImage.createImageURL(List.of(imageFile));
+        String imageURL = facadeImage.createImageURL(imageFile);
         review.setImageURL(imageURL);
         review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
@@ -56,7 +56,7 @@ public class ReviewService {
             String imageURL = foundReview.getImageURL();
             facadeImage.deleteImage(imageURL);
 
-            imageURL = facadeImage.createImageURL(List.of(imageFile));
+            imageURL = facadeImage.createImageURL(imageFile);
             foundReview.setImageURL(imageURL);
         }
 

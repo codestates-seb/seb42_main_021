@@ -55,43 +55,33 @@ public class MemberService {
         return savedMember;
     }
 
-    /*public Member updateMember(Member member, MultipartFile profileImageFile) {
+    public Member updateMemberInfo(Member member) {
         Member findMember = findByEmail();
 
         if (member.getPassword() != null) {
             findMember.setPassword(passwordEncoder.encode(member.getPassword()));
         }
 
-        Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
-        verifyExistsNickName(member.getNickname());
-        Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
-
-
-        if(!profileImageFile.isEmpty()) { // 이미지 변경
-            String imageURL = findMember.getProfileImg();
-            facadeImage.deleteImage(imageURL);
-
-            imageURL = facadeImage.createImageURL(List.of(profileImageFile));
-            findMember.setProfileImg(imageURL);
-        }
-
-        return memberRepository.save(findMember);
-    }*/
-
-    public Member updateMember(Member member) {
-        Member findMember = findByEmail();
-
-        if (member.getPassword() != null) {
-            findMember.setPassword(passwordEncoder.encode(member.getPassword()));
-        }
         Optional.ofNullable(member.getNickname()).ifPresent(username -> findMember.setNickname(username));
         verifyExistsNickName(member.getNickname());
         Optional.ofNullable(member.getComment()).ifPresent(comment -> findMember.setComment(comment));
 
         return memberRepository.save(findMember);
     }
+    
+    public Member updateMemberImage(MultipartFile profileImageFile) {
+        Member findMember = findByEmail();
 
+        if(!profileImageFile.isEmpty()) { // 이미지 변경
+            String imageURL = findMember.getProfileImg();
+            facadeImage.deleteImage(imageURL);
 
+            imageURL = facadeImage.createImageURL(profileImageFile);
+            findMember.setProfileImg(imageURL);
+        }
+
+        return memberRepository.save(findMember);
+    }
 
     @Transactional(readOnly = true)
     public Member findMember (long memberId) {

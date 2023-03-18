@@ -106,7 +106,7 @@ public class MemberControllerTest {
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
                                         fieldWithPath("profileImg").type(JsonFieldType.STRING).description("이미지URL"),
-                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("소개글 (null 처리 가능하므로 별도 데이터 안주셔도 됩니다)")
+                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("소개글 (NULL 가능)")
                                 )
                         ),
                         responseFields(
@@ -123,7 +123,7 @@ public class MemberControllerTest {
     }
 
     @Test
-    public void patchMemberTest() throws Exception {
+    public void patchMemberInfoTest() throws Exception {
         //given
         MemberDto.Patch patchMember = new MemberDto.Patch();
         patchMember.setPassword("5678");
@@ -135,8 +135,7 @@ public class MemberControllerTest {
 
         given(memberMapper.memberPatchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
 
-        //given(memberService.updateMember(Mockito.any(Member.class), Mockito.any(MultipartFile.class))).willReturn(new Member());
-        given(memberService.updateMember(Mockito.any(Member.class))).willReturn(new Member());
+        given(memberService.updateMemberInfo(Mockito.any(Member.class))).willReturn(new Member());
 
         given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(patchResponse);
 
@@ -146,14 +145,11 @@ public class MemberControllerTest {
 
         //when
         ResultActions patchAction = mockMvc.perform(
-                multipart("/members")
-                        .file(GetMockMultipartFile.getMockMultipartJson("patch", content))
-                        .file(GetMockMultipartFile.getMockMultipartFile("profileImageFile"))
-                        .content(content)
+                patch("/members/info")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
                         .headers(headers)
-                        .with(request -> { request.setMethod("PATCH"); return request; })
                 );
 
         patchAction
@@ -162,7 +158,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.data.email").value(patchResponse.getEmail()))
                 .andExpect(jsonPath("$.data.nickname").value(patchResponse.getNickname()))
                 .andExpect(jsonPath("$.data.profileImg").value(patchResponse.getProfileImg()))
-                .andDo(document("patch-member",
+                .andDo(document("patch-member-info",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
                         requestHeaders(
@@ -172,16 +168,11 @@ public class MemberControllerTest {
                                                 "Refresh Token (Ex. eyJhbG...)")
                                 )
                         ),
-                        requestParts(
-                                List.of(partWithName("patch").description("회원 수정 Json Request Fields"),
-                                        partWithName("profileImageFile").description("이미지 첨부 파일")
-                                )
-                        ),
                         requestFields(
                                 List.of(
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임").optional(),
-                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("소개글 (null 처리도 가능)").optional()
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호(선택)"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임(선택)").optional(),
+                                        fieldWithPath("comment").type(JsonFieldType.STRING).description("소개글 (선택 or NULL 가능)").optional()
                                 )
                         ),
                         responseFields(
@@ -197,6 +188,67 @@ public class MemberControllerTest {
                                 )
                         )
                         ));
+    }
+
+    @Test
+    public void patchMemberImageTest() throws Exception {
+        //given
+        MemberDto.Response patchResponse = new MemberDto.Response(1, "user@gmail.com", "user2",
+                "Img.link", "comment", Member.MemberStatus.MEMBER_ACTIVE, LocalDateTime.now());
+
+        given(memberMapper.memberPatchDtoToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
+
+        given(memberService.updateMemberImage(Mockito.any(MultipartFile.class))).willReturn(new Member());
+
+        given(memberMapper.memberToMemberResponseDto(Mockito.any(Member.class))).willReturn(patchResponse);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
+
+        //when
+        ResultActions patchAction = mockMvc.perform(
+                multipart("/members/profile-image")
+                        .file(GetMockMultipartFile.getMockMultipartFile("profileImageFile"))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .headers(headers)
+                        .with(request -> { request.setMethod("PATCH"); return request; })
+        );
+
+        patchAction
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.memberId").value(patchResponse.getMemberId()))
+                .andExpect(jsonPath("$.data.email").value(patchResponse.getEmail()))
+                .andExpect(jsonPath("$.data.nickname").value(patchResponse.getNickname()))
+                .andExpect(jsonPath("$.data.profileImg").value(patchResponse.getProfileImg()))
+                .andDo(document("patch-member-profile-image",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                        headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                "Refresh Token (Ex. eyJhbG...)")
+                                )
+                        ),
+                        requestParts(
+                                List.of(partWithName("profileImageFile").description("수정할 이미지 첨부 파일(NULL 가능)")
+                                )
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별 ID"),
+                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 ID (이메일)"),
+                                        fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                        fieldWithPath("data.profileImg").type(JsonFieldType.STRING).description("프로필 이미지 URL"),
+                                        fieldWithPath("data.comment").type(JsonFieldType.STRING).description("간단한 자기소개 글"),
+                                        fieldWithPath("data.memberStatus").type(JsonFieldType.STRING).description("회원 상태"),
+                                        fieldWithPath("data.createDate").type(JsonFieldType.STRING).description("회원 생성 날짜")
+                                )
+                        )
+                ));
     }
 
     @Test
