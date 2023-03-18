@@ -8,6 +8,12 @@ import { getProductReviews } from '../api/itemDetailAPI';
 
 const ReviewContainer = styled.ul`
   padding: 0 16px;
+  #review-date {
+    margin-top: 20px;
+    color: var(--gray);
+    font-size: x-small;
+    text-align: right;
+  }
 `;
 
 const ReviewBox = styled.li`
@@ -47,11 +53,8 @@ const UserInformation = styled.div`
     width: 40px;
     height: 40px;
   }
-  #review-date {
-    margin-top: 20px;
-    width: 35%;
-    color: var(--gray);
-    font-size: x-small;
+  #user-nickname {
+    width: 70%;
   }
   #review-edit {
     display: flex;
@@ -112,8 +115,11 @@ function ReadReviews({
           <ReviewBox key={`${review.reviewId}`} border={`1px solid #c9c9c9`}>
             <ReviewContents>
               <UserInformation>
-                <img alt="유저 프로필"></img>
-                <div>
+                <img
+                  alt="유저 프로필"
+                  src={review.reviewMember.memberImageURL}
+                ></img>
+                <div id="user-nickname">
                   <Rating
                     size="15px"
                     fillColor="#61a0ff"
@@ -122,9 +128,6 @@ function ReadReviews({
                     readonly="true"
                   />
                   <div>{review.reviewMember.nickname}</div>
-                </div>
-                <div id="review-date">
-                  {new Date(review.createdAt).toLocaleString('ko-KR')}
                 </div>
                 <div id="review-edit">
                   <button
@@ -142,8 +145,19 @@ function ReadReviews({
                 </div>
               </UserInformation>
               <div id="review">{review.content}</div>
+              <div id="review-date">
+                <div>
+                  작성일: {new Date(review.createdAt).toLocaleString('ko-KR')}
+                </div>
+                {review.createdAt !== review.modifiedAt && (
+                  <div>
+                    수정일:{' '}
+                    {new Date(review.modifiedAt).toLocaleString('ko-KR')}
+                  </div>
+                )}
+              </div>
             </ReviewContents>
-            <img alt="리뷰사진" src={review.imageURL.slice(2, -2)}></img>
+            <img alt="리뷰사진" src={review.imageURL}></img>
           </ReviewBox>
         );
       })}
