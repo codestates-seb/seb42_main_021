@@ -46,8 +46,9 @@ const ProductInformation = styled.div`
 `;
 
 const ProductDescription = styled.p`
-  margin: 20px 0;
+  margin: 10px 0 50px 0;
   word-break: break-all;
+  color: ${(props) => props.color};
 `;
 
 const Modal = styled.div`
@@ -153,7 +154,6 @@ const ItemDetail = () => {
 
   const handleEditProductDetail = () => {
     navigate(`/admin-item/${id}`, { state: productDetail });
-    console.log({ state: productDetail });
   };
 
   const handleDeleteProductDetail = () => {
@@ -188,8 +188,6 @@ const ItemDetail = () => {
       setProductReviews(productReviewList)
     );
   }, [id]);
-
-  console.log(productDetail);
 
   return (
     <Main>
@@ -243,6 +241,9 @@ const ItemDetail = () => {
                 </Modal>
               )}
             </ProductInformation>
+            <ProductDescription color="#8e8e8e">
+              {productDetail.subtitle}
+            </ProductDescription>
             <ProductDescription>
               {productDetail.productDetail}
             </ProductDescription>

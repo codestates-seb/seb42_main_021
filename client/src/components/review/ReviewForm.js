@@ -40,9 +40,13 @@ function ReviewForm({
   editingReview,
   setIsEditClicked,
 }) {
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(editingReview?.score || 0);
   const [text, setText] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(
+    new Blob([], {
+      type: 'image/jpg',
+    })
+  );
 
   const [cookies, setCookie, removeCookie] = useCookies();
   const accessToken = cookies.accessToken;
@@ -59,6 +63,13 @@ function ReviewForm({
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
+    if (!image.length) {
+      setImage(
+        new Blob([], {
+          type: 'image/jpg',
+        })
+      );
+    }
     formData.append('imageFile', image);
 
     if (!isEditClicked) {
@@ -71,6 +82,7 @@ function ReviewForm({
           }
         )
       );
+
       return axios
         .post('/reviews', formData, {
           headers: {
@@ -162,7 +174,6 @@ function ReviewForm({
         accept="image/*"
         onChange={() => setImage(imgRef.current.files[0])}
         ref={imgRef}
-        required
       />
       <ButtonBox>
         <FormButton type="submit" backgroundColor="#61a0ff">
