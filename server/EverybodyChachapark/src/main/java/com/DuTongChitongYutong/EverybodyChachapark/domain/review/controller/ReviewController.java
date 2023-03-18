@@ -32,7 +32,7 @@ public class ReviewController {
     final private ReviewMapper mapper;
 
     @PostMapping
-    public ResponseEntity postReview(@Valid @RequestPart ReviewDto.Post requestBody, @RequestPart MultipartFile imageFile) {
+    public ResponseEntity postReview(@Valid @RequestPart(name = "requestBody") ReviewDto.Post requestBody, @RequestPart(name = "imageFile", required = false) MultipartFile imageFile) {
         Review review = reviewService.createReview(mapper.reviewPostDtoToReview(requestBody), imageFile);
         URI location = UriCreator.createUri(REVIEW_DEFAULT_URL, review.getReviewId());
 
@@ -40,7 +40,7 @@ public class ReviewController {
     }
 
     @PatchMapping("/{review-id}")
-    public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId, @Valid @RequestPart ReviewDto.Patch requestBody, @RequestPart MultipartFile imageFile) {
+    public ResponseEntity patchReview(@PathVariable("review-id") @Positive Long reviewId, @Valid @RequestPart(name = "requestBody") ReviewDto.Patch requestBody, @RequestPart(name = "imageFile", required = false) MultipartFile imageFile) {
         Review review = reviewService.updateReview(reviewId, mapper.reviewPatchDtoToReview(requestBody), imageFile);
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(review)), HttpStatus.OK);
