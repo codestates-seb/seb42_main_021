@@ -68,7 +68,7 @@ public class MemberService {
 
         return memberRepository.save(findMember);
     }
-    
+
     public Member updateMemberImage(MultipartFile profileImageFile) {
         Member findMember = findByEmail();
 
