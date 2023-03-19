@@ -334,4 +334,36 @@ public class MemberControllerTest {
                         )
                 );
     }
+
+    @Test
+    public void logoutMemberTest() throws Exception {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer ".concat("adfadf"));
+        headers.add("Refresh", "adasdsad");
+
+        doNothing().when(memberService).logout(Mockito.any());
+
+        ResultActions logoutAction = mockMvc.perform(
+                delete("/members/logout")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .headers(headers)
+                );
+
+        logoutAction
+                .andExpect(status().isNoContent())
+                .andDo(
+                        document("logout-member",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                requestHeaders(
+                                        List.of(headerWithName("Authorization").description("인증에 필요한 " +
+                                                        "Access Token (Ex. Bearer eyJhbG...) `Bearer ` 문자열을 access token 앞에 붙여야 한다."),
+                                                headerWithName("Refresh").description("토큰 재발급에 필요한 " +
+                                                        "Refresh Token (Ex. eyJhbG...)")
+                                        )
+                                )
+                        )
+                );
+    }
 }
