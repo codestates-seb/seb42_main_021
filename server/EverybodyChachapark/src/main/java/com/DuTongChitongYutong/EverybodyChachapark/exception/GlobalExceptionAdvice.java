@@ -1,5 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.exception;
 
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -41,6 +43,20 @@ public class GlobalExceptionAdvice {
         final ErrorResponse response = ErrorResponse.of(e.getStorageExceptionCode());
 
         return new ResponseEntity(response, HttpStatus.valueOf(e.getStorageExceptionCode().getStatus()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleFileSizeException(FileSizeLimitExceededException e) {
+        final ErrorResponse response = ErrorResponse.of(e);
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handleSizeLimitExceededException(SizeLimitExceededException e) {
+        final ErrorResponse response = ErrorResponse.of(e);
+
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

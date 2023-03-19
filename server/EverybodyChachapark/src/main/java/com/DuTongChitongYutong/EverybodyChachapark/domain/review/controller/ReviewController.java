@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.net.URI;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{product-id}")
-    public ResponseEntity getReviews(@PathVariable("product-id") @Positive Long productId, @Positive @RequestParam int page, @Positive @RequestParam int size) {
+    public ResponseEntity getReviews(@PathVariable("product-id") @Positive Long productId, @PositiveOrZero @RequestParam int page, @PositiveOrZero @RequestParam int size) {
         Page<Review> reviewPage = reviewService.findReviews(productId, page, size);
         List<Review> reviews = reviewPage.getContent();
 

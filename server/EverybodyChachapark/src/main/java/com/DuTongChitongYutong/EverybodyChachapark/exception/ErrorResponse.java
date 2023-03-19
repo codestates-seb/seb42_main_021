@@ -2,6 +2,8 @@ package com.DuTongChitongYutong.EverybodyChachapark.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 
@@ -44,6 +46,14 @@ public class ErrorResponse {
 
     public static ErrorResponse of (StorageExceptionCode exceptionCode) {
         return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
+    }
+
+    public static ErrorResponse of (FileSizeLimitExceededException fileSizeException) {
+        return new ErrorResponse(400, "요청하신 파일의 크기가 허용치에 초과되었습니다. " + "요청 크기: " + String.format("%.3f", ((double)fileSizeException.getActualSize()) / 1048576) + "MB, 허용 크기: 10MB");
+    }
+
+    public static ErrorResponse of (SizeLimitExceededException fileSizeException) {
+        return new ErrorResponse(400, "요청하신 파일의 크기가 허용치에 넘어섰습니다. "  + "요청 크기: " + String.format("%.3f", ((double)fileSizeException.getActualSize()) / 1048576) + "MB, 허용 크기: 10MB");
     }
 
     public static ErrorResponse of (HttpStatus httpStatus) {

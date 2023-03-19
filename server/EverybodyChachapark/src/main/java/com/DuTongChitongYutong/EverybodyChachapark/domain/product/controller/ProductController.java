@@ -55,8 +55,8 @@ public class ProductController {
         return new ResponseEntity<>(new MultiResponseDto<>(list, page), HttpStatus.OK);
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<MultiResponseDto<ProductDto>> readProducts(@PathVariable ProductCategory category, Pageable pageable){
+    @GetMapping("/category")
+    public ResponseEntity<MultiResponseDto<ProductDto>> readProducts(@RequestParam ProductCategory category, Pageable pageable){
         Page<Product> page = productFacade.readProducts(category, pageable);
         List<ProductDto> list = page.getContent().stream().map(Product::toDto).collect(Collectors.toList());
 

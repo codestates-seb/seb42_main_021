@@ -15,6 +15,8 @@ public class ProductDto {
 
     private String productName;
 
+    private String subtitle;
+
     private int price;
 
     private int productView;
