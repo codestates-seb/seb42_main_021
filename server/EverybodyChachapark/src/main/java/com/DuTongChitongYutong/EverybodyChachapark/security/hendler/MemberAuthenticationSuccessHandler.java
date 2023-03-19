@@ -30,5 +30,7 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(gson.toJson(success));
+
+
     }
 }

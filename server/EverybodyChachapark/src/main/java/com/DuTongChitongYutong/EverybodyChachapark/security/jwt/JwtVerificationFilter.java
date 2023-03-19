@@ -1,8 +1,10 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.service.MemberDetailsService;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,16 +21,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static ch.qos.logback.classic.PatternLayout.HEADER_PREFIX;
+
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-
     private final MemberDetailsService memberDetailsService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberDetailsService memberDetailsService) {
+    public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils,
+                                 MemberDetailsService memberDetailsService, RefreshTokenRepository refreshTokenRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.memberDetailsService = memberDetailsService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
@@ -57,6 +63,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
+
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
 

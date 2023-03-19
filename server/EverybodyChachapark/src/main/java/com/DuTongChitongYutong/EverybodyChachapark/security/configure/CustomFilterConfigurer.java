@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthen
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtAuthenticationFilter;
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
 import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtVerificationFilter;
+import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.service.MemberDetailsService;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,17 +22,19 @@ public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterC
     private final MemberDetailsService memberDetailsService;
     private final ObjectMapper mapper;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+
 
     @Override
     public void configure(HttpSecurity builder) {
         AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, mapper);
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, mapper, refreshTokenRepository);
         jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
         jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
         jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-        JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService);
+        JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberDetailsService, refreshTokenRepository);
 
         builder
                 .addFilter(jwtAuthenticationFilter)

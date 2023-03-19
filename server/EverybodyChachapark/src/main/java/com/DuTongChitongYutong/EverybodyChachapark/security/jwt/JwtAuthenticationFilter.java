@@ -2,6 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.security.dto.LoginDto;
+import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,11 +21,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
     private final ObjectMapper mapper;
+    private final RefreshTokenRepository redisRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, ObjectMapper mapper) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer,
+                                   ObjectMapper mapper, RefreshTokenRepository redisRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
         this.mapper = mapper;
+        this.redisRepository = redisRepository;
     }
 
     @SneakyThrows
@@ -48,8 +52,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
+        redisRepository.save(member.getEmail(), refreshToken);
+
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }

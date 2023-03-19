@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
+import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,19 +23,19 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
-
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-
     private final FacadeImage facadeImage;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher,
-                         PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, FacadeImage facadeImage) {
+    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, PasswordEncoder passwordEncoder,
+                         CustomAuthorityUtils authorityUtils, FacadeImage facadeImage, RefreshTokenRepository refreshTokenRepository) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
         this.facadeImage = facadeImage;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public Member createMember(Member member) {
@@ -136,6 +137,20 @@ public class MemberService {
         Member findMember = findByEmail();
 
         memberRepository.delete(findMember);
+    }
+
+    @Transactional
+    public void logout (HttpServletRequest request) {
+        String accessToken = getAccessToken(request);
+        String email = getCurrentMemberEmail();
+        // 로그아웃 요청이 들어오면 기존 토큰 블랙리스트 처리
+        refreshTokenRepository.setBlackList(accessToken);
+        // refresh 토큰도 제거
+        refreshTokenRepository.deleteBy(email);
+    }
+
+    private String getAccessToken(HttpServletRequest request) {
+        return request.getHeader("Authorization").substring(7);
     }
 
 

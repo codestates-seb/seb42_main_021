@@ -64,4 +64,10 @@ public class MemberController {
         memberService.deleteMember(request);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout (HttpServletRequest request, String base64EncodedSecretKey) {
+        memberService.logout(request);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
