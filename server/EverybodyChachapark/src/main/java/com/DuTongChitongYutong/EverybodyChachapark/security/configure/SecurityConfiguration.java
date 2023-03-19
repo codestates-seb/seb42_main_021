@@ -39,18 +39,15 @@ public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberDetailsService memberDetailsService;
-    private final ObjectMapper mapper;
-
     private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberRepository memberRepository;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberDetailsService memberDetailsService,
-                                 ObjectMapper mapper, RefreshTokenRepository refreshTokenRepository) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils
+            , RefreshTokenRepository refreshTokenRepository, MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
-        this.memberDetailsService = memberDetailsService;
-        this.mapper = mapper;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -71,7 +68,7 @@ public class SecurityConfiguration {
                 .accessDeniedHandler(new MemberAccessDeniedHandler())
 
                 .and()
-                .apply(new CustomFilterConfigurer(jwtTokenizer, authorityUtils, memberDetailsService, mapper, refreshTokenRepository))
+                .apply(new CustomFilterConfigurer(jwtTokenizer, authorityUtils, refreshTokenRepository, memberRepository))
 
                 .and()
                 .authorizeHttpRequests(authorize -> authorize

@@ -18,8 +18,6 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
 
-        log.error("인증 실패 : {} ", exception.getMessage());
-
         sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "로그인에 실패했습니다. 아이디 또는 비밀번호를 확인 해주세요.");
     }
 

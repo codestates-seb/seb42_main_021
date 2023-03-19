@@ -21,36 +21,35 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CustomAuthorityUtils authorityUtils;
 
 
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        Member findedMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member findedMember = memberService.findByEmail(email);
         return new MemberDetails(findedMember);
     }
 
     @AllArgsConstructor
     @Getter
-    private final class MemberDetails extends Member implements UserDetails {
-        MemberDetails(Member member) {
-            setMemberId(member.getMemberId());
-            setEmail(member.getEmail());
-            setPassword(member.getPassword());
-            setRoles(member.getRoles());
-        }
+    public class MemberDetails implements UserDetails {
+        private Member member;
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return authorityUtils.createAuthorities(this.getRoles());
+            return authorityUtils.createAuthorities(member.getRoles());
         }
 
         @Override
         public String getUsername() {
-            return getEmail();
+            return member.getEmail();
+        }
+
+        @Override
+        public String getPassword() {
+            return member.getPassword();
         }
 
         @Override
