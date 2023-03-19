@@ -104,6 +104,7 @@ const ItemDetail = () => {
   const [productDetail, setProductDetail] = useState(null);
   const [productReviews, setProductReviews] = useState(null);
   const [carts, setCarts] = useState([]);
+  const [productDetailParser, setProductDetailParser] = useState('');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
@@ -112,6 +113,8 @@ const ItemDetail = () => {
 
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
+
+  console.log(productDetail);
 
   const navigate = useNavigate();
 
@@ -174,14 +177,20 @@ const ItemDetail = () => {
           refreshToken: `${refreshToken}`,
         },
       });
+      console.log(data);
       return data.data;
     } catch (error) {
       console.error(error);
     }
   };
-
   useEffect(() => {
     findProductByProductId(id).then((productInformation) => {
+      const parser = new DOMParser();
+      const parsedText = parser.parseFromString(
+        productInformation.productDetail,
+        'text/html'
+      ).body.textContent;
+      setProductDetailParser(parsedText);
       setProductDetail(productInformation);
     });
     getProductReviews(id).then((productReviewList) =>
@@ -207,7 +216,7 @@ const ItemDetail = () => {
                   {productDetail.price.toLocaleString('ko-KR')}원
                 </div>
               </div>
-              {!accessToken && (
+              {accessToken && (
                 <button type="button" onClick={handleShoppingBag}>
                   <FaShoppingCart size="40px" />
                 </button>
@@ -245,7 +254,8 @@ const ItemDetail = () => {
               {productDetail.subtitle}
             </ProductDescription>
             <ProductDescription>
-              {productDetail.productDetail}
+              {productDetailParser}
+              {/* {productDetail.productDetail} */}
             </ProductDescription>
           </div>
         )}
