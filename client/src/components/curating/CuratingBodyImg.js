@@ -161,9 +161,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/1">
+              <span>
                 <img src={circle} alt="" className="circle1" />
-              </a>
+              </span>
             </div>
             <div className="oneTheme2">
               <div>
@@ -177,9 +177,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/1">
+              <span>
                 <img src={circle} alt="" className="circle11" />
-              </a>
+              </span>
             </div>
           </CuratingImg>
         </>
@@ -199,9 +199,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/2">
+              <span>
                 <img src={circle} alt="" className="circle2" />
-              </a>
+              </span>
             </div>
             <div className="twoTheme2">
               <div>
@@ -215,9 +215,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/2">
+              <span>
                 <img src={circle} alt="" className="circle22" />
-              </a>
+              </span>
             </div>
           </CuratingImg>
         </>
@@ -237,9 +237,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/3">
+              <>
                 <img src={circle} alt="" className="circle3" />
-              </a>
+              </>
             </div>
           </CuratingImg>
         </>
@@ -259,9 +259,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/4">
+              <span>
                 <img src={circle} alt="" className="circle4" />
-              </a>
+              </span>
             </div>
             <div className="fourTheme2">
               <div>
@@ -275,9 +275,9 @@ const CuratingBodyImg = () => {
               </div>
             </div>
             <div>
-              <a href="/product/4">
+              <span>
                 <img src={circle} alt="" className="circle44" />
-              </a>
+              </span>
             </div>
           </CuratingImg>
         </>
