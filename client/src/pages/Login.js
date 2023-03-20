@@ -27,7 +27,7 @@ const LoginLayout = styled.div`
     display: none;
   }
 
-  .moveSingup {
+  .moveSignup {
     margin-top: 30px;
     font-size: 13px;
     color: var(--grayblue);
@@ -215,11 +215,11 @@ const Login = () => {
           <NoUser>
             <div>없는 회원입니다 회원가입을 해 주세요</div>
             <button className="confirm">
-              <Link to="../singup">확인</Link>
+              <Link to="/signup">확인</Link>
             </button>
           </NoUser>
         )}
-        <Link to="/singup" className="moveSingup">
+        <Link to="/signup" className="moveSignup">
           회원가입
         </Link>
       </LoginLayout>

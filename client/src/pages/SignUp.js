@@ -93,6 +93,7 @@ const HaveUser = styled.div`
 
 const SignUp = () => {
   const [ModalOpen, setModalOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -185,7 +186,7 @@ const SignUp = () => {
           <HaveUser>
             <div>이미 가입된 회원입니다</div>
             <button className="confirm">
-              <Link to="/login" className="moveSingup">
+              <Link to="/login" className="moveLogin">
                 확인
               </Link>
             </button>
