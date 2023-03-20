@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 import Main from '../components/main/Main';
 import logo1 from '../img/logo1.png';
@@ -64,7 +66,33 @@ const ErrorMsg = styled.p`
   font-size: 15px;
   margin-top: 10px;
 `;
+
+const HaveUser = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  width: 300px;
+  padding: 7px;
+  z-index: 200;
+  border-radius: var(--bd-rd);
+  border: 2px solid var(--midgray);
+  background-color: white;
+
+  .confirm {
+    margin-top: 20px;
+    font-size: 15px;
+    padding: 5px;
+    width: 40px;
+    background-color: var(--blue);
+    border-radius: var(--bd-rd);
+  }
+`;
+
 const SignUp = () => {
+  const [ModalOpen, setModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -82,7 +110,9 @@ const SignUp = () => {
       console.log('성공');
       navigate('../login');
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 409) {
+        setModalOpen(true);
+      }
     }
   };
   return (
@@ -100,7 +130,7 @@ const SignUp = () => {
             {...register('name', {
               required: '닉네임은 필수 입력입니다.',
               minLength: {
-                value: 2,
+                value: 1,
                 message: '닉네임 형식에 맞지 않습니다.',
               },
             })}
@@ -139,7 +169,7 @@ const SignUp = () => {
             {...register('password', {
               required: '비밀번호는 필수 입력입니다.',
               minLength: {
-                value: 8,
+                value: 1,
                 message: '8자리 이상 비밀번호를 사용하세요.',
               },
             })}
@@ -151,6 +181,16 @@ const SignUp = () => {
             회원가입
           </SignUpSubmitBox>
         </SignUpContainer>
+        {ModalOpen && (
+          <HaveUser>
+            <div>이미 가입된 회원입니다</div>
+            <button className="confirm">
+              <Link to="/login" className="moveSingup">
+                확인
+              </Link>
+            </button>
+          </HaveUser>
+        )}
       </SignUpLayout>
     </Main>
   );

@@ -11,6 +11,7 @@ import Main from '../components/main/Main';
 import MainHeader from '../components/main/MainHeader';
 import logo1 from '../img/logo1.png';
 import axios from 'axios';
+import { useState } from 'react';
 
 const LoginLayout = styled.div`
   height: 100%;
@@ -94,8 +95,32 @@ const OathLogin = styled.div`
     border-radius: var(--bd-rd);
   }
 `;
+const NoUser = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  width: 300px;
+  padding: 7px;
+  z-index: 200;
+  border-radius: var(--bd-rd);
+  border: 2px solid var(--midgray);
+  background-color: white;
+
+  .confirm {
+    margin-top: 20px;
+    font-size: 15px;
+    padding: 5px;
+    width: 40px;
+    background-color: var(--blue);
+    border-radius: var(--bd-rd);
+  }
+`;
 
 const Login = () => {
+  const [ModalOpen, setModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -123,9 +148,12 @@ const Login = () => {
       });
       navigate('../product');
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 401) {
+        setModalOpen(true);
+      }
     }
   };
+
   return (
     <Main>
       <MainHeader />
@@ -183,6 +211,14 @@ const Login = () => {
             로그인
           </LoginSubmitBox>
         </LoginContainer>
+        {ModalOpen && (
+          <NoUser>
+            <div>없는 회원입니다 회원가입을 해 주세요</div>
+            <button className="confirm">
+              <Link to="../singup">확인</Link>
+            </button>
+          </NoUser>
+        )}
         <Link to="/singup" className="moveSingup">
           회원가입
         </Link>
