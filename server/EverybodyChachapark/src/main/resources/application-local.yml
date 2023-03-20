@@ -12,9 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
+    defer-datasource-initialization: true # hibernate 처리후 sql 파일로 질의하기 위해 설정하는 옵션
+  sql:
+    init:
+      mode: always # data.sql을 resources에 배치하면 자동으로 실행됨

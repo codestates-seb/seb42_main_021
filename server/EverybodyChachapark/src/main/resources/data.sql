@@ -1,0 +1,2 @@
+INSERT INTO product(created_at, modified_at, price, product_category, product_detail, product_name, product_score, product_status, product_view, subtitle, thumbnail_imageurl)
+VALUES (NOW(), NOW(), 1000, 'NO_CATEGORY','상품 설명입니다', '제일싼 도구',5,'PRODUCT_FOR_SALE',0,'부제목입니다!','http://legendpano.codns.com:8085/images/not-found');
