@@ -38,12 +38,12 @@ const ShoppingCart = () => {
   const [orderPrice, setOrderPrice] = useState(0);
   const [cookies, setCookie, removeCookie] = useCookies();
 
-  const accesseToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
   return (
     <Main>
       <MainHeader />
       <ShoppingCartLayout>
-        {!accesseToken ? (
+        {!refreshToken ? (
           <div className="nologin">로그인 후 이용해 주세요</div>
         ) : (
           <>
