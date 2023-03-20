@@ -4,9 +4,15 @@ import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
 import Footer from '../components/main/Footer';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
-import island from '../img/island.jpg';
+
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+
+const NologinUser = styled.div`
+  font-size: 20px;
+  margin-left: 150px;
+  margin-top: 100px;
+`;
 
 const ProfileImageContainer = styled.div`
   display: flex;
@@ -134,7 +140,12 @@ const Circle = styled.div`
   transition: all 0.5s ease-in-out;
   transform: ${(props) => props.toggle && 'translate(22px, 0)'};
 `;
-
+const Signout = styled.button`
+  margin-top: 300px;
+  /* margin-left: 20px; */
+  font-size: 15px;
+  color: var(--red);
+`;
 const Mypage = () => {
   const [toggle, setToggle] = useState(false);
   const [Image, setImage] = useState(null);
@@ -257,125 +268,144 @@ const Mypage = () => {
     setUpdateProdcut(0);
   };
 
+  const handleSignOut = async () => {
+    await axios.delete(`/members`, {
+      headers: {
+        Authorization: `Bearer ${accesseToken} `,
+        Refresh: `${refreshToken}`,
+      },
+    });
+    removeCookie('accessToken', { path: '/' });
+    removeCookie('refreshToken', { path: '/' });
+  };
   return (
     <Main>
       <MainLayout>
-        <ProfileImageContainer>
-          <div>
-            <div id="imageBox">
-              <img alt="프로필 이미지" src={Image}></img>
-              <input
-                type="file"
-                style={{ display: 'none' }}
-                accept="image/jpg,image/png,image/jpeg"
-                name="profile_img"
-                onChange={handleImage}
-                ref={fileInput}
-              />
-            </div>
-            <button
-              onClick={() => {
-                fileInput.current.click();
-              }}
-            >
-              <FaCamera color="#FFFFFF" />
-            </button>
-          </div>
-          <h3>유저 닉네임</h3>
-        </ProfileImageContainer>
-        <ProfileContainer>
-          {nameEdit ? (
-            <form className="profileBox">
-              <label>닉네임</label>
-              <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-              />
-              <button
-                type="button"
-                onClick={() => handleSubmitEditedName(name)}
-              >
-                <FaChevronRight
-                  className="iconCell"
-                  color="#c9c9c9"
-                  size="16px"
-                />
-              </button>
-            </form>
-          ) : (
-            <div className="profileBox">
-              <label>닉네임</label>
-              <span>{name}</span>
-              <button type="button" onClick={handleNameEdit}>
-                <FaChevronRight
-                  className="iconCell"
-                  color="#c9c9c9"
-                  size="16px"
-                />
-              </button>
-            </div>
-          )}
-          {introEdit ? (
-            <form className="profileBox">
-              <label>한 줄 소개</label>
-              <input
-                value={comment}
-                onChange={(event) => setComment(event.target.value)}
-              />
-              <button type="button" onClick={() => handleSubmitEditedIntro()}>
-                <FaChevronRight
-                  className="iconCell"
-                  color="#c9c9c9"
-                  size="16px"
-                />
-              </button>
-            </form>
-          ) : (
-            <div className="profileBox">
-              <label>한 줄 소개</label>
-              <span>{comment}</span>
-              <button type="button" onClick={handleIntroEdit}>
-                <FaChevronRight
-                  className="iconCell"
-                  color="#c9c9c9"
-                  size="16px"
-                />
-              </button>
-            </div>
-          )}
-          <div className="profileBox">
-            <label>웹사이트 및 SNS</label>
-            <a
-              href="https://github.com/codestates-seb/seb42_main_021"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <FaChevronRight
-                className="iconCell"
-                color="#c9c9c9"
-                size="16px"
-              />
-            </a>
-          </div>
-          <div className="profileBox">
-            <label>마케팅 수신 동의</label>
-            <Toggle onClick={clickedToggle} toggle={toggle}>
-              <Circle toggle={toggle} />
-            </Toggle>
-          </div>
-        </ProfileContainer>
-        <ListContainer>
-          <h1>최근 주문내역</h1>
-          <ul>
-            <li>
-              <div>공기청정기 외 5건</div>
+        {!accesseToken ? (
+          <NologinUser>로그인 후 이용해 주세요</NologinUser>
+        ) : (
+          <>
+            {' '}
+            <ProfileImageContainer>
               <div>
-                <div id="price">58,000원</div>
-                <div id="date">2023.03.15(수)</div>
+                <div id="imageBox">
+                  <img alt="프로필 이미지" src={Image}></img>
+                  <input
+                    type="file"
+                    style={{ display: 'none' }}
+                    accept="image/jpg,image/png,image/jpeg"
+                    name="profile_img"
+                    onChange={handleImage}
+                    ref={fileInput}
+                  />
+                </div>
+                <button
+                  onClick={() => {
+                    fileInput.current.click();
+                  }}
+                >
+                  <FaCamera color="#FFFFFF" />
+                </button>
               </div>
-            </li>
-          </ul>
-        </ListContainer>
+              <h3>유저 닉네임</h3>
+            </ProfileImageContainer>
+            <ProfileContainer>
+              {nameEdit ? (
+                <form className="profileBox">
+                  <label>닉네임</label>
+                  <input
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                  />
+                  <button
+                    type="form"
+                    onClick={() => handleSubmitEditedName(name)}
+                  >
+                    <FaChevronRight
+                      className="iconCell"
+                      color="#c9c9c9"
+                      size="16px"
+                    />
+                  </button>
+                </form>
+              ) : (
+                <div className="profileBox">
+                  <label>닉네임</label>
+                  <span>{name}</span>
+                  <button type="button" onClick={handleNameEdit}>
+                    <FaChevronRight
+                      className="iconCell"
+                      color="#c9c9c9"
+                      size="16px"
+                    />
+                  </button>
+                </div>
+              )}
+              {introEdit ? (
+                <form className="profileBox">
+                  <label>한 줄 소개</label>
+                  <input
+                    value={comment}
+                    onChange={(event) => setComment(event.target.value)}
+                  />
+                  <button type="form" onClick={() => handleSubmitEditedIntro()}>
+                    <FaChevronRight
+                      className="iconCell"
+                      color="#c9c9c9"
+                      size="16px"
+                    />
+                  </button>
+                </form>
+              ) : (
+                <div className="profileBox">
+                  <label>한 줄 소개</label>
+                  <span>{comment}</span>
+                  <button type="button" onClick={handleIntroEdit}>
+                    <FaChevronRight
+                      className="iconCell"
+                      color="#c9c9c9"
+                      size="16px"
+                    />
+                  </button>
+                </div>
+              )}
+              <div className="profileBox">
+                <label>웹사이트 및 SNS</label>
+                <a
+                  href="https://github.com/codestates-seb/seb42_main_021"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaChevronRight
+                    className="iconCell"
+                    color="#c9c9c9"
+                    size="16px"
+                  />
+                </a>
+              </div>
+              <div className="profileBox">
+                <label>마케팅 수신 동의</label>
+                <Toggle onClick={clickedToggle} toggle={toggle}>
+                  <Circle toggle={toggle} />
+                </Toggle>
+              </div>
+            </ProfileContainer>
+            <ListContainer>
+              <h1>최근 주문내역</h1>
+              <ul>
+                <li>
+                  <div>공기청정기 외 5건</div>
+                  <div>
+                    <div id="price">58,000원</div>
+                    <div id="date">2023.03.15(수)</div>
+                  </div>
+                </li>
+              </ul>
+            </ListContainer>
+            <Signout onClick={handleSignOut}>회원탈퇴</Signout>
+          </>
+        )}
+
         <Footer />
       </MainLayout>
     </Main>
