@@ -264,9 +264,7 @@ const ItemDetail = () => {
             editingReview={editingReview}
           />
           <ReadReviews
-            productId={productDetail?.productId}
             productReviews={productReviews}
-            setProductReviews={setProductReviews}
             setEditingReview={setEditingReview}
             setIsEditClicked={setIsEditClicked}
           />
