@@ -16,6 +16,8 @@ public class MemberDto {
         private String email;
         private String password;
         private String nickname;
+
+        @Nullable
         private String profileImg;
         @Nullable
         private String comment;
@@ -24,6 +26,7 @@ public class MemberDto {
     @Getter
     @Setter
     public static class Patch {
+
         private String password;
         private String nickname;
         private String comment;

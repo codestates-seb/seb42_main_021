@@ -21,6 +21,7 @@ public interface MemberMapper {
 
     default Member memberPatchDtoToMember(MemberDto.Patch patch) {
         Member member = new Member();
+
         member.setPassword(patch.getPassword());
         member.setNickname(patch.getNickname());
         member.setComment(patch.getComment());

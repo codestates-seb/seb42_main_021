@@ -114,7 +114,6 @@ public class CartControllerTest {
                                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("장바구니 수정 시간")
                                 )
                         )
-
         ));
     }
 

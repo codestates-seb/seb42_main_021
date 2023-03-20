@@ -38,10 +38,7 @@ public class CartService {
 
         Cart cart;
         if (optionalCart.isPresent()) {
-            cart = optionalCart.get();
-            cart.setQuantity(cart.getQuantity() + post.getQuantity());
-
-            return cart;
+            throw new BusinessLogicException(ExceptionCode.CART_PRODUCT_EXISTS);
         }
 
         cart = new Cart(post.getProductId(), post.getQuantity());

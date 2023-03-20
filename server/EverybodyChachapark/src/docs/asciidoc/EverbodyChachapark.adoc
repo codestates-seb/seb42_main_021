@@ -118,6 +118,19 @@ include::{snippets}/post-member-login/response-fields.adoc[]
 .response-headers
 include::{snippets}/post-member-login/response-headers.adoc[]
 
+=== 회원 로그아웃
+.curl-request
+include::{snippets}/logout-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/logout-member/http-request.adoc[]
+
+.request-headers
+include::{snippets}/logout-member/request-headers.adoc[]
+
+.http-response
+include::{snippets}/logout-member/http-response.adoc[]
+
 
 == ProductController
 === 상품 등록

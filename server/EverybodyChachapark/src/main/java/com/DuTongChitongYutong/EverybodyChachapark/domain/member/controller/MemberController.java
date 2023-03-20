@@ -60,8 +60,14 @@ public class MemberController {
 
     @DeleteMapping
     public ResponseEntity deleteMember (HttpServletRequest request) {
-        //String accessToken = request.getHeader("Authorization").substring(7);
+        String accessToken = request.getHeader("Authorization").substring(7);
         memberService.deleteMember(request);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity logout (HttpServletRequest request) {
+        memberService.logout(request);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
