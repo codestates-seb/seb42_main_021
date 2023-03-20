@@ -114,7 +114,11 @@ const SubHeader = () => {
         <LoginBox>
           {accessToken ? (
             <div>
-              <img src={logolast3} alt="프로필" />
+              <img
+                src={logolast3}
+                alt="프로필"
+                onClick={() => navigate('/mypage/:id')}
+              />
               <LoginLink to="/login" className="logout">
                 로그아웃
               </LoginLink>

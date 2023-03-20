@@ -1,8 +1,12 @@
+import styled from 'styled-components';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import styled from 'styled-components';
+
 import {
   IoChevronBackCircleOutline,
   IoChevronForwardCircleOutline,
@@ -11,8 +15,6 @@ import camping from '../../img/camping.jpg';
 import camping1 from '../../img/camping1.jpg';
 import camping5 from '../../img/camping5.jpg';
 import island from '../../img/island.jpg';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 const StyledSlider = styled(Slider)`
   height: 100%;

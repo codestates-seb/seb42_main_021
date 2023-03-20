@@ -14,7 +14,7 @@ const ItemLayout = styled(Link)`
 const ItemImgBox = styled.div`
   img {
     width: 100%;
-    height: 100%;
+    height: 168px;
     border: 1px solid var(--border);
     border-radius: var(--bd-rd);
   }
@@ -50,7 +50,7 @@ const ItemListItem = ({ item }) => {
       <ItemBodyContainer>
         <ItemTitleBox>
           <h2>{item.productName}</h2>
-          <p>{item.productDetail}</p>
+          <p>{item.subtitle}</p>
         </ItemTitleBox>
         <ItemValueBox>
           {/* <span>{list.rates} </span> */}

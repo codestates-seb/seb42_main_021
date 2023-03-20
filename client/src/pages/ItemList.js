@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Paging from '../components/ui/Pagination';
 
 import { FaSistrix } from 'react-icons/fa';
 import {
@@ -83,16 +84,19 @@ const ItemBodyContainer = styled.div`
 const AdminButton = styled.button``;
 
 const ItemList = () => {
+  const navigate = useNavigate();
+
   const [items, setItems] = useState([]);
   const [isSubmitClicked] = useState(true);
 
-  const page = 0;
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(1);
   const size = 10;
 
   const [searchValue, setSearchValue] = useState('');
   const [keyword, setKeyword] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
-  const navigate = useNavigate();
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       const filterProductName = items.filter((item) => {
@@ -100,11 +104,12 @@ const ItemList = () => {
           .toLowerCase()
           .includes(searchValue.toLowerCase());
       })[0];
-      console.log(filterProductName);
-      setKeyword(filterProductName);
+      console.log(filterProductName.productName);
+      console.log(searchValue);
+      setKeyword(filterProductName.productName);
     }
   };
-  console.log(keyword.pro);
+  console.log(keyword);
   const handleChange = (e) => {
     setSearchValue(e.target.value);
   };
@@ -116,32 +121,37 @@ const ItemList = () => {
   useEffect(() => {
     const getProductListFilter = async () => {
       const response = await getProductList(page, size);
-      console.log(response.data);
-      // setItems((prevItems) => [...prevItems, ...response.data]);
-      setItems(response.data);
+      console.log(response.data.data);
+      console.log(response.data.pageInfo);
+      // setItems((prevItems) => [...prevItems, ...response.data.data]);
+      setItems(response.data.data);
+      setCount(response.data.pageInfo.totalElements);
     };
     getProductListFilter();
   }, [page, size]);
 
   useEffect(() => {
+    // if(categoryFilter.length === 0) return;
     if (categoryFilter.length > 0) {
       const categoryProductListFilter = async () => {
         // console.log(categoryFilter);
         const response = await categoryProductList(categoryFilter);
         console.log(response);
-        setItems(response.data);
+        setItems(response.data.data);
+        // setCount(response.data.pageInfo.totalElements);
       };
       categoryProductListFilter();
     }
   }, [categoryFilter]);
 
   useEffect(() => {
+    // if(keyword.length === 0) return;
     if (keyword.length > 0) {
       const searchProductListFilter = async () => {
         // console.log(keyword);
-        // setItems((prevItems) => [...prevItems, ...response.data]);
         const response = await searchProductList(keyword);
-        setItems(response.data);
+        console.log(response.data.data);
+        setItems(response.data.data);
       };
       searchProductListFilter();
     }
@@ -174,6 +184,7 @@ const ItemList = () => {
                 <ItemListItem key={item.productId} item={item} />
               ))}
             </ItemBodyContainer>
+            <Paging page={page} count={count} setPage={setPage} />
           </div>
           <Footer />
         </ItemListContainerWrap>

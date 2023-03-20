@@ -24,7 +24,6 @@ const ItemInformationContainer = styled.form`
 `;
 
 const ItemInformationBox = styled.div`
-  margin-bottom: 20px;
   width: 100%;
   > div {
     display: flex;
@@ -53,6 +52,9 @@ const ItemInformationBox = styled.div`
 
 const ItemDescriptionBox = styled.div`
   margin-bottom: 100px;
+  div {
+    margin-bottom: 10px;
+  }
 `;
 
 const ContentInput = styled.input`
@@ -91,6 +93,7 @@ const AdminNewItem = () => {
   const [preview, setPreview] = useState('');
   const [text, setText] = useState('');
   const [status, setStatus] = useState('');
+  const [subTitle, setSubTitle] = useState('');
   const navigate = useNavigate();
   const imgRef = useRef();
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -123,15 +126,17 @@ const AdminNewItem = () => {
   };
 
   const { state } = useLocation();
-  console.log(state.productId);
-  console.log(state.thumbnailImageURL);
+  console.log(state.price);
+  // console.log(state);
   useEffect(() => {
     setName(state.productName);
-    setPrice(state.price);
+    setPrice(Number(state.price).toLocaleString('ko-KR'));
     setImage(state.thumbnailImageURL);
     setCategory(state.productCategory);
     setText(state.productDetail);
     setStatus(state.productStatus);
+    setSubTitle(state.subtitle);
+    // handleImageChange(); // 이미지 미리보기 테스트
   }, [
     state.productName,
     state.price,
@@ -139,6 +144,7 @@ const AdminNewItem = () => {
     state.productCategory,
     state.productDetail,
     state.productStatus,
+    state.subtitle,
   ]);
 
   const handleCategory = (event) => {
@@ -155,6 +161,9 @@ const AdminNewItem = () => {
     setPrice(formattedPrice);
   };
 
+  const handleSubtitle = (event) => {
+    setSubTitle(event.target.value);
+  };
   const handleImageChange = () => {
     const file = imgRef.current.files[0];
     setImage(file);
@@ -187,27 +196,11 @@ const AdminNewItem = () => {
     } else if (text === '') {
       window.alert('상품 세부 설명을 입력해주세요.');
       return;
+    } else if (subTitle === '') {
+      window.alert('상품 부제목을 입력해주세요.');
+      return;
     }
     const formData = new FormData();
-
-    formData.append('thumbnailImageFile', image);
-    formData.append(
-      'productPostDto',
-      new Blob(
-        [
-          JSON.stringify({
-            productName: name,
-            price: parseInt(price.replace(/,/g, '')),
-            productCategory: category,
-            productStatus: status,
-            productDetail: text,
-          }),
-        ],
-        {
-          type: 'application/json',
-        }
-      )
-    );
     // 이미지는 폼데이터에 append, productPostDto JSON.string
     const accessToken = cookies.accessToken;
     const refreshToken = cookies.refreshToken;
@@ -222,13 +215,14 @@ const AdminNewItem = () => {
     };
     if (state.productName) {
       try {
-        // formData.append('thumbnailImageFile', image);
+        formData.append('thumbnailImageFile', image);
         formData.append(
           'productPatchDto',
           new Blob(
             [
               JSON.stringify({
                 productName: name,
+                subtitle: subTitle,
                 price: parseInt(price.replace(/,/g, '')),
                 productCategory: category,
                 productStatus: status,
@@ -250,7 +244,29 @@ const AdminNewItem = () => {
         console.log(error);
       }
       navigate('/product');
+      return;
     }
+
+    formData.append('thumbnailImageFile', image);
+    formData.append(
+      'productPostDto',
+      new Blob(
+        [
+          JSON.stringify({
+            productName: name,
+            subtitle: subTitle,
+            price: parseInt(price.replace(/,/g, '')),
+            productCategory: category,
+            productStatus: status,
+            productDetail: text,
+          }),
+        ],
+        {
+          type: 'application/json',
+        }
+      )
+    );
+
     try {
       const response = await axios.post('/products', formData, header);
       console.log(response.data);
@@ -296,6 +312,15 @@ const AdminNewItem = () => {
                 />
               </div>
               <div>
+                <label htmlFor="가격">상품 부제목</label>
+                <ContentInput
+                  type="text"
+                  value={subTitle}
+                  onChange={handleSubtitle}
+                  required
+                />
+              </div>
+              <div>
                 <label htmlFor="가격">가격</label>
                 <ContentInput
                   type="text"
@@ -325,7 +350,12 @@ const AdminNewItem = () => {
               )}
             </ItemInformationBox>
             <ItemDescriptionBox>
-              <ItemDescription modules={modules} onChange={handleText} />
+              <div>상품 상세설명</div>
+              <ItemDescription
+                modules={modules}
+                onChange={handleText}
+                value={text}
+              />
             </ItemDescriptionBox>
             <ButtonBox>
               <button type="submit">
