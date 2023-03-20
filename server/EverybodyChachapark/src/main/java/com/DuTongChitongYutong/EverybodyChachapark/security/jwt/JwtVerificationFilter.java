@@ -2,8 +2,8 @@ package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.exception.AuthExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.security.exception.SecurityAuthException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthExceptionCode;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
 import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.*;
@@ -41,9 +41,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             }
         } catch (SignatureException se) {
             request.setAttribute("exception", se);
-        } catch (ExpiredJwtException ee) {
-            request.setAttribute("exception", ee);
-        } catch (Exception e) {
+        } catch (SecurityAuthException e) {
             request.setAttribute("exception", e);
         }
         filterChain.doFilter(request, response);
@@ -56,44 +54,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     private Claims verifyJws(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = request.getHeader("Authorization").substring(HEADER_PREFIX.length());
+        String accessToken = request.getHeader("Authorization").substring(7);
         String refreshToken = request.getHeader("Refresh");
 
         if (refreshTokenRepository.findBy(accessToken) != null) {
-            throw new SecurityAuthException(AuthExceptionCode.MEMBER_LOGOUT);
-        }
-
-        Claims refreshTokenClaims = null;
-        Claims accessTokenClaims = null;
-
-        try {
-            accessTokenClaims = jwtTokenizer.parseClaims(accessToken);
-            return accessTokenClaims;
-        } catch (ExpiredJwtException e) {
-            refreshTokenClaims = jwtTokenizer.parseClaims(refreshToken);
-            String findRefreshToken = refreshTokenRepository.findBy(refreshTokenClaims.getSubject());
-            if (refreshToken.equals(findRefreshToken)) {
-                Member findMember = memberRepository.findByEmail(refreshTokenClaims.getSubject()).orElse(null);
-                String newAccessToken = jwtTokenizer.generateAccessToken(findMember);
-                response.setHeader("Authorization", "Bearer " + newAccessToken);
-                accessTokenClaims = jwtTokenizer.parseClaims(newAccessToken);
-            } else {
-                throw new SecurityAuthException(AuthExceptionCode.MEMBER_LOGOUT);
-            }
-        } catch (Exception e) {
-            request.setAttribute("exception", e);
-        }
-
-        return accessTokenClaims;
-    }
-
-    // 오류시 하기 코드 사용
-    /*private Claims verifyJws(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = request.getHeader("Authorization").substring(HEADER_PREFIX.length());
-        String refreshToken = request.getHeader("Refresh");
-
-        if (refreshTokenRepository.findBy(accessToken) != null) {
-            throw new SecurityAuthException(AuthExceptionCode.MEMBER_LOGOUT);
+            throw new SecurityAuthException(SecurityAuthExceptionCode.MEMBER_LOGOUT);
         }
 
         Claims refreshTokenClaims = null;
@@ -115,7 +80,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             request.setAttribute("exception", ee);
             return null;
         }
-    }*/
+    }
 
     private void setAuthenticationToContext(Claims claims) {
         String email = (String) claims.get("email");

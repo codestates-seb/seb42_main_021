@@ -345,7 +345,7 @@ public class MemberControllerTest {
         doNothing().when(memberService).logout(Mockito.any());
 
         ResultActions logoutAction = mockMvc.perform(
-                delete("/members/logout")
+                post("/members/logout")
                         .accept(MediaType.APPLICATION_JSON)
                         .headers(headers)
                 );

@@ -31,11 +31,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity postMember (@RequestBody MemberDto.Post post) {
-
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(post));
-        //URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
-
-        //return ResponseEntity.created(location).build();
         return new ResponseEntity(new SingleResponseDto<>(mapper.createMemberToMemberResponseDto(createdMember)),HttpStatus.CREATED);
     }
 
@@ -65,9 +61,9 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity logout (HttpServletRequest request) {
         memberService.logout(request);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
