@@ -4,8 +4,6 @@ import { useCookies } from 'react-cookie';
 
 import { Rating } from 'react-simple-star-rating';
 
-import { getProductReviews } from '../api/itemDetailAPI';
-
 const ReviewContainer = styled.ul`
   padding: 0 16px;
   #review-date {
@@ -69,13 +67,7 @@ const UserInformation = styled.div`
   }
 `;
 
-function ReadReviews({
-  productId,
-  productReviews,
-  setProductReviews,
-  setEditingReview,
-  setIsEditClicked,
-}) {
+function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
   const [cookies, setCookie, removeCookie] = useCookies();
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
@@ -89,9 +81,7 @@ function ReadReviews({
         },
       })
       .then(() => {
-        getProductReviews(productId).then((productReviewList) =>
-          setProductReviews(productReviewList)
-        );
+        window.location.reload();
       })
       .catch((error) => {
         console.error('리뷰 삭제 실패:', error);
