@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Paging from '../components/ui/Pagination';
 
 import { FaSistrix } from 'react-icons/fa';
+
 import {
   getProductList,
   searchProductList,
@@ -132,13 +133,17 @@ const ItemList = () => {
 
   useEffect(() => {
     // if(categoryFilter.length === 0) return;
+    if (categoryFilter === 'NO_CATEGORY') {
+      window.location.reload();
+    }
     if (categoryFilter.length > 0) {
       const categoryProductListFilter = async () => {
         // console.log(categoryFilter);
         const response = await categoryProductList(categoryFilter);
-        console.log(response);
+        console.log(response.data.data);
         setItems(response.data.data);
         // setCount(response.data.pageInfo.totalElements);
+        setCount(response.data.data.length);
       };
       categoryProductListFilter();
     }
@@ -152,6 +157,7 @@ const ItemList = () => {
         const response = await searchProductList(keyword);
         console.log(response.data.data);
         setItems(response.data.data);
+        setCount(response.data.data.length);
       };
       searchProductListFilter();
     }

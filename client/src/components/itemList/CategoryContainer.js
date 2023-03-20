@@ -4,7 +4,7 @@ import chair from '../../img/chair.jpg';
 import table from '../../img/table.jpg';
 import light from '../../img/light.jpg';
 import campingbulmung from '../../img/campingbulmung.jpg';
-
+import allView from '../../img/allView.png';
 const CategoryContainerDiv = styled.div`
   display: flex;
   justify-content: space-evenly;
@@ -36,11 +36,19 @@ const ImgButton = styled.button`
 const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
   return (
     <CategoryContainerDiv>
+      <ImgButton onClick={() => setCategoryFilter('NO_CATEGORY')}>
+        <img
+          src={allView}
+          alt="전체보기"
+          className={categoryFilter === 'NO_CATEGORY' ? 'option' : null}
+        />
+        <p>전체보기</p>
+      </ImgButton>
       <ImgButton onClick={() => setCategoryFilter('TENT')}>
         <img
           src={tent}
           alt="텐트"
-          className={categoryFilter === 0 ? 'option' : null}
+          className={categoryFilter === 'TENT' ? 'option' : null}
         />
         <p>텐트</p>
       </ImgButton>
@@ -48,7 +56,7 @@ const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
         <img
           src={chair}
           alt="의자"
-          className={categoryFilter === 1 ? 'option' : null}
+          className={categoryFilter === 'CHAIR' ? 'option' : null}
         />
         <p>체어</p>
       </ImgButton>
@@ -56,7 +64,7 @@ const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
         <img
           src={table}
           alt="테이블"
-          className={categoryFilter === 2 ? 'option' : null}
+          className={categoryFilter === 'TABLE' ? 'option' : null}
         />
         <p>테이블</p>
       </ImgButton>
@@ -64,7 +72,7 @@ const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
         <img
           src={light}
           alt="조명"
-          className={categoryFilter === 3 ? 'option' : null}
+          className={categoryFilter === 'LIGHT' ? 'option' : null}
         />
         <p>조명</p>
       </ImgButton>
@@ -72,7 +80,7 @@ const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
         <img
           src={campingbulmung}
           alt="화로대"
-          className={categoryFilter === 4 ? 'option' : ''}
+          className={categoryFilter === 'FIREPLACE' ? 'option' : ''}
         />
         <p>화로대</p>
       </ImgButton>
