@@ -81,7 +81,7 @@ function App() {
               <Route path="/product" element={<ItemList />} />
               <Route path="/product/:id" element={<ItemDetail />} />
               <Route path="/shoppingcart" element={<ShoppingCart />} />
-              <Route path="/mypage/:id" element={<Mypage />} />
+              <Route path="/mypage" element={<Mypage />} />
               <Route path="/admin-item/:id" element={<AdminNewItem />} />
             </Routes>
             <Navigation />
