@@ -77,10 +77,10 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/curation/:id" element={<CuratingDetail />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/singup" element={<SignUp />} />
+              <Route path="/signup" element={<SignUp />} />
               <Route path="/product" element={<ItemList />} />
               <Route path="/product/:id" element={<ItemDetail />} />
-              <Route path="/shoppingcart/:id" element={<ShoppingCart />} />
+              <Route path="/shoppingcart" element={<ShoppingCart />} />
               <Route path="/mypage/:id" element={<Mypage />} />
               <Route path="/admin-item/:id" element={<AdminNewItem />} />
             </Routes>
