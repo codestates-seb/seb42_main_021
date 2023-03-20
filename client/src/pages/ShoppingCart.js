@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
+
 import styled from 'styled-components';
 import Main from '../components/main/Main';
 import MainHeader from '../components/main/MainHeader';
@@ -24,16 +27,30 @@ const ShoppingCartLayout = styled.div`
     margin-left: 20px;
     margin-top: 50px;
   }
+  .nologin {
+    font-size: 20px;
+    margin-left: 150px;
+    margin-top: 100px;
+  }
 `;
 
 const ShoppingCart = () => {
   const [orderPrice, setOrderPrice] = useState(0);
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  const accesseToken = cookies.accessToken;
   return (
     <Main>
       <MainHeader />
       <ShoppingCartLayout>
-        <ShoppingItems setOrderPrice={setOrderPrice} />
-        <ShippingInformation orderPrice={orderPrice} />
+        {!accesseToken ? (
+          <div className="nologin">로그인 후 이용해 주세요</div>
+        ) : (
+          <>
+            <ShoppingItems setOrderPrice={setOrderPrice} />
+            <ShippingInformation orderPrice={orderPrice} />
+          </>
+        )}
         <Footer />
       </ShoppingCartLayout>
     </Main>
