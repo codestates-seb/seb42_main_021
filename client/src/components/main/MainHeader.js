@@ -17,7 +17,6 @@ const MainHeaderLayout = styled.div`
   top: 0;
   border: 1px solid var(--border);
   border-radius: var(--bd-rd);
-
   img {
     width: 75px;
     height: 75px;
@@ -56,9 +55,7 @@ const LoginBox = styled.div`
     border-radius: var(--bd-rd);
     color: white;
     font-size: 16px;
-    :nth-child(1) {
-      margin-right: 10px;
-    }
+    margin-right: 10px;
   }
   img {
     width: 100%;
@@ -91,8 +88,8 @@ const BackBox = styled.div`
   }
 `;
 
-const SubHeader = () => {
-  const [profileImage, setProfileImage] = useState('../../img/logolast3.png');
+const MainHeader = () => {
+  const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -122,8 +119,8 @@ const SubHeader = () => {
   return (
     <MainHeaderLayout>
       <MainHeaderContainer>
-        {location.pathname === '/curation/:id' ||
-        location.pathname === '/product/:id' ? (
+        {location.pathname.includes(`/curation/`) ||
+        location.pathname.includes(`/product/`) ? (
           <>
             <BackBox onClick={() => navigate(-1)}>
               <img className="back" src={back} alt="" />
@@ -163,4 +160,4 @@ const SubHeader = () => {
   );
 };
 
-export default SubHeader;
+export default MainHeader;
