@@ -281,7 +281,7 @@ const Mypage = () => {
   return (
     <Main>
       <MainLayout>
-        {!accesseToken ? (
+        {!refreshToken ? (
           <NologinUser>로그인 후 이용해 주세요</NologinUser>
         ) : (
           <>

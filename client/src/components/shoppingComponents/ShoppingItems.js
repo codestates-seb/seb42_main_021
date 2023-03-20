@@ -127,18 +127,8 @@ const ShoppingItems = ({ setOrderPrice }) => {
         Authorization: `Bearer ${accesseToken} `,
         Refresh: `${refreshToken}`,
       },
-    }); //사이드이펙트 방지하기위해 return값 주고
-
-    setProduct(data.data);
-
-    setCheckedItem(data.data.map((element) => element.productId));
-
-    data.data.forEach((element) => {
-      setCounts((previosCount) => ({
-        ...previosCount,
-        [element.productId]: element.quantity,
-      }));
     });
+    return data;
   };
 
   const sendCountInformation = async (cartId, quantity) => {
@@ -156,9 +146,20 @@ const ShoppingItems = ({ setOrderPrice }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      await readProductList();
-    })();
+    const getProduct = async () => {
+      const data = await readProductList();
+      setProduct(data.data);
+
+      setCheckedItem(data.data.map((element) => element.productId));
+
+      data.data.forEach((element) => {
+        setCounts((previosCount) => ({
+          ...previosCount,
+          [element.productId]: element.quantity,
+        }));
+      });
+    };
+    getProduct();
     setUpdateProdcut(1);
   }, [updateProduct]);
 
