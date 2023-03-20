@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import shoppingCartItem from '../../img/shoppingCartItem.png';
 import { useProduct } from '../store';
+import { Navigate } from 'react-router-dom';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
@@ -238,7 +239,6 @@ const ShoppingItems = ({ setOrderPrice }) => {
           {'전체선택'}
         </label>
       </AllCheckContainer>
-
       <h2 className="item">배송상품</h2>
       {product.length === 0 ? (
         <div className="no-product">주문 할 제품이 없습니다</div>
@@ -256,7 +256,7 @@ const ShoppingItems = ({ setOrderPrice }) => {
                   }}
                 />
               </CheckBoxContainer>
-              <ItemImgBox alt={'shoppingItem'} src={shoppingCartItem} />
+              <ItemImgBox alt={'shoppingItem'} src={element.imageUrl} />
               <ItemInformationBox>
                 <label className="single-checkText" htmlFor={element.productId}>
                   {element.productName}
