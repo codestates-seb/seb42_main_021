@@ -40,7 +40,7 @@ function ReviewForm({
   editingReview,
   setIsEditClicked,
 }) {
-  const [rating, setRating] = useState(editingReview?.score || 0);
+  const [rating, setRating] = useState(0);
   const [text, setText] = useState('');
   const [image, setImage] = useState(
     new Blob([], {
@@ -58,12 +58,13 @@ function ReviewForm({
     if (!isEditClicked) {
       setText('');
     } else setText(editingReview.content);
-  }, [editingReview?.content, isEditClicked]);
+  }, [isEditClicked, editingReview]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const formData = new FormData();
-    if (!image.length) {
+    if (image === null) {
       setImage(
         new Blob([], {
           type: 'image/jpg',
@@ -96,10 +97,7 @@ function ReviewForm({
           getProductReviews(productId).then((productReviewList) =>
             setProductReviews(productReviewList)
           );
-          setRating(0);
-          setImage(null);
-          imgRef.current.value = '';
-          setText('');
+          window.location.reload();
         })
         .catch((error) => {
           console.error(error);
@@ -134,11 +132,7 @@ function ReviewForm({
         getProductReviews(productId).then((productReviewList) =>
           setProductReviews(productReviewList)
         );
-        setRating(0);
-        setImage(null);
-        imgRef.current.value = '';
-        setText('');
-        setIsEditClicked(false);
+        window.location.reload();
       })
       .catch((error) => {
         console.error('리뷰 수정 실패:', error);
@@ -162,7 +156,6 @@ function ReviewForm({
         emptyColor="#C9C9C9"
         onClick={(rating) => setRating(rating)}
         initialValue={isEditClicked ? editingReview.score : rating}
-        required
       />
       <textarea
         value={text}
