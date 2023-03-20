@@ -62,8 +62,8 @@ const Navigation = () => {
           </Link>
         </li>
         <li>
-          <Link to="/shoppingcart/:id">
-            {location.pathname === '/shoppingcart/:id' ? (
+          <Link to="/shoppingcart">
+            {location.pathname === '/shoppingcart' ? (
               <FaShoppingCart size="50px" color="#61a0ff" />
             ) : (
               <FaShoppingCart size="50px" color="#4E4E4E" />
@@ -71,8 +71,8 @@ const Navigation = () => {
           </Link>
         </li>
         <li>
-          <Link to="/mypage/:id">
-            {location.pathname === '/mypage/:id' ? (
+          <Link to="/mypage">
+            {location.pathname === '/mypage' ? (
               <FaUser size="50px" color="#61a0ff" />
             ) : (
               <FaUser size="50px" color="#4E4E4E" />
