@@ -210,7 +210,7 @@ include::{snippets}/get-category-products/http-response.adoc[]
 include::{snippets}/get-category-products/response-fields.adoc[]
 
 
-=== 검색 상품 조회
+=== 검색별 상품 조회
 .curl-request
 include::{snippets}/get-search-products/curl-request.adoc[]
 

@@ -13,6 +13,8 @@ public class ProductPatchDto {
 
     private String productName;
 
+    private String subtitle;
+
     @PositiveOrZero
     private int price;
 

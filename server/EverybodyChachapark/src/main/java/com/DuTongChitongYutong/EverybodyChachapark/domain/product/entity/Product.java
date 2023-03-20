@@ -24,6 +24,10 @@ public class Product extends BaseTime {
     @Column(name = "product_name")
     private String productName;
 
+    @Column(name = "subtitle")
+    private String subtitle;
+
+    @Column(name = "price")
     private int price;
 
     @Column(name = "product_view")
@@ -32,7 +36,6 @@ public class Product extends BaseTime {
     @Column(name = "product_score")
     private int productScore;
 
-    // Todo: 주연님 여기에 imageURL 넣겠습니다!
     @Column(name = "thumbnail_imageURL")
     private String thumbnailImageURL;
 
@@ -46,16 +49,18 @@ public class Product extends BaseTime {
     @Column(name = "product_detail")
     private String productDetail;
 
-    public Product(String productName, int price, String thumbnailImageURL, String productDetail){
+    public Product(String productName, String subtitle, int price, String thumbnailImageURL, String productDetail){
         this.productName = productName;
+        this.subtitle = subtitle;
         this.price = price;
         this.thumbnailImageURL = thumbnailImageURL;
         this.productDetail = productDetail;
     }
 
-    public Product(long productId, String productName, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
+    public Product(long productId, String productName, String subtitle, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
         this.productId = productId;
         this.productName = productName;
+        this.subtitle = subtitle;
         this.price = price;
         this.productView = productView;
         this.productScore = productScore;
@@ -66,7 +71,7 @@ public class Product extends BaseTime {
     }
 
     public ProductDto toDto(){
-        return new ProductDto(productId, productName, price, productView, productScore, productCategory, productStatus, thumbnailImageURL, productDetail, getCreatedAt(), getModifiedAt());
+        return new ProductDto(productId, productName, subtitle, price, productView, productScore, productCategory, productStatus, thumbnailImageURL, productDetail, getCreatedAt(), getModifiedAt());
     }
 
 }

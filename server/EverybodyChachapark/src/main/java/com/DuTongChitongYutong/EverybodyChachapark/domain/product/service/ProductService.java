@@ -29,7 +29,7 @@ public class ProductService {
     private final FacadeImage facadeImage;
 
     public Product createProduct(ProductPostDto productPostDto, String thumbnailImageURL){
-        Product product = new Product(productPostDto.getProductName(), productPostDto.getPrice(), thumbnailImageURL, productPostDto.getProductDetail());
+        Product product = new Product(productPostDto.getProductName(), productPostDto.getSubtitle(), productPostDto.getPrice(), thumbnailImageURL, productPostDto.getProductDetail());
 
         Optional.ofNullable(productPostDto.getProductCategory()).ifPresent(product::setProductCategory);
         Optional.ofNullable(productPostDto.getProductStatus()).ifPresent(product::setProductStatus);
@@ -56,7 +56,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Page<Product> searchProducts(String searchKeyword, Pageable pageable){
-        return productRepository.findByProductNameLike(searchKeyword, pageable);
+        return productRepository.findByProductNameContaining(searchKeyword, pageable);
     }
 
     public Product updateProduct(long productId, ProductPatchDto productPatchDto, String thumbnailimageURL){
@@ -64,6 +64,7 @@ public class ProductService {
 
         Optional<ProductPatchDto> optionalProductPatchDto = Optional.ofNullable(productPatchDto);
         optionalProductPatchDto.map(ProductPatchDto::getProductName).ifPresent(product::setProductName);
+        optionalProductPatchDto.map(ProductPatchDto::getSubtitle).ifPresent(product::setSubtitle);
         optionalProductPatchDto.map(ProductPatchDto::getPrice).ifPresent(product::setPrice);
         optionalProductPatchDto.map(ProductPatchDto::getProductCategory).ifPresent(product::setProductCategory);
         optionalProductPatchDto.map(ProductPatchDto::getProductStatus).ifPresent(product::setProductStatus);
