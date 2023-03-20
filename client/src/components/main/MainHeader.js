@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import axios from 'axios';
 
 import logolast3 from '../../img/logolast3.png';
 import back from '../../img/back.svg';
@@ -40,6 +42,7 @@ const LogoBox = styled.div`
   margin-left: 12px;
   margin-top: 1px;
 `;
+
 const LoginBox = styled.div`
   cursor: pointer;
   a {
@@ -58,10 +61,10 @@ const LoginBox = styled.div`
     }
   }
   img {
-    width: 70px;
-    height: 50px;
-    margin-right: 10px;
-    border: 1px solid blue;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--bd-rd);
+    object-fit: cover;
   }
 `;
 
@@ -74,8 +77,8 @@ const LoginLink = styled(Link)`
   border-radius: var(--bd-rd);
   color: var(--white);
   font-size: 12px;
-  color: black;
 `;
+
 const BackBox = styled.div`
   cursor: pointer;
   img {
@@ -89,10 +92,33 @@ const BackBox = styled.div`
 `;
 
 const SubHeader = () => {
+  const [profileImage, setProfileImage] = useState('../../img/logolast3.png');
   const navigate = useNavigate();
   const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies();
   const accessToken = cookies.accessToken;
+  const refreshToken = cookies.refreshToken;
+
+  const getUserProfile = async (accessToken) => {
+    try {
+      const { data } = await axios.get(`/members/mypage`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Refresh: `${refreshToken}`,
+        },
+      });
+      return data.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (accessToken) {
+    getUserProfile(accessToken).then((profile) =>
+      setProfileImage(profile.profileImg)
+    );
+  }
+
   return (
     <MainHeaderLayout>
       <MainHeaderContainer>
@@ -114,11 +140,9 @@ const SubHeader = () => {
         <LoginBox>
           {accessToken ? (
             <div>
-              <img
-                src={logolast3}
-                alt="프로필"
-                onClick={() => navigate('/mypage/:id')}
-              />
+              <LoginLink to="/mypage">
+                <img src={profileImage} alt="프로필" />
+              </LoginLink>
               <LoginLink to="/login" className="logout">
                 로그아웃
               </LoginLink>
@@ -128,7 +152,7 @@ const SubHeader = () => {
               <LoginLink to="/login" className="logout">
                 로그인
               </LoginLink>
-              <LoginLink to="/singup" className="signup">
+              <LoginLink to="/signup" className="signup">
                 회원가입
               </LoginLink>
             </div>
