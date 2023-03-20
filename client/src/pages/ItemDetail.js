@@ -114,15 +114,13 @@ const ItemDetail = () => {
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
 
-  console.log(productDetail);
-
   const navigate = useNavigate();
 
   const { id } = useParams();
 
   const handleModal = () => {
     setIsModalOpen((isOpen) => !isOpen);
-    navigate('/shoppingcart/1');
+    navigate('/shoppingcart');
   };
 
   const handleShoppingBag = () => {
@@ -134,25 +132,25 @@ const ItemDetail = () => {
         console.error(error);
       });
 
-    const isInTheCart = carts?.filter(
-      (items) => items.productId === productDetail.productId
-    ).length;
-    if (isInTheCart > 0) {
-      window.alert('이미 장바구니에 담은 상품입니다.');
-      navigate('/shoppingcart');
-    }
-
     const item = {
       productId: productDetail.productId,
       quantity: 1,
     };
-    axios.post(`/carts`, item, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Refresh: `${refreshToken}`,
-      },
-    });
-    setIsModalOpen(true);
+
+    axios
+      .post(`/carts`, item, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Refresh: `${refreshToken}`,
+        },
+      })
+      .then(() => setIsModalOpen(true))
+      .catch((error) => {
+        if (error.response.data.status === 409) {
+          window.alert('이미 장바구니에 담은 상품입니다.');
+          navigate('/shoppingcart');
+        }
+      });
   };
 
   const handleEditProductDetail = () => {
@@ -253,10 +251,7 @@ const ItemDetail = () => {
             <ProductDescription color="#8e8e8e">
               {productDetail.subtitle}
             </ProductDescription>
-            <ProductDescription>
-              {productDetailParser}
-              {/* {productDetail.productDetail} */}
-            </ProductDescription>
+            <ProductDescription>{productDetailParser}</ProductDescription>
           </div>
         )}
         <ReviewContainer>
