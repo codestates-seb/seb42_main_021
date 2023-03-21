@@ -2,6 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.image.controller;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.service.StorageService;
+import com.DuTongChitongYutong.EverybodyChachapark.response.ImageURLResponseDto;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import com.DuTongChitongYutong.EverybodyChachapark.util.JsonListHelper;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,11 @@ public class ImageController {
     final private FacadeImage facadeImage;
     final private JsonListHelper jsonListHelper;
 
-    @PostMapping // Image Upload Test
-    public ResponseEntity postImage(@RequestPart(name = "imageFile") List<MultipartFile> imageFile) {
+    @PostMapping("/upload") // Image Upload Test
+    public ResponseEntity postImage(@RequestPart(name = "imageFile", required = false) List<MultipartFile> imageFile) {
         String imageURL = facadeImage.createImageURLs(imageFile);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(imageURL), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ImageURLResponseDto<>(jsonListHelper.jsonToList(imageURL)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{image-name}")
