@@ -38,7 +38,11 @@ const MainHeaderContainer = styled.div`
 const LogoBox = styled.div`
   transform: translateX(5px);
   cursor: pointer;
-  margin-left: 12px;
+
+  .logoF1 {
+    margin-left: 70px;
+  }
+
   margin-top: 1px;
 `;
 
@@ -106,6 +110,21 @@ const BackBox = styled.div`
   }
 `;
 
+const Logout = styled.button`
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+  width: 70px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #32465b;
+  border-radius: var(--bd-rd);
+  color: white;
+  font-size: 16px;
+  margin-right: 10px;
+  font-weight: bold;
+`;
+
 const MainHeader = () => {
   const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
@@ -114,7 +133,7 @@ const MainHeader = () => {
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
 
-  const getUserProfile = async (accessToken) => {
+  const getUserProfile = async (accessToken, refreshToken) => {
     try {
       const { data } = await axios.get(`/members/mypage`, {
         headers: {
@@ -128,18 +147,19 @@ const MainHeader = () => {
     }
   };
 
-  if (accessToken) {
-    getUserProfile(accessToken).then((profile) =>
+  if (refreshToken) {
+    getUserProfile(accessToken, refreshToken).then((profile) =>
       setProfileImage(profile.profileImg)
     );
   }
-  const handleSignOut = async () => {
-    await axios.post('/members/logout', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Refresh: `${refreshToken}`,
-      },
-    });
+
+  const handleLogOut = async () => {
+    // await axios.post('/members/logout', {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //     Refresh: `${refreshToken}`,
+    //   },
+    // });
     removeCookie('accessToken');
     removeCookie('refreshToken');
     navigate('/');
@@ -155,21 +175,21 @@ const MainHeader = () => {
               <img className="back" src={back} alt="" />
             </BackBox>
             <LogoBox onClick={() => navigate('/')}>
-              <img className="logo5" src={logolast3} alt="" />
+              <img className="logoF1" src={logolast3} alt="" />
             </LogoBox>
           </>
         ) : (
           <LogoBox onClick={() => navigate('/')}>
-            <img className="logo5" src={logolast3} alt="" />
+            <img src={logolast3} alt="" />
           </LogoBox>
         )}
         <LoginBox>
-          {accessToken ? (
-            <div className="login-box">
+          {refreshToken ? (
+            <div className='login-box"'>
               <LoginLink to="/mypage">
                 <img src={profileImage} alt="프로필" />
               </LoginLink>
-              <Logout onClick={handleSignOut}>로그아웃</Logout>
+              <Logout onClick={handleLogOut}>로그아웃</Logout>
             </div>
           ) : (
             <div>

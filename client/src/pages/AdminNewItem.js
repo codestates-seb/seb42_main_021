@@ -126,17 +126,15 @@ const AdminNewItem = () => {
   };
 
   const { state } = useLocation();
-  console.log(state.price);
   // console.log(state);
   useEffect(() => {
-    setName(state.productName);
-    setPrice(Number(state.price).toLocaleString('ko-KR'));
-    setImage(state.thumbnailImageURL);
-    setCategory(state.productCategory);
-    setText(state.productDetail);
-    setStatus(state.productStatus);
-    setSubTitle(state.subtitle);
-    // handleImageChange(); // 이미지 미리보기 테스트
+    setName(state.productName || '');
+    setPrice(state.price ? Number(state.price).toLocaleString('ko-KR') : '');
+    setImage(state.thumbnailImageURL || '');
+    setCategory(state.productCategory || '');
+    setText(state.productDetail || '');
+    setStatus(state.productStatus || 'PRODUCT_FOR_SALE');
+    setSubTitle(state.subtitle || '');
   }, [
     state.productName,
     state.price,
@@ -204,8 +202,7 @@ const AdminNewItem = () => {
     // 이미지는 폼데이터에 append, productPostDto JSON.string
     const accessToken = cookies.accessToken;
     const refreshToken = cookies.refreshToken;
-    console.log(accessToken);
-    console.log(refreshToken);
+
     const header = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -280,6 +277,7 @@ const AdminNewItem = () => {
       console.error(error);
     }
     navigate('/product');
+    return;
   };
 
   return (
