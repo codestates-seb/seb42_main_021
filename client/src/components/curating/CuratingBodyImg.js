@@ -78,7 +78,7 @@ const CuratingImg = styled(Link)`
   .fourTheme1,
   .fourTheme2 {
     position: absolute;
-    width: 130px;
+    width: 180px;
     height: 100px;
     border-radius: var(--bd-rd);
     border: 2px solid var(--border);
@@ -103,6 +103,7 @@ const CuratingImg = styled(Link)`
         }
         :nth-child(1) {
           margin-right: 5px;
+          transform: translateY(5px);
         }
       }
     }
@@ -116,8 +117,8 @@ const CuratingImg = styled(Link)`
     left: -110px;
   }
   .twoTheme1 {
-    top: 140px;
-    left: 140px;
+    top: 150px;
+    left: 120px;
   }
   .twoTheme2 {
     top: -20px;
@@ -151,13 +152,13 @@ const CuratingBodyImg = () => {
           <CuratingImg to="/product/1">
             <div className="oneTheme1">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>폴더 스탭션 캠핑의자</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>체어</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>30,400</span>
               </div>
             </div>
             <div>
@@ -165,15 +166,17 @@ const CuratingBodyImg = () => {
                 <img src={circle} alt="" className="circle1" />
               </span>
             </div>
+          </CuratingImg>
+          <CuratingImg to="/product/2">
             <div className="oneTheme2">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>폴딩 우드 테이블</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>테이블</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>34,000</span>
               </div>
             </div>
             <div>
@@ -186,16 +189,16 @@ const CuratingBodyImg = () => {
       ) : null}
       {location.pathname === '/curation/2' ? (
         <>
-          <CuratingImg to="/product/2">
+          <CuratingImg to="/product/3">
             <div className="twoTheme1">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>경량 와이드 캠핑의자</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>체어</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>21,500</span>
               </div>
             </div>
             <div>
@@ -203,15 +206,17 @@ const CuratingBodyImg = () => {
                 <img src={circle} alt="" className="circle2" />
               </span>
             </div>
+          </CuratingImg>
+          <CuratingImg to="/product/4">
             <div className="twoTheme2">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>레트로 캠핑 랜턴</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>조명</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>14,900</span>
               </div>
             </div>
             <div>
@@ -224,38 +229,36 @@ const CuratingBodyImg = () => {
       ) : null}
       {location.pathname === '/curation/3' ? (
         <>
-          <CuratingImg to="/product/3">
+          <CuratingImg to="/product/5">
             <div className="threeTheme1">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>몬베이지 그린 벨트</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>텐트</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>115,000</span>
               </div>
             </div>
             <div>
-              <>
-                <img src={circle} alt="" className="circle3" />
-              </>
+              <img src={circle} alt="" className="circle3" />
             </div>
           </CuratingImg>
         </>
       ) : null}
       {location.pathname === '/curation/4' ? (
         <>
-          <CuratingImg to="/product/4">
+          <CuratingImg to="/product/6">
             <div className="fourTheme1">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>코어 이지스 테이블</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>테이블</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>29,500</span>
               </div>
             </div>
             <div>
@@ -263,15 +266,17 @@ const CuratingBodyImg = () => {
                 <img src={circle} alt="" className="circle4" />
               </span>
             </div>
+          </CuratingImg>
+          <CuratingImg to="/product/7">
             <div className="fourTheme2">
               <div>
-                <span>SAMLA 삼라</span>
+                <h4>내셔널 경량 체어</h4>
                 <img src={right} alt="" />
               </div>
-              <div>수납합</div>
+              <div>체어</div>
               <div>
                 <img src={money} alt="" />
-                <span>4,900</span>
+                <span>24,000</span>
               </div>
             </div>
             <div>
