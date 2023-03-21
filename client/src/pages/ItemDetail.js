@@ -101,15 +101,14 @@ const FormButton = styled.button`
 `;
 
 const ItemDetail = () => {
+  const [cookies, setCookie, removeCookie] = useCookies();
+
   const [productDetail, setProductDetail] = useState(null);
   const [productReviews, setProductReviews] = useState(null);
   const [carts, setCarts] = useState([]);
-  const [productDetailParser, setProductDetailParser] = useState('');
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies();
 
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
@@ -181,14 +180,9 @@ const ItemDetail = () => {
       console.error(error);
     }
   };
+
   useEffect(() => {
     findProductByProductId(id).then((productInformation) => {
-      const parser = new DOMParser();
-      const parsedText = parser.parseFromString(
-        productInformation.productDetail,
-        'text/html'
-      ).body.textContent;
-      setProductDetailParser(parsedText);
       setProductDetail(productInformation);
     });
     getProductReviews(id).then((productReviewList) =>
@@ -251,7 +245,9 @@ const ItemDetail = () => {
             <ProductDescription color="#8e8e8e">
               {productDetail.subtitle}
             </ProductDescription>
-            <ProductDescription>{productDetailParser}</ProductDescription>
+            <ProductDescription
+              dangerouslySetInnerHTML={{ __html: productDetail.productDetail }}
+            ></ProductDescription>
           </div>
         )}
         <ReviewContainer>
