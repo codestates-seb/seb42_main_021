@@ -67,6 +67,10 @@ const LoginBox = styled.div`
     border-radius: var(--bd-rd);
     object-fit: cover;
   }
+  .login-box {
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 const LoginLink = styled(Link)`
@@ -90,6 +94,21 @@ const BackBox = styled.div`
     width: 50px;
     height: 50px;
   }
+`;
+
+const Logout = styled.button`
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+  width: 70px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #32465b;
+  border-radius: var(--bd-rd);
+  color: white;
+  font-size: 16px;
+  margin-right: 10px;
+  font-weight: bold;
 `;
 
 const MainHeader = () => {
@@ -120,6 +139,18 @@ const MainHeader = () => {
     );
   }
 
+  const handleLogOut = async () => {
+    // await axios.post('/members/logout', {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //     Refresh: `${refreshToken}`,
+    //   },
+    // });
+    removeCookie('accessToken');
+    removeCookie('refreshToken');
+    navigate('/');
+  };
+
   return (
     <MainHeaderLayout>
       <MainHeaderContainer>
@@ -140,13 +171,11 @@ const MainHeader = () => {
         )}
         <LoginBox>
           {refreshToken ? (
-            <div>
+            <div className='login-box"'>
               <LoginLink to="/mypage">
                 <img src={profileImage} alt="프로필" />
               </LoginLink>
-              <LoginLink to="/login" className="logout">
-                로그아웃
-              </LoginLink>
+              <Logout onClick={handleLogOut}>로그아웃</Logout>
             </div>
           ) : (
             <div>
