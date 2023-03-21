@@ -134,12 +134,12 @@ const MainHeader = () => {
     );
   }
   const handleSignOut = async () => {
-    // await axios.post('/members/logout', {
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`,
-    //     Refresh: `${refreshToken}`,
-    //   },
-    // });
+    await axios.post('/members/logout', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Refresh: `${refreshToken}`,
+      },
+    });
     removeCookie('accessToken');
     removeCookie('refreshToken');
     navigate('/');
