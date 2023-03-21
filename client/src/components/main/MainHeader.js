@@ -63,6 +63,10 @@ const LoginBox = styled.div`
     border-radius: var(--bd-rd);
     object-fit: cover;
   }
+  .login-box {
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 const LoginLink = styled(Link)`
@@ -74,6 +78,20 @@ const LoginLink = styled(Link)`
   border-radius: var(--bd-rd);
   color: var(--white);
   font-size: 12px;
+`;
+const Logout = styled.button`
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+  font-weight: bold;
+  width: 70px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #32465b;
+  border-radius: var(--bd-rd);
+  color: white;
+  font-size: 16px;
+  margin-right: 10px;
 `;
 
 const BackBox = styled.div`
@@ -115,6 +133,17 @@ const MainHeader = () => {
       setProfileImage(profile.profileImg)
     );
   }
+  const handleSignOut = async () => {
+    // await axios.post('/members/logout', {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //     Refresh: `${refreshToken}`,
+    //   },
+    // });
+    removeCookie('accessToken');
+    removeCookie('refreshToken');
+    navigate('/');
+  };
 
   return (
     <MainHeaderLayout>
@@ -136,13 +165,11 @@ const MainHeader = () => {
         )}
         <LoginBox>
           {accessToken ? (
-            <div>
+            <div className="login-box">
               <LoginLink to="/mypage">
                 <img src={profileImage} alt="프로필" />
               </LoginLink>
-              <LoginLink to="/login" className="logout">
-                로그아웃
-              </LoginLink>
+              <Logout onClick={handleSignOut}>로그아웃</Logout>
             </div>
           ) : (
             <div>
