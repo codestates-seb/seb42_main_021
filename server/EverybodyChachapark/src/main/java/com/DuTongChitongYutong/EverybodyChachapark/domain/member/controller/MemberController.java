@@ -65,9 +65,9 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity logout (HttpServletRequest request) {
         memberService.logout(request);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
