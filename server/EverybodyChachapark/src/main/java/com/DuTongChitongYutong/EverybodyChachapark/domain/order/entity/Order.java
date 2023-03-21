@@ -1,22 +1,28 @@
-/*
+
 package com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity;
 
+import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class Order {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Order extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long orderId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
-    private List<OrderProduct> orderProducts;
+    private int totalPrice;
 
+    @Enumerated(EnumType.STRING)
+    private OrderProductStatus orderProductStatus = OrderProductStatus.ORDER_WAITING;
 
-
-
-}
-*/
+    }
