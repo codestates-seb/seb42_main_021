@@ -12,6 +12,7 @@ import ShoppingCart from './pages/ShoppingCart';
 import SignUp from './pages/SignUp';
 import Navigation from './components/main/Navigation';
 import MainHeader from './components/main/MainHeader';
+import NotFound from './pages/NotFound';
 
 const MainLayout = styled.div`
   width: 100vw;
@@ -83,6 +84,7 @@ function App() {
               <Route path="/shoppingcart" element={<ShoppingCart />} />
               <Route path="/mypage" element={<Mypage />} />
               <Route path="/admin-item/:id" element={<AdminNewItem />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <Navigation />
           </MainBox>
