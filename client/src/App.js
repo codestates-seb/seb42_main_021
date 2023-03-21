@@ -18,39 +18,47 @@ const MainLayout = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+  @media (max-width: 950px) {
+    transform: translateX(-100px);
+    margin: 0 auto;
+    padding: 16px 32px;
+  }
 `;
 const TitleContainer = styled.div`
   width: 50%;
   justify-content: center;
   align-content: center;
+  @media (max-width: 950px) {
+    display: none;
+  }
 `;
 
 const TitleContainerBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 530px;
+  max-width: 530px;
   height: 100%;
   justify-content: center;
   color: white;
   .MainTitle {
-    margin-bottom: 500px;
-    margin-left: 130px;
-    font-size: 35px;
+    margin-bottom: 600px;
+    margin-left: 150px;
+    font-size: 65px;
     font-weight: bold;
   }
   .SubTitle {
-    font-size: 20px;
+    font-size: 25px;
     margin-left: 120px;
     line-height: 200%;
   }
 `;
 const MainContainer = styled.div`
-  width: 50%;
+  max-width: 50%;
   margin: 0 auto;
 `;
 
 const MainBox = styled.div`
-  width: 530px;
+  max-width: 530px;
   height: 100%;
   margin: 0 auto;
   border: 1px solid var(--border);
@@ -63,7 +71,7 @@ function App() {
       <MainLayout>
         <TitleContainer>
           <TitleContainerBox>
-            <div className="MainTitle">Everybody chachapark</div>
+            <div className="MainTitle">Everybody chachapark!</div>
             <div className="SubTitle">
               나에게 맞는 차박 용품을 한 눈에!
               <br /> 차박 장소까지 한 번에 결정하세요.

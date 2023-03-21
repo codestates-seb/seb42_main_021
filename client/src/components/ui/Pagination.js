@@ -2,11 +2,9 @@ import '../../Paging.css';
 import Pagination from 'react-js-pagination';
 
 const Paging = ({ page, count, setPage }) => {
-  console.log(count);
   const handlePageChange = (page) => {
     setPage(page - 1);
   };
-  console.log();
 
   return (
     <Pagination
