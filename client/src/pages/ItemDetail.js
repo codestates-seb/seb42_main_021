@@ -157,10 +157,10 @@ const ItemDetail = () => {
   };
 
   const handleDeleteProductDetail = () => {
-    axios.post(`products/${productDetail.productId}`, {
+    axios.delete(`../products/${productDetail.productId}`, {
       headers: {
-        Authorization: `Bearer `,
-        Refresh: `Bearer `,
+        Authorization: `Bearer ${accessToken}`,
+        Refresh: `${refreshToken}`,
       },
     });
     navigate('/product');
