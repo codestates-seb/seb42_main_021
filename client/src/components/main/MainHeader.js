@@ -38,7 +38,11 @@ const MainHeaderContainer = styled.div`
 const LogoBox = styled.div`
   transform: translateX(5px);
   cursor: pointer;
-  margin-left: 12px;
+
+  .logoF1 {
+    margin-left: 70px;
+  }
+
   margin-top: 1px;
 `;
 
@@ -96,7 +100,7 @@ const MainHeader = () => {
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
 
-  const getUserProfile = async (accessToken) => {
+  const getUserProfile = async (accessToken, refreshToken) => {
     try {
       const { data } = await axios.get(`/members/mypage`, {
         headers: {
@@ -110,8 +114,8 @@ const MainHeader = () => {
     }
   };
 
-  if (accessToken) {
-    getUserProfile(accessToken).then((profile) =>
+  if (refreshToken) {
+    getUserProfile(accessToken, refreshToken).then((profile) =>
       setProfileImage(profile.profileImg)
     );
   }
@@ -126,16 +130,16 @@ const MainHeader = () => {
               <img className="back" src={back} alt="" />
             </BackBox>
             <LogoBox onClick={() => navigate('/')}>
-              <img className="logo5" src={logolast3} alt="" />
+              <img className="logoF1" src={logolast3} alt="" />
             </LogoBox>
           </>
         ) : (
           <LogoBox onClick={() => navigate('/')}>
-            <img className="logo5" src={logolast3} alt="" />
+            <img src={logolast3} alt="" />
           </LogoBox>
         )}
         <LoginBox>
-          {accessToken ? (
+          {refreshToken ? (
             <div>
               <LoginLink to="/mypage">
                 <img src={profileImage} alt="프로필" />
