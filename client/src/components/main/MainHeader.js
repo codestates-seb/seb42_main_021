@@ -83,6 +83,20 @@ const LoginLink = styled(Link)`
   color: var(--white);
   font-size: 12px;
 `;
+const Logout = styled.button`
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+  font-weight: bold;
+  width: 70px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #32465b;
+  border-radius: var(--bd-rd);
+  color: white;
+  font-size: 16px;
+  margin-right: 10px;
+`;
 
 const BackBox = styled.div`
   cursor: pointer;
