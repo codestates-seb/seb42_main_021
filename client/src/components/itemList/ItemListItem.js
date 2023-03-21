@@ -17,6 +17,7 @@ const ItemImgBox = styled.div`
     height: 168px;
     border: 1px solid var(--border);
     border-radius: var(--bd-rd);
+    object-fit: cover;
   }
 `;
 const ItemBodyContainer = styled.div`
@@ -27,12 +28,13 @@ const ItemBodyContainer = styled.div`
 `;
 const ItemTitleBox = styled.div`
   margin-bottom: 10px;
-  h2 {
-    font-size: 20px;
-    margin-bottom: 5px;
-  }
+
   p {
     font-size: 16px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: 7px;
   }
 `;
 const ItemValueBox = styled.div`
@@ -49,8 +51,8 @@ const ItemListItem = ({ item }) => {
       </ItemImgBox>
       <ItemBodyContainer>
         <ItemTitleBox>
-          <h2>{item.productName}</h2>
           <p>{item.subtitle}</p>
+          <h2>{item.productName}</h2>
         </ItemTitleBox>
         <ItemValueBox>
           {/* <span>{list.rates} </span> */}
