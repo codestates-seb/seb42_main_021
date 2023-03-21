@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import ReactQuill from 'react-quill';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import 'react-quill/dist/quill.snow.css';
+import { useCookies } from 'react-cookie';
+
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
 import Footer from '../components/main/Footer';
-import { useCookies } from 'react-cookie';
+import ProductEditor from '../components/ui/ProductEditor';
 
 const PageName = styled.h1`
   margin-bottom: 40px;
@@ -68,7 +68,7 @@ const ContentInput = styled.input`
   }
 `;
 
-const ItemDescription = styled(ReactQuill)`
+const ItemDescription = styled(ProductEditor)`
   height: 200px;
 `;
 
@@ -94,46 +94,19 @@ const AdminNewItem = () => {
   const [text, setText] = useState('');
   const [status, setStatus] = useState('');
   const [subTitle, setSubTitle] = useState('');
+  const [cookies, setCookie, removeCookie] = useCookies();
+
   const navigate = useNavigate();
   const imgRef = useRef();
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const modules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        [{ font: [] }],
-        [{ align: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, 'link'],
-        ['image'],
-        [
-          {
-            color: [
-              '#000000',
-              '#e60000',
-              '#ff9900',
-              '#ffff00',
-              '#008a00',
-              '#0066cc',
-              '#9933ff',
-              'custom-color',
-            ],
-          },
-          { background: [] },
-        ],
-      ],
-    },
-  };
-
   const { state } = useLocation();
-  // console.log(state);
+
   useEffect(() => {
     setName(state.productName || '');
     setPrice(state.price ? Number(state.price).toLocaleString('ko-KR') : '');
     setImage(state.thumbnailImageURL || '');
     setCategory(state.productCategory || '');
     setText(state.productDetail || '');
-    setStatus(state.productStatus || 'PRODUCT_FOR_SALE');
+    setStatus(state.productStatus || '');
     setSubTitle(state.subtitle || '');
   }, [
     state.productName,
@@ -149,6 +122,10 @@ const AdminNewItem = () => {
     setCategory(event.target.value);
   };
 
+  const handleStatus = (event) => {
+    setStatus(event.target.value);
+  };
+
   const handleName = (event) => {
     setName(event.target.value);
   };
@@ -162,6 +139,7 @@ const AdminNewItem = () => {
   const handleSubtitle = (event) => {
     setSubTitle(event.target.value);
   };
+
   const handleImageChange = () => {
     const file = imgRef.current.files[0];
     setImage(file);
@@ -188,18 +166,21 @@ const AdminNewItem = () => {
     if (category === '선택해주세요') {
       window.alert('상품 카테고리를 선택해주세요.');
       return;
+    } else if (status === '선택해주세요') {
+      window.alert('상품 판매 상태를 선택해주세요.');
+      return;
     } else if (image === null) {
       window.alert('상품 대표 이미지를 첨부해주세요.');
       return;
     } else if (text === '') {
-      window.alert('상품 세부 설명을 입력해주세요.');
+      window.alert('상품 상세 설명을 입력해주세요.');
       return;
     } else if (subTitle === '') {
       window.alert('상품 부제목을 입력해주세요.');
       return;
     }
+
     const formData = new FormData();
-    // 이미지는 폼데이터에 append, productPostDto JSON.string
     const accessToken = cookies.accessToken;
     const refreshToken = cookies.refreshToken;
 
@@ -210,6 +191,7 @@ const AdminNewItem = () => {
         Refresh: `${refreshToken}`,
       },
     };
+
     if (state.productName) {
       try {
         formData.append('thumbnailImageFile', image);
@@ -231,6 +213,7 @@ const AdminNewItem = () => {
             }
           )
         );
+
         const response = await axios.patch(
           `/products/${state.productId}`,
           formData,
@@ -301,6 +284,15 @@ const AdminNewItem = () => {
                 </select>
               </div>
               <div>
+                <label>상품 판매 상태</label>
+                <select value={status} onChange={handleStatus}>
+                  <option value="선택해주세요">선택해주세요</option>
+                  <option value="PRODUCT_FOR_SALE">판매 중</option>
+                  <option value="PRODUCT_SOLD_OUT">품절</option>
+                  <option value="PRODUCT_STOP">절판</option>
+                </select>
+              </div>
+              <div>
                 <label htmlFor="상품명">상품명</label>
                 <ContentInput
                   type="text"
@@ -349,11 +341,7 @@ const AdminNewItem = () => {
             </ItemInformationBox>
             <ItemDescriptionBox>
               <div>상품 상세설명</div>
-              <ItemDescription
-                modules={modules}
-                onChange={handleText}
-                value={text}
-              />
+              <ItemDescription handleText={handleText} text={text} />
             </ItemDescriptionBox>
             <ButtonBox>
               <button type="submit">
