@@ -19,14 +19,14 @@ public class Review extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2000)
     private String content;
 
     @Column(nullable = false)
     private int score;
 
     @Column(nullable = false)
-    private String imageURL = "[]";  // Todo: 이미지 식별자
+    private String imageURL;  // Todo: 이미지 식별자
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
