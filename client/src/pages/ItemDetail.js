@@ -49,6 +49,9 @@ const ProductDescription = styled.p`
   margin: 10px 0 50px 0;
   word-break: break-all;
   color: ${(props) => props.color};
+  img {
+    width: 500px;
+  }
 `;
 
 const Modal = styled.div`
