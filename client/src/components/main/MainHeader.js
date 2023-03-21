@@ -140,14 +140,14 @@ const MainHeader = () => {
   }
 
   const handleLogOut = async () => {
-    // await axios.post('/members/logout', {
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`,
-    //     Refresh: `${refreshToken}`,
-    //   },
-    // });
-    removeCookie('accessToken');
-    removeCookie('refreshToken');
+    await axios.post('/members/logout', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Refresh: `${refreshToken}`,
+      },
+    });
+    // removeCookie('accessToken');
+    // removeCookie('refreshToken');
     navigate('/');
   };
 
