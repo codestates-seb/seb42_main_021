@@ -5,8 +5,13 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthExceptionCode;
+import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
 import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
+import io.jsonwebtoken.Claims;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class MemberService {
 
@@ -28,16 +35,7 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final FacadeImage facadeImage;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher, PasswordEncoder passwordEncoder,
-                         CustomAuthorityUtils authorityUtils, FacadeImage facadeImage, RefreshTokenRepository refreshTokenRepository) {
-        this.memberRepository = memberRepository;
-        this.publisher = publisher;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityUtils = authorityUtils;
-        this.facadeImage = facadeImage;
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
+    private final JwtTokenizer jwtTokenizer;
 
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
@@ -119,6 +117,21 @@ public class MemberService {
 
     public Member findByEmail() {
         String email = getCurrentMemberEmail();
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_NOT_VALID));
+    }
+
+    //테스트
+    public Member findByToken(HttpServletRequest request) {
+        String token = getAccessToken(request);
+        Claims claims = jwtTokenizer.parseClaims(token);
+
+        Date expiration = claims.getExpiration();
+        if (expiration.before(new Date())) {
+            throw new SecurityAuthException(SecurityAuthExceptionCode.TOKEN_NOT_FOUND);
+        }
+
+        String email = claims.get("email", String.class);
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }

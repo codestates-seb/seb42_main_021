@@ -10,6 +10,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,7 +68,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             refreshTokenClaims = jwtTokenizer.parseClaims(refreshToken);
             return jwtTokenizer.parseClaims(accessToken);
         } catch (ExpiredJwtException ee) {
-            if (refreshTokenClaims != null) {
+            // access-token이 만료되면 자동으로 header에 새로운 토큰을 응답해주는 로직, RefreshController 사용 후 활용하지 않는 기능
+            /*if (refreshTokenClaims != null) {
                 String findRefreshToken = refreshTokenRepository.findBy(refreshTokenClaims.getSubject());
 
                 if (refreshToken.equals(findRefreshToken)) {
@@ -75,7 +78,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                     response.setHeader("Authorization", "Bearer " + newAccessToken);
                     return jwtTokenizer.parseClaims(newAccessToken);
                 }
-            }
+            }*/
             request.setAttribute("exception", ee);
             return null;
         }
