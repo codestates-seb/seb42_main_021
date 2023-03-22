@@ -76,7 +76,7 @@ public class ProductControllerTest {
         ProductPostDto productPostDto = new ProductPostDto("짱비싼 텐트", "subtitle",500000, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "상품 상세 내용");
         String content = gson.toJson(productPostDto);
 
-        ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", "subtitle",500000, 0, 0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", "subtitle",500000,  0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
 
         given(productFacade.createProduct(Mockito.any(ProductPostDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultProduct);
 
@@ -130,7 +130,6 @@ public class ProductControllerTest {
                                         fieldWithPath("data.subtitle").type(JsonFieldType.STRING).description("상품 부제목"),
                                         fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data.productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
-                                        fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
                                         fieldWithPath("data.productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data.productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("data.thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
@@ -151,7 +150,7 @@ public class ProductControllerTest {
         ProductPatchDto productPatchDto = new ProductPatchDto("짱비싼 의자", "subtitle", 400000, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT, "상품 상세 내용") ;
         String content = gson.toJson(productPatchDto);
 
-        ProductDto mockResultPatchProduct = new ProductDto(2, "짱비싼 의자", "subtitle",400000, 5, 5, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT,"[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultPatchProduct = new ProductDto(2, "짱비싼 의자", "subtitle",400000,  5, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT,"[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
         given(productFacade.updateProduct(Mockito.anyLong(), Mockito.any(ProductPatchDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultPatchProduct);
 
         HttpHeaders headers = new HttpHeaders();
@@ -208,7 +207,6 @@ public class ProductControllerTest {
                                         fieldWithPath("data.subtitle").type(JsonFieldType.STRING).description("상품 부제목"),
                                         fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data.productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
-                                        fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
                                         fieldWithPath("data.productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data.productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("data.thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
@@ -231,7 +229,7 @@ public class ProductControllerTest {
 
         Long productId = 1L;
 
-        ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", "subtitle",0, 0, 0, ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]","상품 상세 내용" , LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", "subtitle",0, 0,  ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]","상품 상세 내용" , LocalDateTime.now(), LocalDateTime.now());
 
         given(productFacade.readProduct(Mockito.anyLong())).willReturn(mockResultProductReadDto);
 
@@ -259,7 +257,6 @@ public class ProductControllerTest {
                                         fieldWithPath("data.subtitle").type(JsonFieldType.STRING).description("상품 부제목"),
                                         fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data.productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
-                                        fieldWithPath("data.productScore").type(JsonFieldType.NUMBER).description("상품 점수"),
                                         fieldWithPath("data.productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data.productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("data.thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
@@ -333,7 +330,6 @@ public class ProductControllerTest {
                                         fieldWithPath("data[].subtitle").type(JsonFieldType.STRING).description("상품 부제목"),
                                         fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
-                                        fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
                                         fieldWithPath("data[].productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data[].productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("data[].thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
@@ -410,7 +406,6 @@ public class ProductControllerTest {
                                         fieldWithPath("data[].subtitle").type(JsonFieldType.STRING).description("상품 부제목"),
                                         fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
-                                        fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
                                         fieldWithPath("data[].productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data[].productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("data[].thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
@@ -489,7 +484,6 @@ public class ProductControllerTest {
                                         fieldWithPath("data[].subtitle").type(JsonFieldType.STRING).description("상품 부제목"),
                                         fieldWithPath("data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("data[].productView").type(JsonFieldType.NUMBER).description("상품 조회수"),
-                                        fieldWithPath("data[].productScore").type(JsonFieldType.NUMBER).description("리뷰 평균 점수"),
                                         fieldWithPath("data[].productCategory").type(JsonFieldType.STRING).description("상품 카테고리"),
                                         fieldWithPath("data[].productStatus").type(JsonFieldType.STRING).description("상품 상태"),
                                         fieldWithPath("data[].thumbnailImageURL").type(JsonFieldType.STRING).description("상품 썸네일 이미지 URL"),
