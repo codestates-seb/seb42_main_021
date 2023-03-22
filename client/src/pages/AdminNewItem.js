@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import axios from 'axios';
+import newAxios from '../components/newAxios';
 import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
@@ -68,10 +67,6 @@ const ContentInput = styled.input`
   }
 `;
 
-const ItemDescription = styled(ProductEditor)`
-  height: 200px;
-`;
-
 const ButtonBox = styled.div`
   display: flex;
   justify-content: right;
@@ -101,8 +96,6 @@ const AdminNewItem = () => {
   const [image, setImage] = useState(state.thumbnailImageURL || '');
   const [preview, setPreview] = useState('');
   const [text, setText] = useState(state.productDetail || '');
-
-  const [cookies, setCookie, removeCookie] = useCookies();
 
   const navigate = useNavigate();
 
@@ -147,16 +140,6 @@ const AdminNewItem = () => {
     }
 
     const formData = new FormData();
-    const accessToken = cookies.accessToken;
-    const refreshToken = cookies.refreshToken;
-
-    const header = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${accessToken}`,
-        Refresh: `${refreshToken}`,
-      },
-    };
 
     if (state.productName) {
       try {
@@ -179,13 +162,7 @@ const AdminNewItem = () => {
             }
           )
         );
-
-        const response = await axios.patch(
-          `/products/${state.productId}`,
-          formData,
-          header
-        );
-        console.log(response.data);
+        newAxios.patch(`/products/${state.productId}`, formData);
       } catch (error) {
         console.log(error);
       }
@@ -213,8 +190,7 @@ const AdminNewItem = () => {
     );
 
     try {
-      const response = await axios.post('/products', formData, header);
-      console.log(response.data);
+      newAxios.post('/products', formData);
       setCategory('선택해주세요');
       setName('');
       setPrice('');
@@ -312,7 +288,7 @@ const AdminNewItem = () => {
             </ItemInformationBox>
             <ItemDescriptionBox>
               <div>상품 상세설명</div>
-              <ItemDescription
+              <ProductEditor
                 handleText={(contents) => setText(contents)}
                 text={text}
               />

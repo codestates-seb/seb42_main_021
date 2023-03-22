@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
+import newAxios from '../components/newAxios';
 
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
@@ -107,7 +107,7 @@ const FormButton = styled.button`
 `;
 
 const ItemDetail = () => {
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies] = useCookies();
 
   const [productDetail, setProductDetail] = useState(null);
   const [productReviews, setProductReviews] = useState(null);
@@ -115,7 +115,6 @@ const ItemDetail = () => {
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
 
-  const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
 
   const navigate = useNavigate();
@@ -133,13 +132,8 @@ const ItemDetail = () => {
       quantity: 1,
     };
 
-    axios
-      .post(`/carts`, item, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Refresh: `${refreshToken}`,
-        },
-      })
+    newAxios
+      .post(`/carts`, item)
       .then(() => setIsModalOpen(true))
       .catch((error) => {
         if (error.response.data.status === 409) {
@@ -154,12 +148,7 @@ const ItemDetail = () => {
   };
 
   const handleDeleteProductDetail = () => {
-    axios.delete(`../products/${productDetail.productId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Refresh: `${refreshToken}`,
-      },
-    });
+    newAxios.delete(`../products/${productDetail.productId}`);
     navigate('/product');
   };
 
