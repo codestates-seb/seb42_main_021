@@ -33,9 +33,6 @@ public class Product extends BaseTime {
     @Column(name = "product_view")
     private int productView;
 
-    @Column(name = "product_score")
-    private int productScore;
-
     @Column(name = "thumbnail_imageURL")
     private String thumbnailImageURL;
 
@@ -46,7 +43,7 @@ public class Product extends BaseTime {
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
 
-    @Column(name = "product_detail")
+    @Column(name = "product_detail", length = 9999)
     private String productDetail;
 
     public Product(String productName, String subtitle, int price, String thumbnailImageURL, String productDetail){
@@ -57,13 +54,12 @@ public class Product extends BaseTime {
         this.productDetail = productDetail;
     }
 
-    public Product(long productId, String productName, String subtitle, int price, int productView, int productScore, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
+    public Product(long productId, String productName, String subtitle, int price, int productView, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
         this.productId = productId;
         this.productName = productName;
         this.subtitle = subtitle;
         this.price = price;
         this.productView = productView;
-        this.productScore = productScore;
         this.productCategory = productCategory;
         this.productStatus = productStatus;
         this.thumbnailImageURL = thumbnailImageURL;
@@ -71,7 +67,7 @@ public class Product extends BaseTime {
     }
 
     public ProductDto toDto(){
-        return new ProductDto(productId, productName, subtitle, price, productView, productScore, productCategory, productStatus, thumbnailImageURL, productDetail, getCreatedAt(), getModifiedAt());
+        return new ProductDto(productId, productName, subtitle, price, productView, productCategory, productStatus, thumbnailImageURL, productDetail, getCreatedAt(), getModifiedAt());
     }
 
 }

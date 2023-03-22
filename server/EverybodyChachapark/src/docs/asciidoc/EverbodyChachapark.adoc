@@ -143,6 +143,10 @@ include::{snippets}/post-member-refresh/request-headers.adoc[]
 
 .http-response
 include::{snippets}/post-member-refresh/http-response.adoc[]
+<<<<<<< HEAD
+=======
+
+>>>>>>> a15ffaa5779cfdc8cbeb8a45cdf82650652fb167
 
 == ProductController
 === 상품 등록
@@ -356,6 +360,7 @@ include::{snippets}/patch-review/response-fields.adoc[]
 === 리뷰 삭제
 .curl-request
 include::{snippets}/delete-review/curl-request.adoc[]
+
 .http-request
 include::{snippets}/delete-review/http-request.adoc[]
 
@@ -442,6 +447,68 @@ include::{snippets}/delete-cart/http-response.adoc[]
 
 
 == OrderController
+=== 주문 생성
+.curl-request
+include::{snippets}/create-order/curl-request.adoc[]
+
+.http-request
+include::{snippets}/create-order/http-request.adoc[]
+
+.request-headers
+include::{snippets}/create-order/request-headers.adoc[]
+
+.http-response
+include::{snippets}/create-order/http-response.adoc[]
+
+.response-fields
+include::{snippets}/create-order/response-fields.adoc[]
+
+
+=== 단일 주문 조회
+.curl-request
+include::{snippets}/read-order/curl-request.adoc[]
+
+.http-request
+include::{snippets}/read-order/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/read-order/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/read-order/http-response.adoc[]
+
+.response-fields
+include::{snippets}/read-order/response-fields.adoc[]
+
+
+=== 전체 주문 조회
+.curl-request
+include::{snippets}/read-all-order/curl-request.adoc[]
+
+.http-request
+include::{snippets}/read-all-order/http-request.adoc[]
+
+.http-response
+include::{snippets}/read-all-order/http-response.adoc[]
+
+.response-fields
+include::{snippets}/read-all-order/response-fields.adoc[]
+
+=== 주문 취소
+.curl-request
+include::{snippets}/cancel-order/curl-request.adoc[]
+
+.http-request
+include::{snippets}/cancel-order/http-request.adoc[]
+
+.request-headers
+include::{snippets}/cancel-order/request-headers.adoc[]
+
+.path-parameters
+include::{snippets}/cancel-order/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/cancel-order/http-response.adoc[]
 
 == ImageController
 === 이미지 업로드
