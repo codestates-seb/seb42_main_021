@@ -20,13 +20,10 @@ public class CartService {
 
     private final CartRepository cartRepository;
 
-    private final ProductService productService;
-
     private final MemberService memberService;
 
-    public CartService(CartRepository cartRepository, ProductService productService, MemberService memberService) {
+    public CartService(CartRepository cartRepository, MemberService memberService) {
         this.cartRepository = cartRepository;
-        this.productService = productService;
         this.memberService = memberService;
     }
 

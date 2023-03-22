@@ -55,21 +55,6 @@ public class CartFacade {
         return cartService.updateCart(cartId, patch.getQuantity()).toDto(product);
     }
 
-    /*public CartDto.Response findCart (long cartId) {
-        Cart cart = cartService.findCart(cartId);
-
-        // 회원 확인 로직
-        Member member = memberService.findByEmail();
-
-        if (member.getMemberId() != cart.getMemberId()) {
-            throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
-        }
-
-        Product product = productService.readProduct(cart.getProductId());
-
-        return cart.toDto(product);
-    }*/
-
     public List<CartDto.Response> findCarts() {
 
         // 회원 확인 로직
@@ -97,6 +82,21 @@ public class CartFacade {
         }
 
         cartService.deleteCart(cartId);
-
     }
+
+    // 특정 카트만 보여주는 로직. 사용할 경우가 없을 것 같아서 주석처리
+    /*public CartDto.Response findCart (long cartId) {
+        Cart cart = cartService.findCart(cartId);
+
+        // 회원 확인 로직
+        Member member = memberService.findByEmail();
+
+        if (member.getMemberId() != cart.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
+        }
+
+        Product product = productService.readProduct(cart.getProductId());
+
+        return cart.toDto(product);
+    }*/
 }

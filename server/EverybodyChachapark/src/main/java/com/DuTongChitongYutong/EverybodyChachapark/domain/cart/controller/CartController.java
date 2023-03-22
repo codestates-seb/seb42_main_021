@@ -28,11 +28,6 @@ public class CartController {
         return new ResponseEntity(new SingleResponseDto<>(cartFacade.updateCart(cartId, patch)), HttpStatus.OK);
     }
 
-    /*@GetMapping("/{cart-id}")
-    public ResponseEntity getCart (@PathVariable ("cart-id") long cartId) {
-        return new ResponseEntity(new SingleResponseDto<>(cartFacade.findCart(cartId)), HttpStatus.OK);
-    }*/
-
     @GetMapping
     public ResponseEntity getCarts() {
         return new ResponseEntity<>(new SingleResponseDto<>(cartFacade.findCarts()), HttpStatus.OK);
