@@ -11,34 +11,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
-    default Review reviewPostDtoToReview(ReviewDto.Post reviewPostDto) {
-        Review review = new Review();
-        review.setContent(reviewPostDto.getContent());
-        review.setScore(reviewPostDto.getScore());
+    Review reviewPostDtoToReview(ReviewDto.Post reviewPostDto);
 
-        Member member = new Member();
-        review.setMember(member);
-
-        Product product = new Product();
-        product.setProductId(reviewPostDto.getProductId());
-
-        review.setProduct(product);
-
-        return review;
-    }
-
-    default Review reviewPatchDtoToReview(ReviewDto.Patch reviewPatchDto) {
-        Review review = new Review();
-
-        review.setContent(reviewPatchDto.getContent());
-        review.setScore(reviewPatchDto.getScore());
-
-        Member member = new Member();
-
-        review.setMember(member);
-
-        return review;
-    }
+    Review reviewPatchDtoToReview(ReviewDto.Patch reviewPatchDto);
 
     @Mapping(source = "member.nickname", target = "reviewMember.nickname")
     @Mapping(source = "member.memberId", target = "reviewMember.memberId")

@@ -1,6 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.service;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,8 +35,8 @@ public class ReviewService {
     public Review createReview(Review review, MultipartFile imageFile) {
         String imageURL = facadeImage. createImageURL(imageFile);
         review.setImageURL(imageURL);
-        review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
+        review.setMemberId(memberService.findByEmail().getMemberId());
         verifyReview(review); // 작성자, 상품 검증
 
         // Todo: ImageURL 생성 처리
@@ -43,7 +45,7 @@ public class ReviewService {
     }
 
     public Review updateReview(Long reviewId, Review review, MultipartFile imageFile) {
-        review.getMember().setMemberId(memberService.findByEmail().getMemberId());
+        review.setMemberId(memberService.findByEmail().getMemberId());
 
         Review foundReview = findReview(reviewId);
         verifyReviewAskedMember(review, foundReview);
@@ -70,7 +72,14 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public Page<Review> findReviews(Long productId, int page, int size) {
-        return reviewRepository.findPageByProduct_ProductId(productId, PageRequest.of(page, size, Sort.by("reviewId")));
+        Page<Review> reviewPage = reviewRepository.findPageByProductId(productId, PageRequest.of(page, size, Sort.by("reviewId")));
+        List<Review> mappingReviews = reviewPage.getContent().stream().map(review -> {
+            Member member = memberService.findVerifiedMember(review.getMemberId());
+            review.setMember(member);
+            return review;
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(mappingReviews, PageRequest.of(page, size, Sort.by("reviewId")), mappingReviews.size());
     }
 
     public void deleteReview(Long reviewId) {
@@ -88,18 +97,18 @@ public class ReviewService {
     }
 
     private void verifyReview(Review review) {
-        memberService.findMember(review.getMember().getMemberId());
-        productService.readProduct(review.getProduct().getProductId());
+        memberService.findVerifiedMember(review.getMemberId());
+        productService.readProduct(review.getProductId());
     }
 
     private void verifyReviewAskedMember(Review review, Review foundReview) {
-        if(!memberService.verifyAskedMember(review.getMember().getMemberId(), foundReview.getMember().getMemberId())){
+        if(!memberService.verifyAskedMember(review.getMemberId(), foundReview.getMemberId())){
             throw new BusinessLogicException(ExceptionCode.REVIEW_UPDATE_NO_PERMISSION);
         }
     }
 
     private void verifyReviewAskedMember(Long memberId, Review foundReview) {
-        if(!memberService.verifyAskedMember(memberId, foundReview.getMember().getMemberId())){
+        if(!memberService.verifyAskedMember(memberId, foundReview.getMemberId())){
             throw new BusinessLogicException(ExceptionCode.REVIEW_DELETE_NO_PERMISSION);
         }
     }
