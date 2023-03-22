@@ -9,7 +9,7 @@ export const getProductList = async (page, size) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(response);
+    // console.log(response);
     console.log('getItemList 받아오기 성공');
     return response;
   } catch (error) {
@@ -25,7 +25,7 @@ export const categoryProductList = async (categoryFilter) => {
       url: `/products/category?category=${categoryFilter}&page=0&size=10`,
     });
     console.log('categoryProductList 받아오기 성공');
-    console.log(response);
+    // console.log(response);
     return response;
   } catch (error) {
     console.log('categoryProductList 받아오기 실패');
@@ -34,7 +34,6 @@ export const categoryProductList = async (categoryFilter) => {
 };
 
 export const searchProductList = async (keyword) => {
-  console.log(keyword);
   try {
     const response = await axios({
       method: 'get',
@@ -44,7 +43,7 @@ export const searchProductList = async (keyword) => {
       },
     });
     console.log('searchProductList 받아오기 성공');
-    console.log(response);
+    // console.log(response);
     return response;
   } catch (error) {
     console.log('searchProductList 받아오기 실패');
