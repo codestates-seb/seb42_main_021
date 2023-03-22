@@ -2,12 +2,12 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.review.service;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,14 +75,18 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public Page<Review> findReviews(Long productId, int page, int size) {
-        Page<Review> reviewPage = reviewRepository.findPageByProductId(productId, PageRequest.of(page, size, Sort.by("reviewId")));
-        List<Review> mappingReviews = reviewPage.getContent().stream().map(review -> {
-            Member member = memberService.findVerifiedMember(review.getMemberId());
-            review.setMember(member);
+        Page<Review> reviewPage = reviewRepository.findPageByProductId(productId, PageRequest.of(page, size, Sort.by("reviewId"))); // Review Entity를 가져옴
+        List<Review> reviews = reviewPage.getContent(); // Review List
+        Set<Long> memberIds = reviews.stream().map(Review::getMemberId).collect(Collectors.toSet()); // MemberId Set
+
+        Map<Long, Member> members = memberService.getVerifiedMembers(memberIds).stream().collect(Collectors.toMap(Member::getMemberId, Function.identity())); // SELECT 결과 가져옴
+
+        reviews = reviews.stream().map(review -> { // Review Entity에 Member 객체 매핑
+            review.setMember(members.get(review.getMemberId()));
             return review;
         }).collect(Collectors.toList());
 
-        return new PageImpl<>(mappingReviews, PageRequest.of(page, size, Sort.by("reviewId")), mappingReviews.size());
+        return new PageImpl<>(reviews, PageRequest.of(page, size, Sort.by("reviewId")), reviews.size()); // mapping된 Review Entity를 Page로 다시 변환
     }
 
     public void deleteReview(Long reviewId) {
