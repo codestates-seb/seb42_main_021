@@ -3,9 +3,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import styled from 'styled-components';
 
-import shoppingCartItem from '../../img/shoppingCartItem.png';
-import { useProduct } from '../store';
-import { Navigate } from 'react-router-dom';
+import newAxios from '../newAxios';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
@@ -122,26 +120,13 @@ const ShoppingItems = ({ setOrderPrice }) => {
   // useEffect winddow.location.path로 현재 경로페이지 확인하기
 
   const readProductList = async () => {
-    const { data } = await axios.get(`/carts`, {
-      headers: {
-        Authorization: `Bearer ${accesseToken} `,
-        Refresh: `${refreshToken}`,
-      },
-    });
+    const { data } = await newAxios.get(`/carts`);
+
     return data;
   };
 
   const sendCountInformation = async (cartId, quantity) => {
-    await axios.patch(
-      `/carts/${cartId}`,
-      { quantity },
-      {
-        headers: {
-          Authorization: `Bearer ${accesseToken} `,
-          Refresh: `${refreshToken}`,
-        },
-      }
-    );
+    await newAxios.patch(`/carts/${cartId}`, { quantity });
     setUpdateProdcut(0);
   };
 
@@ -195,12 +180,7 @@ const ShoppingItems = ({ setOrderPrice }) => {
   };
 
   const handleDelte = async (cartId) => {
-    await axios.delete(`/carts/${cartId}`, {
-      headers: {
-        Authorization: `Bearer ${accesseToken} `,
-        Refresh: `${refreshToken}`,
-      },
-    });
+    await newAxios.delete(`/carts/${cartId}`);
     setUpdateProdcut(0);
   };
 
