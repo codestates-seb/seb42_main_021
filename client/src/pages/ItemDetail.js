@@ -4,10 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
-import { FaShoppingCart } from 'react-icons/fa';
-import Footer from '../components/main/Footer';
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
+import Footer from '../components/main/Footer';
+
+import { FaShoppingCart } from 'react-icons/fa';
 import ReviewForm from '../components/review/ReviewForm';
 import ReadReviews from '../components/review/ReadReviews';
 
@@ -33,10 +34,11 @@ const ProductInformation = styled.div`
   }
   > div {
     width: 80%;
-    #productName {
-      font-size: xxx-large;
+    word-break: keep-all;
+    #product-name {
+      font-size: xx-large;
     }
-    #productPrice {
+    #product-price {
       font-size: xx-large;
     }
   }
@@ -108,7 +110,6 @@ const ItemDetail = () => {
 
   const [productDetail, setProductDetail] = useState(null);
   const [productReviews, setProductReviews] = useState(null);
-  const [carts, setCarts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
@@ -126,14 +127,6 @@ const ItemDetail = () => {
   };
 
   const handleShoppingBag = () => {
-    getCartItems()
-      .then((cartItems) => {
-        setCarts(cartItems);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
     const item = {
       productId: productDetail.productId,
       quantity: 1,
@@ -169,21 +162,6 @@ const ItemDetail = () => {
     navigate('/product');
   };
 
-  const getCartItems = async () => {
-    try {
-      const { data } = await axios.get('/carts', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          refreshToken: `${refreshToken}`,
-        },
-      });
-      console.log(data);
-      return data.data;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     findProductByProductId(id).then((productInformation) => {
       setProductDetail(productInformation);
@@ -206,17 +184,17 @@ const ItemDetail = () => {
             </ImageBox>
             <ProductInformation>
               <div>
-                <div id="productName">{productDetail.productName}</div>
-                <div id="productPrice">
+                <div id="product-name">{productDetail.productName}</div>
+                <div id="product-price">
                   {productDetail.price.toLocaleString('ko-KR')}원
                 </div>
               </div>
-              {accessToken && (
+              {refreshToken && (
                 <button type="button" onClick={handleShoppingBag}>
                   <FaShoppingCart size="40px" />
                 </button>
               )}
-              {accessToken && (
+              {refreshToken && (
                 <>
                   <FormButton
                     type="button"
@@ -257,7 +235,6 @@ const ItemDetail = () => {
           <h3>상품 리뷰</h3>
           <ReviewForm
             productId={productDetail?.productId}
-            setProductReviews={setProductReviews}
             isEditClicked={isEditClicked}
             setIsEditClicked={setIsEditClicked}
             editingReview={editingReview}
