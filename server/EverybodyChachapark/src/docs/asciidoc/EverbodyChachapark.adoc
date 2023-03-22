@@ -131,6 +131,18 @@ include::{snippets}/logout-member/request-headers.adoc[]
 .http-response
 include::{snippets}/logout-member/http-response.adoc[]
 
+=== 리프레시 토큰
+.curl-request
+include::{snippets}/post-member-refresh/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-member-refresh/http-request.adoc[]
+
+.request-headers
+include::{snippets}/post-member-refresh/request-headers.adoc[]
+
+.http-response
+include::{snippets}/post-member-refresh/http-response.adoc[]
 
 == ProductController
 === 상품 등록
