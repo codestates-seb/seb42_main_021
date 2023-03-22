@@ -29,7 +29,7 @@ const ItemListContainerWrap = styled.div`
   }
 `;
 
-const SearchContainer = styled.div`
+const SearchContainer = styled.form`
   display: flex;
   justify-content: center;
   position: relative;
@@ -88,7 +88,7 @@ const ItemList = () => {
   const navigate = useNavigate();
 
   const [items, setItems] = useState([]);
-  const [isSubmitClicked] = useState(true);
+  const isSubmitClicked = true;
 
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
@@ -100,17 +100,19 @@ const ItemList = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      const filterProductName = items.filter((item) => {
-        return item.productName
-          .toLowerCase()
-          .includes(searchValue.toLowerCase());
-      })[0];
-      console.log(filterProductName.productName);
-      console.log(searchValue);
-      setKeyword(filterProductName.productName);
+      event.preventDefault();
+      if (!searchValue) {
+        const getProductListFilter = async () => {
+          const response = await getProductList(page, size);
+          setItems(response.data.data);
+          setCount(response.data.pageInfo.totalElements);
+        };
+        getProductListFilter();
+      }
+      setKeyword(searchValue);
     }
   };
-  console.log(keyword);
+  console.log(searchValue);
   const handleChange = (e) => {
     setSearchValue(e.target.value);
   };
@@ -122,8 +124,6 @@ const ItemList = () => {
   useEffect(() => {
     const getProductListFilter = async () => {
       const response = await getProductList(page, size);
-      console.log(response.data.data);
-      console.log(response.data.pageInfo);
       // setItems((prevItems) => [...prevItems, ...response.data.data]);
       setItems(response.data.data);
       setCount(response.data.pageInfo.totalElements);
@@ -132,35 +132,28 @@ const ItemList = () => {
   }, [page, size]);
 
   useEffect(() => {
-    // if(categoryFilter.length === 0) return;
+    if (!categoryFilter) return;
     if (categoryFilter === 'NO_CATEGORY') {
       window.location.reload();
     }
-    if (categoryFilter.length > 0) {
-      const categoryProductListFilter = async () => {
-        // console.log(categoryFilter);
-        const response = await categoryProductList(categoryFilter);
-        console.log(response.data.data);
-        setItems(response.data.data);
-        // setCount(response.data.pageInfo.totalElements);
-        setCount(response.data.data.length);
-      };
-      categoryProductListFilter();
-    }
+    const categoryProductListFilter = async () => {
+      const response = await categoryProductList(categoryFilter);
+      // console.log(response.data.data);
+      setItems(response.data.data);
+      setCount(response.data.data.length);
+    };
+    categoryProductListFilter();
   }, [categoryFilter]);
 
   useEffect(() => {
-    // if(keyword.length === 0) return;
-    if (keyword.length > 0) {
-      const searchProductListFilter = async () => {
-        // console.log(keyword);
-        const response = await searchProductList(keyword);
-        console.log(response.data.data);
-        setItems(response.data.data);
-        setCount(response.data.data.length);
-      };
-      searchProductListFilter();
-    }
+    if (!keyword) return;
+    const searchProductListFilter = async () => {
+      const response = await searchProductList(keyword);
+      console.log(response.data.data);
+      setItems(response.data.data);
+      setCount(response.data.data.length);
+    };
+    searchProductListFilter();
   }, [keyword]);
 
   return (
@@ -175,6 +168,7 @@ const ItemList = () => {
                 placeholder="찾으시려는 상품의 이름을 입력 후 Enter 해주세요."
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
+                type="text"
               />
             </SearchContainer>
             <CategoryContainer
