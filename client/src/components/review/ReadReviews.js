@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import axios from 'axios';
+import newAxios from '../newAxios';
+import jwt_decode from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 
 import { Rating } from 'react-simple-star-rating';
@@ -68,18 +69,12 @@ const UserInformation = styled.div`
 `;
 
 function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const accessToken = cookies.accessToken;
-  const refreshToken = cookies.refreshToken;
+  const [cookies] = useCookies();
+  const userNickName = jwt_decode(cookies.accessToken).nickname;
 
   const handeleDeleteReview = (reviewId) => {
-    axios
-      .delete(`/reviews/${reviewId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Refresh: `${refreshToken}`,
-        },
-      })
+    newAxios
+      .delete(`/reviews/${reviewId}`)
       .then(() => {
         window.location.reload();
       })
@@ -120,18 +115,22 @@ function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
                   <div>{review.reviewMember.nickname}</div>
                 </div>
                 <div id="review-edit">
-                  <button
-                    type="button"
-                    onClick={() => handleEditReview(review)}
-                  >
-                    수정
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handeleDeleteReview(review.reviewId)}
-                  >
-                    삭제
-                  </button>
+                  {userNickName === review.reviewMember.nickname && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleEditReview(review)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handeleDeleteReview(review.reviewId)}
+                      >
+                        삭제
+                      </button>
+                    </>
+                  )}
                 </div>
               </UserInformation>
               <div id="review">{review.content}</div>
