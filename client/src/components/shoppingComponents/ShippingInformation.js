@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import DaumPostCode from './DaumPostCode';
+import newAxios from '../newAxios';
 
 const ShippingLayout = styled.div`
   display: flex;
@@ -127,8 +128,7 @@ const ShippingInformation = ({ orderPrice }) => {
     );
   };
 
-  const handleSubmit = () => {
-    if (orderPrice !== 0) return;
+  const handleSubmit = async () => {
     if (!address && !receiver) {
       popupOpen('받는 사람과 주소를 입력해주세요');
     }
@@ -140,6 +140,13 @@ const ShippingInformation = ({ orderPrice }) => {
     }
     if (orderPrice === 0) {
       popupOpen('주문할 상품이 없습니다');
+    }
+    try {
+      newAxios.post(`/orders`);
+      popupOpen('주문이 완료되었습니다');
+      //장바구니 리셋 => 다시 get해 오는 함수 필요
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

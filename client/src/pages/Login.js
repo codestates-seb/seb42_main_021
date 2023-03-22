@@ -191,7 +191,7 @@ const Login = () => {
             {...register('password', {
               required: '비밀번호는 필수 입력입니다.',
               minLength: {
-                value: 8,
+                value: 1,
                 message: '8자리 이상 비밀번호를 사용하세요.',
               },
             })}
@@ -228,11 +228,3 @@ const Login = () => {
 };
 
 export default Login;
-
-//로그인 데이터를 서버에 post한다
-//서버에서 액세스토큰과 리프레시토큰을 받아 저장한다(아마 쿠키)
-
-//또 다른 api.js 를 만든다
-//api.js 에서는 axios.create , interceptors(?)를 이용하여 액세스토큰이 만료되면 자동으로 토큰들을 서버에 주는 로직을 담고있다
-//로그인 한 유저가 액세스토큰값이 있어야만 확인 할 수 있는데이터는
-//axios.get이 아니라 아니라 api.get를 이용해서 서버에서 데이터를 받아온다

@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
-import Main from '../components/main/Main';
-import MainLayout from '../components/main/MainLayout';
-import Footer from '../components/main/Footer';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
-
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import newAxios from '../components/newAxios';
+
+import Footer from '../components/main/Footer';
+import MainLayout from '../components/main/MainLayout';
+import Main from '../components/main/Main';
 
 const NologinUser = styled.div`
   font-size: 20px;
@@ -163,19 +164,14 @@ const Mypage = () => {
   const fileInput = useRef();
 
   const readUserInfomation = async () => {
-    const { data } = await axios.get(`/members/mypage`, {
-      headers: {
-        Authorization: `Bearer ${accesseToken} `,
-        Refresh: `${refreshToken}`,
-      },
-    });
+    const { data } = await newAxios.get(`/members/mypage`);
     return data;
   };
 
-  // const readOrderData = async () => {
-  //   const { data } = await axios.get(`/members/1/orders`);
-  //   console.log(data);
-  // };
+  const readOrderData = async () => {
+    const { data } = await newAxios.get(`/orders/all`);
+    return data;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,9 +181,13 @@ const Mypage = () => {
       setImage(data.data.profileImg);
       setComment(data.data.comment || '등록해주세요!');
     };
+    const orderProduct = async () => {
+      const data = await readOrderData();
+      console.log(data);
+    };
     fetchData();
+    orderProduct();
     setUpdateProdcut(1);
-    // await readOrderData();
   }, [updateProduct]);
 
   const clickedToggle = () => {
@@ -205,16 +205,7 @@ const Mypage = () => {
   const handleSubmitEditedName = async (event) => {
     //서버에 수정된 이름 제출하기
     try {
-      axios.patch(
-        '/members/info',
-        { nickname: name },
-        {
-          headers: {
-            Authorization: `Bearer ${accesseToken} `,
-            Refresh: `${refreshToken}`,
-          },
-        }
-      );
+      newAxios.patch('/members/info', { nickname: name });
     } catch (error) {
       console.log(error);
     }
@@ -223,20 +214,8 @@ const Mypage = () => {
   };
 
   const handleSubmitEditedIntro = (event) => {
-    // event.preventDefalt();
-    //서버에 수정된 소개 제출하기
-    console.log(comment);
     try {
-      axios.patch(
-        '/members/info',
-        { comment: comment },
-        {
-          headers: {
-            Authorization: `Bearer ${accesseToken} `,
-            Refresh: `${refreshToken}`,
-          },
-        }
-      );
+      newAxios.patch('/members/info', { comment: comment });
     } catch (error) {
       console.log(error);
     }
@@ -245,19 +224,16 @@ const Mypage = () => {
   };
 
   const handleImage = (event) => {
-    //서버에 새로 등록된 이미지 보내주기
     const formData = new FormData();
     formData.append('profileImageFile', event.target.files[0]);
 
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${accesseToken}`,
-        Refresh: `${refreshToken}`,
       },
     };
 
-    axios
+    newAxios
       .patch('/members/profile-image', formData, config)
       .then((response) => {
         console.log(response.data);
@@ -269,12 +245,7 @@ const Mypage = () => {
   };
 
   const handleSignOut = async () => {
-    await axios.delete(`/members`, {
-      headers: {
-        Authorization: `Bearer ${accesseToken} `,
-        Refresh: `${refreshToken}`,
-      },
-    });
+    await newAxios.delete(`/members`);
     removeCookie('accessToken', { path: '/' });
     removeCookie('refreshToken', { path: '/' });
   };
@@ -307,7 +278,7 @@ const Mypage = () => {
                   <FaCamera color="#FFFFFF" />
                 </button>
               </div>
-              <h3>유저 닉네임</h3>
+              <h3>{name}</h3>
             </ProfileImageContainer>
             <ProfileContainer>
               {nameEdit ? (
