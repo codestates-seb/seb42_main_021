@@ -351,7 +351,7 @@ public class MemberControllerTest {
                 );
 
         logoutAction
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andDo(
                         document("logout-member",
                                 getRequestPreProcessor(),
