@@ -110,11 +110,8 @@ const BackBox = styled.div`
     height: 50px;
   }
 `;
-// {
-//   headers: {
-//     Authorization: `Bearer ${accessToken}`,
-//     Refresh: `${refreshToken}`,
-//   },
+
+
 const MainHeader = () => {
   const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
@@ -140,7 +137,9 @@ const MainHeader = () => {
   }
 
   const handleLogOut = async () => {
+
     await newAxios.post('/members/logout');
+
     removeCookie('accessToken');
     removeCookie('refreshToken');
     navigate('/');

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
+import newAxios from '../newAxios';
+import { useNavigate } from 'react-router-dom';
 
 import { Rating } from 'react-simple-star-rating';
 
@@ -45,11 +46,11 @@ function ReviewForm({
     })
   );
 
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const accessToken = cookies.accessToken;
+  const [cookies] = useCookies();
   const refreshToken = cookies.refreshToken;
 
   const imgRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isEditClicked) {
@@ -59,6 +60,11 @@ function ReviewForm({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!refreshToken) {
+      window.alert('리뷰를 작성하기 전에 로그인 해주세요.');
+      return navigate('/login');
+    }
 
     const formData = new FormData();
     if (image === null) {
@@ -81,15 +87,8 @@ function ReviewForm({
         )
       );
 
-      return axios
-        .post('/reviews', formData, {
-          headers: {
-            'content-type': 'multipart/form-data',
-            Accept: 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`,
-            Refresh: `${refreshToken}`,
-          },
-        })
+      return newAxios
+        .post('/reviews', formData)
         .then(() => {
           window.location.reload();
         })
@@ -114,14 +113,8 @@ function ReviewForm({
       )
     );
 
-    axios
-      .patch(`/reviews/${editingReview.reviewId}`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data',
-          Authorization: `Bearer ${accessToken}`,
-          Refresh: `${refreshToken}`,
-        },
-      })
+    newAxios
+      .patch(`/reviews/${editingReview.reviewId}`, formData)
       .then(() => {
         window.location.reload();
       })
