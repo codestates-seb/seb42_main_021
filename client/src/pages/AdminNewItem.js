@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
-import Footer from '../components/main/Footer';
 import ProductEditor from '../components/ui/ProductEditor';
+import Footer from '../components/main/Footer';
 
 const PageName = styled.h1`
   margin-bottom: 40px;
@@ -87,58 +87,31 @@ const ButtonBox = styled.div`
 `;
 
 const AdminNewItem = () => {
-  const [category, setCategory] = useState('선택해주세요');
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [image, setImage] = useState(null);
+  const { state } = useLocation();
+
+  const [category, setCategory] = useState(
+    state.productCategory || '선택해주세요'
+  );
+  const [status, setStatus] = useState(state.productStatus || '선택해주세요');
+  const [name, setName] = useState(state.productName || '');
+  const [subTitle, setSubTitle] = useState(state.subtitle || '');
+  const [price, setPrice] = useState(
+    state.price ? Number(state.price).toLocaleString('ko-KR') : ''
+  );
+  const [image, setImage] = useState(state.thumbnailImageURL || '');
   const [preview, setPreview] = useState('');
-  const [text, setText] = useState('');
-  const [status, setStatus] = useState('');
-  const [subTitle, setSubTitle] = useState('');
+  const [text, setText] = useState(state.productDetail || '');
+
   const [cookies, setCookie, removeCookie] = useCookies();
 
   const navigate = useNavigate();
+
   const imgRef = useRef();
-  const { state } = useLocation();
-
-  useEffect(() => {
-    setName(state.productName || '');
-    setPrice(state.price ? Number(state.price).toLocaleString('ko-KR') : '');
-    setImage(state.thumbnailImageURL || '');
-    setCategory(state.productCategory || '');
-    setText(state.productDetail || '');
-    setStatus(state.productStatus || '');
-    setSubTitle(state.subtitle || '');
-  }, [
-    state.productName,
-    state.price,
-    state.thumbnailImageURL,
-    state.productCategory,
-    state.productDetail,
-    state.productStatus,
-    state.subtitle,
-  ]);
-
-  const handleCategory = (event) => {
-    setCategory(event.target.value);
-  };
-
-  const handleStatus = (event) => {
-    setStatus(event.target.value);
-  };
-
-  const handleName = (event) => {
-    setName(event.target.value);
-  };
 
   const handlePrice = (event) => {
     const inputValue = event.target.value.replace(/[^0-9]/g, '');
     const formattedPrice = Number(inputValue).toLocaleString('ko-KR');
     setPrice(formattedPrice);
-  };
-
-  const handleSubtitle = (event) => {
-    setSubTitle(event.target.value);
   };
 
   const handleImageChange = () => {
@@ -158,26 +131,18 @@ const AdminNewItem = () => {
     setImage(null);
   };
 
-  const handleText = (contents) => {
-    setText(contents);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (category === '선택해주세요') {
       window.alert('상품 카테고리를 선택해주세요.');
       return;
-    } else if (status === '선택해주세요') {
+    }
+    if (status === '선택해주세요') {
       window.alert('상품 판매 상태를 선택해주세요.');
       return;
-    } else if (image === null) {
-      window.alert('상품 대표 이미지를 첨부해주세요.');
-      return;
-    } else if (text === '') {
+    }
+    if (text === '') {
       window.alert('상품 상세 설명을 입력해주세요.');
-      return;
-    } else if (subTitle === '') {
-      window.alert('상품 부제목을 입력해주세요.');
       return;
     }
 
@@ -224,8 +189,7 @@ const AdminNewItem = () => {
       } catch (error) {
         console.log(error);
       }
-      navigate('/product');
-      return;
+      return navigate('/product');
     }
 
     formData.append('thumbnailImageFile', image);
@@ -260,8 +224,7 @@ const AdminNewItem = () => {
     } catch (error) {
       console.error(error);
     }
-    navigate('/product');
-    return;
+    return navigate('/product');
   };
 
   return (
@@ -274,8 +237,11 @@ const AdminNewItem = () => {
           <ItemInformationContainer onSubmit={handleSubmit}>
             <ItemInformationBox>
               <div>
-                <label>상품 카테고리</label>
-                <select value={category} onChange={handleCategory}>
+                <label htmlFor="상품 카테고리">상품 카테고리</label>
+                <select
+                  value={category}
+                  onChange={(event) => setCategory(event.target.value)}
+                >
                   <option value="선택해주세요">선택해주세요</option>
                   <option value="TENT">텐트</option>
                   <option value="CHAIR">체어</option>
@@ -285,8 +251,11 @@ const AdminNewItem = () => {
                 </select>
               </div>
               <div>
-                <label>상품 판매 상태</label>
-                <select value={status} onChange={handleStatus}>
+                <label htmlFor="상품 판매 상태">상품 판매 상태</label>
+                <select
+                  value={status}
+                  onChange={(event) => setStatus(event.target.value)}
+                >
                   <option value="선택해주세요">선택해주세요</option>
                   <option value="PRODUCT_FOR_SALE">판매 중</option>
                   <option value="PRODUCT_SOLD_OUT">품절</option>
@@ -297,7 +266,7 @@ const AdminNewItem = () => {
                 <label htmlFor="상품명">상품명</label>
                 <ContentInput
                   type="text"
-                  onChange={handleName}
+                  onChange={(event) => setName(event.target.value)}
                   value={name}
                   required
                 />
@@ -307,7 +276,7 @@ const AdminNewItem = () => {
                 <ContentInput
                   type="text"
                   value={subTitle}
-                  onChange={handleSubtitle}
+                  onChange={(event) => setSubTitle(event.target.value)}
                   required
                 />
               </div>
@@ -328,6 +297,7 @@ const AdminNewItem = () => {
                   accept="image/*"
                   onChange={handleImageChange}
                   ref={imgRef}
+                  required
                 />
                 <button type="button" onClick={handleDismiss}>
                   삭제하기
@@ -342,7 +312,10 @@ const AdminNewItem = () => {
             </ItemInformationBox>
             <ItemDescriptionBox>
               <div>상품 상세설명</div>
-              <ItemDescription handleText={handleText} text={text} />
+              <ItemDescription
+                handleText={(contents) => setText(contents)}
+                text={text}
+              />
             </ItemDescriptionBox>
             <ButtonBox>
               <button type="submit">
