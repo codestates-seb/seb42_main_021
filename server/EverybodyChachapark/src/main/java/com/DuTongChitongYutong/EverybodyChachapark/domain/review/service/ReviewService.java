@@ -1,12 +1,13 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.review.service;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.ProductService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.entity.Review;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.review.repository.ReviewRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,8 +38,8 @@ public class ReviewService {
     public Review createReview(Review review, MultipartFile imageFile) {
         String imageURL = facadeImage. createImageURL(imageFile);
         review.setImageURL(imageURL);
-        review.getMember().setMemberId(memberService.findByEmail().getMemberId());
 
+        review.setMemberId(memberService.findByEmail().getMemberId());
         verifyReview(review); // 작성자, 상품 검증
 
         // Todo: ImageURL 생성 처리
@@ -43,7 +48,7 @@ public class ReviewService {
     }
 
     public Review updateReview(Long reviewId, Review review, MultipartFile imageFile) {
-        review.getMember().setMemberId(memberService.findByEmail().getMemberId());
+        review.setMemberId(memberService.findByEmail().getMemberId());
 
         Review foundReview = findReview(reviewId);
         verifyReviewAskedMember(review, foundReview);
@@ -70,7 +75,18 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public Page<Review> findReviews(Long productId, int page, int size) {
-        return reviewRepository.findPageByProduct_ProductId(productId, PageRequest.of(page, size, Sort.by("reviewId")));
+        Page<Review> reviewPage = reviewRepository.findPageByProductId(productId, PageRequest.of(page, size, Sort.by("reviewId"))); // Review Entity를 가져옴
+        List<Review> reviews = reviewPage.getContent(); // Review List
+        Set<Long> memberIds = reviews.stream().map(Review::getMemberId).collect(Collectors.toSet()); // MemberId Set
+
+        Map<Long, Member> members = memberService.getVerifiedMembers(memberIds).stream().collect(Collectors.toMap(Member::getMemberId, Function.identity())); // SELECT 결과 가져옴
+
+        reviews = reviews.stream().map(review -> { // Review Entity에 Member 객체 매핑
+            review.setMember(members.get(review.getMemberId()));
+            return review;
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(reviews, PageRequest.of(page, size, Sort.by("reviewId")), reviews.size()); // mapping된 Review Entity를 Page로 다시 변환
     }
 
     public void deleteReview(Long reviewId) {
@@ -88,18 +104,18 @@ public class ReviewService {
     }
 
     private void verifyReview(Review review) {
-        memberService.findMember(review.getMember().getMemberId());
-        productService.readProduct(review.getProduct().getProductId());
+        memberService.findVerifiedMember(review.getMemberId());
+        productService.readProduct(review.getProductId());
     }
 
     private void verifyReviewAskedMember(Review review, Review foundReview) {
-        if(!memberService.verifyAskedMember(review.getMember().getMemberId(), foundReview.getMember().getMemberId())){
+        if(!memberService.verifyAskedMember(review.getMemberId(), foundReview.getMemberId())){
             throw new BusinessLogicException(ExceptionCode.REVIEW_UPDATE_NO_PERMISSION);
         }
     }
 
     private void verifyReviewAskedMember(Long memberId, Review foundReview) {
-        if(!memberService.verifyAskedMember(memberId, foundReview.getMember().getMemberId())){
+        if(!memberService.verifyAskedMember(memberId, foundReview.getMemberId())){
             throw new BusinessLogicException(ExceptionCode.REVIEW_DELETE_NO_PERMISSION);
         }
     }
