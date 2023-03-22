@@ -20,7 +20,7 @@ public class OrderProduct extends BaseTime {
     private Long orderProductId;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @Column(nullable = false)
@@ -41,7 +41,7 @@ public class OrderProduct extends BaseTime {
     }
 
     public static OrderProductDto toDto(OrderProduct orderProduct){
-        return new OrderProductDto(orderProduct.getOrder(), orderProduct.getProductId(), orderProduct.getPrice(), orderProduct.getQuantity());
+        return new OrderProductDto(orderProduct.getProductId(), orderProduct.getPrice(), orderProduct.getQuantity());
     }
 
 }

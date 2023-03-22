@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -18,15 +20,15 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<SingleResponseDto<OrderDto>> createOrder(@RequestParam Long memberId){
+    public ResponseEntity<SingleResponseDto<OrderDto>> createOrder(){
 
-        return new ResponseEntity<>(new SingleResponseDto<>(orderService.createOrder(memberId)),HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(orderService.createOrder()),HttpStatus.CREATED);
     }
 
-    @PostMapping("/cancel/{orderId}")
+    @PatchMapping("/cancel/{orderId}")
     public ResponseEntity cancelOrder(@PathVariable Long orderId){
         orderService.cancelOrder(orderId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{orderId}")
@@ -34,4 +36,12 @@ public class OrderController {
 
         return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrder(orderId)), HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<SingleResponseDto<List<OrderDto.Response>>> readOrders(){
+
+        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders()), HttpStatus.OK);
+    }
+
+
 }

@@ -46,7 +46,7 @@ public class Product extends BaseTime {
     @Enumerated(value = EnumType.STRING)
     private ProductStatus productStatus = ProductStatus.PRODUCT_FOR_SALE;
 
-    @Column(name = "product_detail")
+    @Column(name = "product_detail", length = 9999)
     private String productDetail;
 
     public Product(String productName, String subtitle, int price, String thumbnailImageURL, String productDetail){

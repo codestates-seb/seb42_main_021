@@ -8,8 +8,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderProductDto {
 
-    private Order order;
-
     private Long productId;
 
     private int price;
