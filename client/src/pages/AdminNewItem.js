@@ -76,6 +76,7 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: right;
   margin-bottom: 20px;
+  z-index: 1000;
   button {
     width: 100px;
     height: 40px;

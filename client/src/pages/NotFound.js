@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactComponent as NotfoundImg } from '../img/not_found.svg';
+import { ReactComponent as NotfoundImage } from '../img/not_found.svg';
 
 const Main = styled.div`
   height: 100%;
@@ -49,10 +49,10 @@ const ContentBox = styled.div`
   align-items: center;
 `;
 
-const ImgBox = styled.div`
+const ImageBox = styled.div`
   width: 195px;
   height: 195px;
-  ${NotfoundImg} {
+  ${NotfoundImage} {
     border-radius: 50%;
   }
 `;
@@ -89,9 +89,9 @@ const NotFound = () => {
         <ContainerBox>
           <MainBox>
             <ContentBox>
-              <ImgBox>
-                <NotfoundImg />
-              </ImgBox>
+              <ImageBox>
+                <NotfoundImage />
+              </ImageBox>
               <TextBox>
                 <TitleH1>Page not found</TitleH1>
                 <TitleP>

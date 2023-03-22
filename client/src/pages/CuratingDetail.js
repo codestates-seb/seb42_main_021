@@ -5,10 +5,11 @@ import { useParams } from 'react-router-dom';
 import Location from '../components/mapApi/Location';
 import { curationList } from '../assets/curationState';
 
-import locationImg from '../img/location.png';
 import SubCarousel from '../components/ui/SubCarousel';
 import CuratingBodyImg from '../components/curating/CuratingBodyImg';
 import Footer from '../components/main/Footer';
+
+import locationImg from '../img/location.png';
 
 const CuratingDetailLayout = styled.div`
   width: 100%;
@@ -148,7 +149,6 @@ const CuratingDetail = () => {
   const ID = Number(id);
 
   const [carousel] = useState(curationList.SubCarouselImg[ID - 1]);
-  console.log(carousel);
   const [location] = useState([curationList.mapLocation[ID - 1]]);
   const [curatingContent] = useState([curationList.curatingContent[ID - 1]]);
   console.log(location[0].title);
