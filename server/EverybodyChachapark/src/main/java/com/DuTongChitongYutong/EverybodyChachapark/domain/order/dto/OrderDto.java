@@ -1,5 +1,7 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.Order;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,11 +12,37 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto {
 
-    private long OrderId;
+    private Long orderId;
+
+    private int totalPrice;
+
+    private OrderStatus orderStatus;
 
     private List<OrderProductDto> orderProductDtos;
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime modifiedAt;
+    public OrderDto(Order order, List<OrderProductDto> orderProductDtos){
+        this.orderId = order.getOrderId();
+        this.totalPrice = order.getTotalPrice();
+        this.orderStatus = order.getOrderStatus();
+        this.createdAt = order.getCreatedAt();
+        this.orderProductDtos = orderProductDtos;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Response{
+
+        private Long orderId;
+
+        private int totalPrice;
+
+        private OrderStatus orderStatus;
+
+        private LocalDateTime createdAt;
+
+    }
+
+
 }
