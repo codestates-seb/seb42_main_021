@@ -1,6 +1,8 @@
 package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
