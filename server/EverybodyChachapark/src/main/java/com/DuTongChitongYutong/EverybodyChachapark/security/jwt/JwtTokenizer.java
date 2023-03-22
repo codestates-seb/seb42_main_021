@@ -49,10 +49,12 @@ public class JwtTokenizer {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", member.getRoles());
         claims.put("email", member.getEmail());
+        claims.put("nickname", member.getNickname());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(member.getEmail())
+                .setSubject(member.getNickname())
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(calendar.getTime())
                 .signWith(key, SignatureAlgorithm.HS256)

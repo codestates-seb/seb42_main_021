@@ -83,8 +83,12 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.POST, "/reviews").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/reviews/*").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/reviews/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.PATCH, "/products/*").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/products/*").hasRole("ADMIN")
                         .anyRequest().permitAll()
-                );
+                )
+                .oauth2Login(withDefaults());
         return http.build();
     }
 
