@@ -26,7 +26,7 @@ public class Review extends BaseTime {
     private int score;
 
     @Column(nullable = false)
-    private String imageURL = "[]";  // Todo: 이미지 식별자
+    private String imageURL;  // Todo: 이미지 식별자
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")

@@ -21,8 +21,6 @@ public class ProductDto {
 
     private int productView;
 
-    private int productScore;
-
     private ProductCategory productCategory;
 
     private ProductStatus productStatus;

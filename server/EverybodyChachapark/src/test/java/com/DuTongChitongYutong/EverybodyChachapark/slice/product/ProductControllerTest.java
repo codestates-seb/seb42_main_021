@@ -288,11 +288,11 @@ public class ProductControllerTest {
         queryParams.add("size", size);
 
         List<Product> products = List.of(
-                new Product(1, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(2, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(3, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(4, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(5, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+                new Product(1, "텐트", "subtitle", 50000, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10), products.size());
@@ -365,11 +365,11 @@ public class ProductControllerTest {
 
 
         List<Product> products = List.of(
-                new Product(1, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(2, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(3, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(4, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(5, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+                new Product(1, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10, Sort.by("productId").ascending()), products.size());
@@ -444,11 +444,11 @@ public class ProductControllerTest {
         queryParams.add("size", size);
 
         List<Product> products = List.of(
-                new Product(1, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(2, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(3, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(4, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(5, "텐트", "subtitle", 50000, 5, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+                new Product(1, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10), products.size());

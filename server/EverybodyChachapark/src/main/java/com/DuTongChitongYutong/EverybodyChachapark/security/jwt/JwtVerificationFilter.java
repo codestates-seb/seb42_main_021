@@ -2,14 +2,16 @@ package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.exception.AuthExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.security.exception.SecurityAuthException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthExceptionCode;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
 import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +31,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private final CustomAuthorityUtils authorityUtils;
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
-    private final String HEADER_PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -41,9 +42,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             }
         } catch (SignatureException se) {
             request.setAttribute("exception", se);
-        } catch (ExpiredJwtException ee) {
-            request.setAttribute("exception", ee);
-        } catch (Exception e) {
+        } catch (SecurityAuthException e) {
             request.setAttribute("exception", e);
         }
         filterChain.doFilter(request, response);
@@ -56,44 +55,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     private Claims verifyJws(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = request.getHeader("Authorization").substring(HEADER_PREFIX.length());
+        String accessToken = request.getHeader("Authorization").substring(7);
         String refreshToken = request.getHeader("Refresh");
 
         if (refreshTokenRepository.findBy(accessToken) != null) {
-            throw new SecurityAuthException(AuthExceptionCode.MEMBER_LOGOUT);
-        }
-
-        Claims refreshTokenClaims = null;
-        Claims accessTokenClaims = null;
-
-        try {
-            accessTokenClaims = jwtTokenizer.parseClaims(accessToken);
-            return accessTokenClaims;
-        } catch (ExpiredJwtException e) {
-            refreshTokenClaims = jwtTokenizer.parseClaims(refreshToken);
-            String findRefreshToken = refreshTokenRepository.findBy(refreshTokenClaims.getSubject());
-            if (refreshToken.equals(findRefreshToken)) {
-                Member findMember = memberRepository.findByEmail(refreshTokenClaims.getSubject()).orElse(null);
-                String newAccessToken = jwtTokenizer.generateAccessToken(findMember);
-                response.setHeader("Authorization", "Bearer " + newAccessToken);
-                accessTokenClaims = jwtTokenizer.parseClaims(newAccessToken);
-            } else {
-                throw new SecurityAuthException(AuthExceptionCode.MEMBER_LOGOUT);
-            }
-        } catch (Exception e) {
-            request.setAttribute("exception", e);
-        }
-
-        return accessTokenClaims;
-    }
-
-    // 오류시 하기 코드 사용
-    /*private Claims verifyJws(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = request.getHeader("Authorization").substring(HEADER_PREFIX.length());
-        String refreshToken = request.getHeader("Refresh");
-
-        if (refreshTokenRepository.findBy(accessToken) != null) {
-            throw new SecurityAuthException(AuthExceptionCode.MEMBER_LOGOUT);
+            throw new SecurityAuthException(SecurityAuthExceptionCode.MEMBER_LOGOUT);
         }
 
         Claims refreshTokenClaims = null;
@@ -102,7 +68,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             refreshTokenClaims = jwtTokenizer.parseClaims(refreshToken);
             return jwtTokenizer.parseClaims(accessToken);
         } catch (ExpiredJwtException ee) {
-            if (refreshTokenClaims != null) {
+            // access-token이 만료되면 자동으로 header에 새로운 토큰을 응답해주는 로직, RefreshController 사용 후 활용하지 않는 기능
+            /*if (refreshTokenClaims != null) {
                 String findRefreshToken = refreshTokenRepository.findBy(refreshTokenClaims.getSubject());
 
                 if (refreshToken.equals(findRefreshToken)) {
@@ -111,11 +78,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                     response.setHeader("Authorization", "Bearer " + newAccessToken);
                     return jwtTokenizer.parseClaims(newAccessToken);
                 }
-            }
+            }*/
             request.setAttribute("exception", ee);
             return null;
         }
-    }*/
+    }
 
     private void setAuthenticationToContext(Claims claims) {
         String email = (String) claims.get("email");
