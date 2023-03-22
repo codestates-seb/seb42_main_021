@@ -110,21 +110,6 @@ const BackBox = styled.div`
   }
 `;
 
-const Logout = styled.button`
-  display: inline-block;
-  text-align: center;
-  vertical-align: center;
-  width: 70px;
-  height: 50px;
-  line-height: 50px;
-  background-color: #32465b;
-  border-radius: var(--bd-rd);
-  color: white;
-  font-size: 16px;
-  margin-right: 10px;
-  font-weight: bold;
-`;
-
 const MainHeader = () => {
   const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
@@ -160,8 +145,8 @@ const MainHeader = () => {
         Refresh: `${refreshToken}`,
       },
     });
-    // removeCookie('accessToken');
-    // removeCookie('refreshToken');
+    removeCookie('accessToken');
+    removeCookie('refreshToken');
     navigate('/');
   };
 
