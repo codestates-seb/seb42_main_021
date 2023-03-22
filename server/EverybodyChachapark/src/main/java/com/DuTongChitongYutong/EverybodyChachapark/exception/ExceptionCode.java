@@ -30,7 +30,7 @@ public enum ExceptionCode {
 
     // 주문 관련 예외
     ORDER_CANNOT_CANCEL(403, "이미 주문을 완료해서 취소할 수 없습니다."),
-    ORDER_ALREADY_CANCELED(403, "이미 취소된 주문입니다");
+    ORDER_ALREADY_CANCELED(403, "이미 취소된 주문입니다"),
 
     // 테스트
     TOKEN_NOT_FOUND(401, "토큰을 찾을 수 없습니다");
