@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import newAxios from '../newAxios';
 
 import logolast3 from '../../img/logolast3.png';
 import back from '../../img/back.svg';
@@ -110,22 +111,18 @@ const BackBox = styled.div`
   }
 `;
 
+
 const MainHeader = () => {
   const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies();
-  const accessToken = cookies.accessToken;
+  // const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
 
-  const getUserProfile = async (accessToken, refreshToken) => {
+  const getUserProfile = async () => {
     try {
-      const { data } = await axios.get(`/members/mypage`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Refresh: `${refreshToken}`,
-        },
-      });
+      const { data } = await newAxios.get(`/members/mypage`);
       return data.data;
     } catch (error) {
       console.error(error);
@@ -133,18 +130,16 @@ const MainHeader = () => {
   };
 
   if (refreshToken) {
-    getUserProfile(accessToken, refreshToken).then((profile) =>
-      setProfileImage(profile.profileImg)
-    );
+    getUserProfile().then((profile) => {
+      console.log(profile.profileImg);
+      setProfileImage(profile.profileImg);
+    });
   }
 
   const handleLogOut = async () => {
-    await axios.post('/members/logout', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Refresh: `${refreshToken}`,
-      },
-    });
+
+    await newAxios.post('/members/logout');
+
     removeCookie('accessToken');
     removeCookie('refreshToken');
     navigate('/');
