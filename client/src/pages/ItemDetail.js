@@ -21,7 +21,8 @@ const ImageBox = styled.div`
   padding: 30px 0;
   > img {
     width: 100%;
-    height: 100%;
+    height: 300px;
+    object-fit: cover;
   }
 `;
 
