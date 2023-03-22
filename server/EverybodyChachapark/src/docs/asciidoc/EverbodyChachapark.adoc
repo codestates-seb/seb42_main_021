@@ -143,10 +143,7 @@ include::{snippets}/post-member-refresh/request-headers.adoc[]
 
 .http-response
 include::{snippets}/post-member-refresh/http-response.adoc[]
-<<<<<<< HEAD
-=======
 
->>>>>>> a15ffaa5779cfdc8cbeb8a45cdf82650652fb167
 
 == ProductController
 === 상품 등록
