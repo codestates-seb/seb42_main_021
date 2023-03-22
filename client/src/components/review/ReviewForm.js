@@ -3,8 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 
-import { getProductReviews } from '../api/itemDetailAPI';
-
 import { Rating } from 'react-simple-star-rating';
 
 const ReviewFormContainer = styled.form`
@@ -35,10 +33,9 @@ const FormButton = styled.button`
 
 function ReviewForm({
   productId,
-  setProductReviews,
   isEditClicked,
-  editingReview,
   setIsEditClicked,
+  editingReview,
 }) {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState('');
@@ -94,9 +91,6 @@ function ReviewForm({
           },
         })
         .then(() => {
-          getProductReviews(productId).then((productReviewList) =>
-            setProductReviews(productReviewList)
-          );
           window.location.reload();
         })
         .catch((error) => {
@@ -129,9 +123,6 @@ function ReviewForm({
         },
       })
       .then(() => {
-        getProductReviews(productId).then((productReviewList) =>
-          setProductReviews(productReviewList)
-        );
         window.location.reload();
       })
       .catch((error) => {
