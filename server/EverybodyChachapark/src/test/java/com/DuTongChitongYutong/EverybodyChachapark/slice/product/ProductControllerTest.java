@@ -227,7 +227,7 @@ public class ProductControllerTest {
     @Test
     public void readProduct() throws Exception{
 
-        long productId = 1L;
+        Long productId = 1L;
 
         ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", "subtitle",0, 0,  ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]","상품 상세 내용" , LocalDateTime.now(), LocalDateTime.now());
 
