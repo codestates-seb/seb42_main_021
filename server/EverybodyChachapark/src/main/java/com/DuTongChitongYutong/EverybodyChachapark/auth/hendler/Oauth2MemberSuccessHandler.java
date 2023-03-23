@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.auth.hendler;
 
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
@@ -25,11 +26,14 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final MemberService memberService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public Oauth2MemberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils customAuthorityUtils, MemberService memberService) {
+    public Oauth2MemberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils customAuthorityUtils,
+                                      MemberService memberService, RefreshTokenRepository refreshTokenRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.customAuthorityUtils = customAuthorityUtils;
         this.memberService = memberService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
@@ -45,6 +49,10 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     private void saveMember(String email) {
         Member member = new Member(email);
+        String password = "123456789";
+        String nickname = email;
+        member.setPassword(password);
+        member.setNickname(nickname);
         memberService.createMember(member);
     }
 
@@ -64,18 +72,19 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         claims.put("roles", authorities);
 
         String accessToken = jwtTokenizer.generateAccessToken(member);
-        return accessToken;
+        return "Bearer " + accessToken;
     }
 
     private String delegateRefreshToken(Member member) {
         String refreshToken = jwtTokenizer.generateRefreshToken(member);
+        refreshTokenRepository.save(member.getEmail(), refreshToken);
         return refreshToken;
     }
 
     private URI createURI(String accessToken, String refreshToken) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
-        queryParams.add("refresh_tokne", refreshToken);
+        queryParams.add("refresh_token", refreshToken);
 
         return UriComponentsBuilder
                 .newInstance()
