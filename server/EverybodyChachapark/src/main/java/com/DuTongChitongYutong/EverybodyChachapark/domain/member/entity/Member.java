@@ -42,9 +42,6 @@ public class Member extends BaseTime {
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
-    @OneToMany(mappedBy = "member")
-    private List<Review> reviews = new ArrayList<>();
-
     public Member(String email) {
         this.email = email;
     }

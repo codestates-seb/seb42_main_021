@@ -28,27 +28,13 @@ public class Review extends BaseTime {
     @Column(nullable = false)
     private String imageURL;  // Todo: 이미지 식별자
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @Column
+    private Long memberId;
+
+    @Column
+    private Long productId;
+
+    @Transient
     private Member member;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
-
-    public void setMember(Member member) { // 양방향 매핑
-        this.member = member;
-        if (!this.member.getReviews().contains(this)) {
-            this.member.getReviews().add(this);
-        }
-    }
-
-//
-//    public void setProduct(Product product) { // 양방향 매핑
-//        this.product = product;
-//        if (!this.product.getReviews().contains(this)) {
-//            this.product.getReviews().add(this);
-//        }
-//    }
 
 }

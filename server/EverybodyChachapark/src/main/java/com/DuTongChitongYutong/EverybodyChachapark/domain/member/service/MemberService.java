@@ -3,6 +3,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.member.service;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.image.facade.FacadeImage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -165,9 +167,20 @@ public class MemberService {
         refreshTokenRepository.deleteBy(email);
     }
 
+    @Transactional(readOnly = true)
+    public List<Member> getVerifiedMembers(Set<Long> memberIds) {
+
+        List<Member> members = memberRepository.findAllById(memberIds);
+
+        if (members.size() != memberIds.size()) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
+        return members;
+    }
+
     private String getAccessToken(HttpServletRequest request) {
         return request.getHeader("Authorization").substring(7);
     }
-
 
 }
