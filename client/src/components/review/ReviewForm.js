@@ -34,9 +34,12 @@ const FormButton = styled.button`
 
 function ReviewForm({
   productId,
+  productReviews,
+  setProductReviews,
   isEditClicked,
   setIsEditClicked,
   editingReview,
+  setEditingReview,
 }) {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState('');
@@ -54,8 +57,10 @@ function ReviewForm({
 
   useEffect(() => {
     if (!isEditClicked) {
-      setText('');
-    } else setText(editingReview.content);
+      return setText('');
+    }
+    setText(editingReview.content);
+    setRating(editingReview.score);
   }, [isEditClicked, editingReview]);
 
   const handleCreatReview = () => {
@@ -79,8 +84,9 @@ function ReviewForm({
 
     instance
       .post('/reviews', newReview)
-      .then(() => {
-        window.location.reload();
+      .then((response) => {
+        const createdReview = response.data.data;
+        setProductReviews([...productReviews, createdReview]);
       })
       .catch((error) => {
         console.error(error);
@@ -113,8 +119,18 @@ function ReviewForm({
 
     instance
       .patch(`/reviews/${editingReview.reviewId}`, editedReview)
-      .then(() => {
-        window.location.reload();
+      .then((response) => {
+        const editedReview = response.data.data;
+        const editedReviews = productReviews.map((review) => {
+          if (review.reviewId === editedReview.reviewId) {
+            return {
+              ...editingReview,
+              ...editedReview,
+            };
+          }
+          return review;
+        });
+        setProductReviews(editedReviews);
       })
       .catch((error) => {
         console.error('리뷰 수정 실패:', error);
@@ -130,15 +146,31 @@ function ReviewForm({
     }
 
     isEditClicked ? handleEditReview() : handleCreatReview();
+
+    setImage(
+      new Blob([], {
+        type: 'image/jpg',
+      })
+    );
+    imgRef.current.value = '';
+    setText('');
+    setIsEditClicked(false);
+    setEditingReview(null);
+    setRating(0);
   };
 
   const handleDismiss = (event) => {
     event.preventDefault();
-    setRating(0);
-    setImage(null);
+    setImage(
+      new Blob([], {
+        type: 'image/jpg',
+      })
+    );
     imgRef.current.value = '';
     setText('');
     setIsEditClicked(false);
+    setEditingReview(null);
+    setRating(0);
   };
 
   return (
@@ -148,7 +180,7 @@ function ReviewForm({
         fillColor="#61a0ff"
         emptyColor="#C9C9C9"
         onClick={(rating) => setRating(rating)}
-        initialValue={isEditClicked ? editingReview.score : rating}
+        initialValue={rating}
       />
       <textarea
         value={text}
