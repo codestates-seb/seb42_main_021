@@ -26,14 +26,14 @@ public class Order extends BaseTime {
 
     private int totalPrice;
 
+    //구매한 상품 종류
+    private int productType;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.ORDER_WAITING;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderProduct> orderProduct = new ArrayList<>();
 
-    public static OrderDto.Response toDto(Order order){
-        return new OrderDto.Response(order.getOrderId(), order.getTotalPrice(), order.getOrderStatus(), order.getCreatedAt());
-    }
 
     }

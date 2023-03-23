@@ -16,6 +16,8 @@ public class OrderDto {
 
     private int totalPrice;
 
+    private int productType;
+
     private OrderStatus orderStatus;
 
     private List<OrderProductDto> orderProductDtos;
@@ -25,24 +27,12 @@ public class OrderDto {
     public OrderDto(Order order, List<OrderProductDto> orderProductDtos){
         this.orderId = order.getOrderId();
         this.totalPrice = order.getTotalPrice();
+        this.productType = order.getProductType();
         this.orderStatus = order.getOrderStatus();
         this.createdAt = order.getCreatedAt();
         this.orderProductDtos = orderProductDtos;
     }
 
-    @Getter
-    @AllArgsConstructor
-    public static class Response{
-
-        private Long orderId;
-
-        private int totalPrice;
-
-        private OrderStatus orderStatus;
-
-        private LocalDateTime createdAt;
-
-    }
 
 
 }
