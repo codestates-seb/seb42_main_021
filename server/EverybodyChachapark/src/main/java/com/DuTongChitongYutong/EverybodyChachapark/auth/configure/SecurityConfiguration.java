@@ -80,7 +80,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/members/signup").permitAll()
                         .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
-                        .antMatchers(HttpMethod.GET, "/members/mypage").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/members").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/carts").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/carts").hasRole("USER")
@@ -95,7 +95,7 @@ public class SecurityConfiguration {
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService))
+                        .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService, refreshTokenRepository))
                 );
         return http.build();
     }
