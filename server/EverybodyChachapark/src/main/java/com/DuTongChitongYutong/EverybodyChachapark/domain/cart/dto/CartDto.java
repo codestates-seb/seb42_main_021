@@ -3,8 +3,10 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.cart.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.SecondaryTable;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class CartDto {
@@ -13,6 +15,8 @@ public class CartDto {
     @Getter
     public static class Post {
         private long productId;
+        @NotBlank
+        @Range(min = 1)
         private int quantity;
     }
 
