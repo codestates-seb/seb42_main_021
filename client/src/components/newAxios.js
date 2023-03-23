@@ -2,11 +2,14 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
 
-const newAxios = axios.create({
+//라이브러리 이름 수정 =>axios말고
+//instance
+
+const instance = axios.create({
   baseURL: 'http://localhost:3000',
 });
 
-newAxios.interceptors.request.use(function (config) {
+instance.interceptors.request.use(function (config) {
   const accessToken = Cookies.get('accessToken');
   const refreshToken = Cookies.get('refreshToken');
 
@@ -22,7 +25,7 @@ newAxios.interceptors.request.use(function (config) {
   }
 });
 
-newAxios.interceptors.response.use(
+instance.interceptors.response.use(
   function (response) {
     return response;
   },
@@ -51,7 +54,7 @@ newAxios.interceptors.response.use(
         Cookies.set('accessToken', newAccessToken, {
           expires: accessTokenExpires,
         });
-        return await newAxios.request(originalConfig);
+        return await instance.request(originalConfig);
       } catch (error) {
         console.log('토큰 갱신 에러');
       }
@@ -60,4 +63,4 @@ newAxios.interceptors.response.use(
   }
 );
 
-export default newAxios;
+export default instance;
