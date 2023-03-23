@@ -1,6 +1,5 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.hendler;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.hendler;
 
-import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

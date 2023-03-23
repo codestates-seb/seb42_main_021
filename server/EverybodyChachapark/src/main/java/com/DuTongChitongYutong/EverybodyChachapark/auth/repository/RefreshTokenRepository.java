@@ -1,14 +1,11 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.repository;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.repository;
 
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 

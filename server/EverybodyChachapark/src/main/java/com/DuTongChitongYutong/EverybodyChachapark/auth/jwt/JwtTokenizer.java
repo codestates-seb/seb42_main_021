@@ -1,10 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.jwt;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
-import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
-import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

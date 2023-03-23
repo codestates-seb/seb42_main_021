@@ -1,9 +1,9 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.hendler;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.hendler;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.CustomAuthorityUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.rmi.server.ServerCloneException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
