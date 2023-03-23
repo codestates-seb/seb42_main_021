@@ -13,3 +13,9 @@ spring:
   sql:
     init:
       mode: always
+
+image:
+  local-path: src/main/resources/file/
+  server-url: ${server-url}/  # EC2 주소 입력
+  profileImage-name: profile-
+  dummyImage-name: not-found

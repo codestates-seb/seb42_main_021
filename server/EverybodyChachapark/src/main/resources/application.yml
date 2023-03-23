@@ -10,13 +10,6 @@ spring:
 account:
   admin: admin@gmail.com
 
-image:
-  local-path: src/main/resources/file/
-  server-url: http://localhost:8080/images/
-#  server-url: http://legendpano.codns.com:8085/images/
-  profileImage-name: profile-
-  dummyImage-name: not-found
-
 jwt:
   key: kim1234123412341234567895678956789567895678956789
   access-token-expiration-minutes: 30
