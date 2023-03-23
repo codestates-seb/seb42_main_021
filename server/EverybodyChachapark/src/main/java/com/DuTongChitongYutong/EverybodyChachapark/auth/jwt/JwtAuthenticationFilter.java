@@ -1,13 +1,12 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.jwt;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
-import com.DuTongChitongYutong.EverybodyChachapark.security.dto.LoginDto;
-import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.service.MemberDetailsService;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.dto.LoginDto;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.service.MemberDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -17,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

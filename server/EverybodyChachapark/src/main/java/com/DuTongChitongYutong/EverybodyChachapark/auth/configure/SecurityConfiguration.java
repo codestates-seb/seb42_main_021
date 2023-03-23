@@ -1,27 +1,24 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.configure;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.configure;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAccessDeniedHandler;
-import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationEntryPoint;
-import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationFailureHandler;
-import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationSuccessHandler;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtAuthenticationFilter;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtVerificationFilter;
-import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.service.MemberDetailsService;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.hendler.*;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.CustomAuthorityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
@@ -41,14 +38,23 @@ public class SecurityConfiguration {
     private final CustomAuthorityUtils authorityUtils;
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
+
 
     public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils
-            , RefreshTokenRepository refreshTokenRepository, MemberRepository memberRepository) {
+            , RefreshTokenRepository refreshTokenRepository, MemberRepository memberRepository, @Lazy MemberService memberService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.refreshTokenRepository = refreshTokenRepository;
         this.memberRepository = memberRepository;
+        this.memberService = memberService;
     }
+
+    @Value("${spring.security.oauth2.client.registration.google.clientId}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.client.registration.google.clientSecret}")
+    private String clientSecret;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -83,7 +89,13 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.POST, "/reviews").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/reviews/*").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/reviews/*").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.PATCH, "/products/*").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/products/*").hasRole("ADMIN")
                         .anyRequest().permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberService))
                 );
         return http.build();
     }
@@ -105,5 +117,21 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        var clientRegistration = clientRegistration();
+
+        return new InMemoryClientRegistrationRepository(clientRegistration);
+    }
+
+    private ClientRegistration clientRegistration() {
+        return CommonOAuth2Provider
+                .GOOGLE
+                .getBuilder("google")
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .build();
     }
 }

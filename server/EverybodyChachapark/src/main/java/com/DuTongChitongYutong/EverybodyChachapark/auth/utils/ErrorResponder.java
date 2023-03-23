@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.utils;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.utils;
 
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ErrorResponse;
 import com.google.gson.Gson;

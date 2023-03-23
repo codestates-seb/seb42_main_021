@@ -1,9 +1,9 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.controller;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.controller;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
-import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")

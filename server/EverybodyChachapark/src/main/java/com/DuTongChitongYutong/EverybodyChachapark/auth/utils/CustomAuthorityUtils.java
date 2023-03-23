@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.utils;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;

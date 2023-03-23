@@ -1,11 +1,8 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.service;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.service;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
-import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
-import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.CustomAuthorityUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

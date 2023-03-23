@@ -1,17 +1,14 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.jwt;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.jwt;
 
-import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
-import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
