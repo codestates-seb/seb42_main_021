@@ -30,7 +30,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ApplicationEventPublisher publisher;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final FacadeImage facadeImage;
@@ -50,7 +49,6 @@ public class MemberService {
         member.setProfileImg(facadeImage.makeProfileImage());
 
         Member savedMember = memberRepository.save(member);
-        //publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
 
         return savedMember;
     }
