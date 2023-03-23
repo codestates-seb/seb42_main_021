@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 import { useCookies } from 'react-cookie';
-import newAxios from '../newAxios';
+import instance from '../newAxios';
 import { useNavigate } from 'react-router-dom';
 
 import { Rating } from 'react-simple-star-rating';
@@ -58,15 +58,9 @@ function ReviewForm({
     } else setText(editingReview.content);
   }, [isEditClicked, editingReview]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleCreatReview = () => {
+    const newReview = new FormData();
 
-    if (!refreshToken) {
-      window.alert('리뷰를 작성하기 전에 로그인 해주세요.');
-      return navigate('/login');
-    }
-
-    const formData = new FormData();
     if (image === null) {
       setImage(
         new Blob([], {
@@ -74,53 +68,68 @@ function ReviewForm({
         })
       );
     }
-    formData.append('imageFile', image);
+    newReview.append('imageFile', image);
 
-    if (!isEditClicked) {
-      formData.append(
-        'requestBody',
-        new Blob(
-          [JSON.stringify({ productId, content: text, score: rating })],
-          {
-            type: 'application/json',
-          }
-        )
-      );
-
-      return newAxios
-        .post('/reviews', formData)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-
-    formData.append(
+    newReview.append(
       'requestBody',
-      new Blob(
-        [
-          JSON.stringify({
-            reviewId: editingReview.reviewId,
-            content: text,
-            score: rating,
-          }),
-        ],
-        {
-          type: 'application/json',
-        }
-      )
+      new Blob([JSON.stringify({ productId, content: text, score: rating })], {
+        type: 'application/json',
+      })
     );
 
-    newAxios
-      .patch(`/reviews/${editingReview.reviewId}`, formData)
+    instance
+      .post('/reviews', newReview)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleEditReview = () => {
+    const editedReview = new FormData();
+
+    if (image === null) {
+      setImage(
+        new Blob([], {
+          type: 'image/jpg',
+        })
+      );
+    }
+    editedReview.append('imageFile', image);
+
+    const editedReviewText = {
+      reviewId: editingReview.reviewId,
+      content: text,
+      score: rating,
+    };
+    editedReview.append(
+      'requestBody',
+      new Blob([JSON.stringify(editedReviewText)], {
+        type: 'application/json',
+      })
+    );
+
+    instance
+      .patch(`/reviews/${editingReview.reviewId}`, editedReview)
       .then(() => {
         window.location.reload();
       })
       .catch((error) => {
         console.error('리뷰 수정 실패:', error);
       });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!refreshToken) {
+      alert('리뷰를 작성하기 전에 로그인 해주세요.');
+      return navigate('/login');
+    }
+
+    isEditClicked ? handleEditReview() : handleCreatReview();
   };
 
   const handleDismiss = (event) => {
