@@ -27,21 +27,25 @@ public class OrderProduct extends BaseTime {
     private Long productId;
 
     @Column(nullable = false)
+    private String productName;
+
+    @Column(nullable = false)
     private int price;
 
     @Column(nullable = false)
     private int quantity;
 
-    public OrderProduct(Order order, Long productId, int price, int quantity)
+    public OrderProduct(Order order, Long productId, String productName, int price, int quantity)
     {
         this.order = order;
         this.productId = productId;
+        this.productName = productName;
         this.price = price;
         this.quantity = quantity;
     }
 
     public static OrderProductDto toDto(OrderProduct orderProduct){
-        return new OrderProductDto(orderProduct.getProductId(), orderProduct.getPrice(), orderProduct.getQuantity());
+        return new OrderProductDto(orderProduct.getProductId(), orderProduct.getProductName(), orderProduct.getPrice(), orderProduct.getQuantity());
     }
 
 }

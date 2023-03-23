@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.order.controller;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.service.OrderService;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
@@ -20,9 +21,10 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<SingleResponseDto<OrderDto>> createOrder(){
+    public ResponseEntity<SingleResponseDto<OrderDto>> createOrder(@RequestBody CartListDto cartListDto){
 
-        return new ResponseEntity<>(new SingleResponseDto<>(orderService.createOrder()),HttpStatus.CREATED);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(orderService.createOrder(cartListDto)),HttpStatus.CREATED);
     }
 
     @PatchMapping("/cancel/{orderId}")
@@ -30,15 +32,17 @@ public class OrderController {
         orderService.cancelOrder(orderId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+/*
     @GetMapping("/{orderId}")
     public ResponseEntity<SingleResponseDto<OrderDto>> readOrder(@PathVariable Long orderId){
 
         return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrder(orderId)), HttpStatus.OK);
     }
 
+ */
+
     @GetMapping("/all")
-    public ResponseEntity<SingleResponseDto<List<OrderDto.Response>>> readOrders(){
+    public ResponseEntity<SingleResponseDto<List<OrderDto>>> readOrders(){
 
         return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders()), HttpStatus.OK);
     }

@@ -10,6 +10,8 @@ public class OrderProductDto {
 
     private Long productId;
 
+    private String productName;
+
     private int price;
 
     private int quantity;
