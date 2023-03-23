@@ -8,91 +8,20 @@ import { useState } from 'react';
 import Main from '../components/main/Main';
 import logo1 from '../img/logo1.png';
 import MainHeader from '../components/main/MainHeader';
-
-const SignUpLayout = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow-y: scroll;
-  padding-left: 16px;
-  padding-right: 16px;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const LogoImgBox = styled.img`
-  width: 200px;
-  margin-bottom: 30px;
-`;
-const SignUpContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-const SignUpInputBox = styled.input`
-  width: 400px;
-  height: 40px;
-  border: none;
-  border-bottom: 2px solid var(--midgray);
-  font-size: 20px;
-  :focus {
-    outline: none;
-    border: 2px solid var(--blue);
-    border-radius: var(--bd-rd);
-    box-shadow: 5px 3px 3px var(--blue200);
-  }
-  :nth-child(n + 2) {
-    margin-top: 30px;
-  }
-`;
-const SignUpSubmitBox = styled.button`
-  width: 300px;
-  height: 50px;
-  margin-top: 70px;
-  border-radius: var(--bd-rd);
-  background-color: var(--blue);
-  font-size: 20px;
-  color: var(--white);
-  font-weight: 600;
-`;
-
-const ErrorMsg = styled.p`
-  color: red;
-  font-size: 15px;
-  margin-top: 10px;
-`;
-
-const HaveUser = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  position: absolute;
-  top: 50%;
-  width: 300px;
-  padding: 7px;
-  z-index: 200;
-  border-radius: var(--bd-rd);
-  border: 2px solid var(--midgray);
-  background-color: white;
-
-  .confirm {
-    margin-top: 20px;
-    font-size: 15px;
-    padding: 5px;
-    width: 40px;
-    background-color: var(--blue);
-    border-radius: var(--bd-rd);
-  }
-`;
+import {
+  ErrorMsg,
+  HaveUser,
+  LogoImgBox,
+  SignUpContainer,
+  SignUpInputBox,
+  SignUpLayout,
+  SignUpSubmitBox,
+} from '../components/signup/Signup.styled';
+//관심사 분리 커맨드 + i로 임포트 하기
+//3~5개 정도, 가독성이 떨어진다면 분리하기
 
 const SignUp = () => {
-  const [ModalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const {
     register,
@@ -182,7 +111,7 @@ const SignUp = () => {
             회원가입
           </SignUpSubmitBox>
         </SignUpContainer>
-        {ModalOpen && (
+        {modalOpen && (
           <HaveUser>
             <div>이미 가입된 회원입니다</div>
             <button className="confirm">
@@ -198,3 +127,5 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
+//
