@@ -1,9 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import light from '../../img/light.jpg';
+// import light from '../../img/light.jpg';
+import {
+  findProductByProductId,
+  getProductReviews,
+} from '../../components/api/itemDetailAPI';
 
-const ItemLayout = styled(Link)`
+const ItemLayoutButton = styled.button`
   width: 45%;
   height: 40%;
   :nth-child(2n + 1) {
@@ -43,9 +47,20 @@ const ItemValueBox = styled.div`
     font-weight: bold;
   }
 `;
+
 const ItemListItem = ({ item }) => {
+  const navigate = useNavigate();
+
+  const handleClick = async (event) => {
+    const id = event.target.value;
+    const url = `/product/${id}`;
+    const responseProductDetail = await findProductByProductId(id);
+    const responseReviews = await getProductReviews(id);
+    navigate(url, { state: { responseProductDetail, responseReviews } });
+  };
+
   return (
-    <ItemLayout to={`/product/${item.productId}`}>
+    <ItemLayoutButton value={item.productId} onClick={handleClick}>
       <ItemImgBox>
         <img src={item.thumbnailImageURL} alt="" />
       </ItemImgBox>
@@ -59,7 +74,7 @@ const ItemListItem = ({ item }) => {
           <b>{Number(item.price).toLocaleString('ko-KR')}원</b>
         </ItemValueBox>
       </ItemBodyContainer>
-    </ItemLayout>
+    </ItemLayoutButton>
   );
 };
 
