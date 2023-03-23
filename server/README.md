@@ -19,7 +19,7 @@ EverybodyChaChapark BackEnd Server 배포 가이드
 <br>
 
 ## Spring Application Profile
-``` java -jar EverybodyChachapark-0.0.1-SNAPSHOT.jar --spring.profiles.active=(profileName) ```
+``` java -jar build/libs/EverybodyChachapark-0.0.1-SNAPSHOT.jar --spring.profiles.active=(profileName) ```
 
 <br>
 
