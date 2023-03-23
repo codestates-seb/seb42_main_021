@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
+import instance from '../newAxios';
 
 import { Rating } from 'react-simple-star-rating';
 import {
@@ -9,19 +8,15 @@ import {
   UserInformation,
 } from './ReadReviews.styled';
 
-function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const accessToken = cookies.accessToken;
-  const refreshToken = cookies.refreshToken;
-
+function ReadReviews({
+  userNickName,
+  productReviews,
+  setEditingReview,
+  setIsEditClicked,
+}) {
   const handeleDeleteReview = (reviewId) => {
-    axios
-      .delete(`/reviews/${reviewId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Refresh: `${refreshToken}`,
-        },
-      })
+    instance
+      .delete(`/reviews/${reviewId}`)
       .then(() => {
         window.location.reload();
       })
@@ -62,18 +57,22 @@ function ReadReviews({ productReviews, setEditingReview, setIsEditClicked }) {
                   <div>{review.reviewMember.nickname}</div>
                 </div>
                 <div id="review-edit">
-                  <button
-                    type="button"
-                    onClick={() => handleEditReview(review)}
-                  >
-                    수정
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handeleDeleteReview(review.reviewId)}
-                  >
-                    삭제
-                  </button>
+                  {userNickName === review.reviewMember.nickname && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleEditReview(review)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handeleDeleteReview(review.reviewId)}
+                      >
+                        삭제
+                      </button>
+                    </>
+                  )}
                 </div>
               </UserInformation>
               <div id="review">{review.content}</div>

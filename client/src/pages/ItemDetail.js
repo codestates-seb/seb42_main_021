@@ -23,6 +23,7 @@ const ItemDetail = () => {
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
   const [userRole, setUserRole] = useState('');
+  const [userNickName, setUserNickName] = useState('');
 
   const productDetail = location.state.responseProductDetail;
   const { accessToken } = cookies;
@@ -30,6 +31,7 @@ const ItemDetail = () => {
   useEffect(() => {
     if (Object.keys(cookies).length) {
       setUserRole(jwt_decode(accessToken).roles[0]);
+      setUserNickName(jwt_decode(accessToken).nickname);
     }
   }, [cookies, accessToken]);
 
@@ -48,6 +50,7 @@ const ItemDetail = () => {
             editingReview={editingReview}
           />
           <ReadReviews
+            userNickName={userNickName}
             productReviews={productReviews}
             setEditingReview={setEditingReview}
             setIsEditClicked={setIsEditClicked}
