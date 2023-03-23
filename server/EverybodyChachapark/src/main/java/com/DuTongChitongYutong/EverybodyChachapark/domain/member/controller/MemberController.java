@@ -6,6 +6,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberS
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import com.DuTongChitongYutong.EverybodyChachapark.util.UriCreator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity postMember (@RequestBody MemberDto.Post post) {
+    public ResponseEntity postMember (@Valid @RequestBody MemberDto.Post post) {
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(post));
         return new ResponseEntity(new SingleResponseDto<>(mapper.createMemberToMemberResponseDto(createdMember)),HttpStatus.CREATED);
     }
