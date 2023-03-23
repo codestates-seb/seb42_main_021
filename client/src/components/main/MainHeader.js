@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import jwt_decode from 'jwt-decode';
+import instance from '../newAxios';
 import axios from 'axios';
-import newAxios from '../newAxios';
 
 import logolast3 from '../../img/logolast3.png';
 import back from '../../img/back.svg';
@@ -111,18 +112,18 @@ const BackBox = styled.div`
   }
 `;
 
-
 const MainHeader = () => {
-  const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
   const location = useLocation();
-  const [cookies, setCookie, removeCookie] = useCookies();
-  // const accessToken = cookies.accessToken;
+
+  const [cookies, , removeCookie] = useCookies(); //셋쿠키 공백
   const refreshToken = cookies.refreshToken;
+
+  const [profileImage, setProfileImage] = useState();
 
   const getUserProfile = async () => {
     try {
-      const { data } = await newAxios.get(`/members/mypage`);
+      const { data } = await instance.get(`/members/mypage`);
       return data.data;
     } catch (error) {
       console.error(error);
@@ -130,58 +131,84 @@ const MainHeader = () => {
   };
 
   if (refreshToken) {
-    getUserProfile().then((profile) => {
-      console.log(profile.profileImg);
-      setProfileImage(profile.profileImg);
-    });
+    const getUserProfileMethod = async () => {
+      const profile = await getUserProfile();
+      const profileImage = profile.profileImg;
+      setProfileImage(profileImage);
+    };
+    getUserProfileMethod();
   }
 
-  const handleLogOut = async () => {
-
-    await newAxios.post('/members/logout');
-
+  const handleLogout = async () => {
+    await instance.post('/members/logout');
     removeCookie('accessToken');
     removeCookie('refreshToken');
     navigate('/');
   };
 
+  // object mapper pattern
+
+  const getPathNameType = (pathName) => {
+    if (pathName.includes(`/curation/`)) {
+      return 'special';
+    }
+    if (pathName.includes(`/product/`)) {
+      return 'special';
+    }
+    return 'normal';
+  };
+
+  const getLoginStatus = (refreshToken) => {
+    if (refreshToken) {
+      return 'login';
+    }
+
+    return 'logout';
+  };
+
+  const pathType = getPathNameType(location.pathname);
+  const loginStatus = getLoginStatus(refreshToken);
+
+  const componentTable = {
+    special: (
+      <>
+        <BackBox onClick={() => navigate(-1)}>
+          <img className="back" src={back} alt="" />
+        </BackBox>
+        <LogoBox onClick={() => navigate('/')}>
+          <img className="logoF1" src={logolast3} alt="" />
+        </LogoBox>
+      </>
+    ),
+    normal: (
+      <LogoBox onClick={() => navigate('/')}>
+        <img src={logolast3} alt="" />
+      </LogoBox>
+    ),
+    login: (
+      <div className='login-box"'>
+        <LoginLink to="/mypage">
+          <img src={profileImage} alt="프로필" />
+        </LoginLink>
+        <Logout onClick={handleLogout}>로그아웃</Logout>
+      </div>
+    ),
+    logout: (
+      <div>
+        <LoginLink to="/login" className="login">
+          로그인
+        </LoginLink>
+        <LoginLink to="/signup" className="signup">
+          회원가입
+        </LoginLink>
+      </div>
+    ),
+  };
   return (
     <MainHeaderLayout>
       <MainHeaderContainer>
-        {location.pathname.includes(`/curation/`) ||
-        location.pathname.includes(`/product/`) ? (
-          <>
-            <BackBox onClick={() => navigate(-1)}>
-              <img className="back" src={back} alt="" />
-            </BackBox>
-            <LogoBox onClick={() => navigate('/')}>
-              <img className="logoF1" src={logolast3} alt="" />
-            </LogoBox>
-          </>
-        ) : (
-          <LogoBox onClick={() => navigate('/')}>
-            <img src={logolast3} alt="" />
-          </LogoBox>
-        )}
-        <LoginBox>
-          {refreshToken ? (
-            <div className='login-box"'>
-              <LoginLink to="/mypage">
-                <img src={profileImage} alt="프로필" />
-              </LoginLink>
-              <Logout onClick={handleLogOut}>로그아웃</Logout>
-            </div>
-          ) : (
-            <div>
-              <LoginLink to="/login" className="logout">
-                로그인
-              </LoginLink>
-              <LoginLink to="/signup" className="signup">
-                회원가입
-              </LoginLink>
-            </div>
-          )}
-        </LoginBox>
+        {componentTable[pathType]}
+        <LoginBox>{componentTable[loginStatus]}</LoginBox>
       </MainHeaderContainer>
     </MainHeaderLayout>
   );
