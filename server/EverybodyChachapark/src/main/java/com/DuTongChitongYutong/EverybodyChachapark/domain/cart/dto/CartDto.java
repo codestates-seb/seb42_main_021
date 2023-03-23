@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.SecondaryTable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class CartDto {
@@ -30,7 +31,7 @@ public class CartDto {
         private long productId;
         private String productName;
         private String imageUrl;
-        private Integer price;
+        private BigDecimal price;
         private int quantity;
         private LocalDateTime createAt;
         private LocalDateTime modifiedAt;

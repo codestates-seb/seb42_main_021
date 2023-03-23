@@ -4,6 +4,8 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @Getter
 @AllArgsConstructor
 public class OrderProductDto {
@@ -12,7 +14,7 @@ public class OrderProductDto {
 
     private String productName;
 
-    private int price;
+    private BigDecimal price;
 
     private int quantity;
 

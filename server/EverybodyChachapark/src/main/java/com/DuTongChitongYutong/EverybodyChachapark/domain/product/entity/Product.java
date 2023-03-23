@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+import java.math.BigDecimal;
 
 
 @Entity
@@ -28,7 +28,7 @@ public class Product extends BaseTime {
     private String subtitle;
 
     @Column(name = "price")
-    private int price;
+    private BigDecimal price;
 
     @Column(name = "product_view")
     private int productView;
@@ -46,7 +46,7 @@ public class Product extends BaseTime {
     @Column(name = "product_detail", length = 9999)
     private String productDetail;
 
-    public Product(String productName, String subtitle, int price, String thumbnailImageURL, String productDetail){
+    public Product(String productName, String subtitle, BigDecimal price, String thumbnailImageURL, String productDetail){
         this.productName = productName;
         this.subtitle = subtitle;
         this.price = price;
@@ -54,7 +54,7 @@ public class Product extends BaseTime {
         this.productDetail = productDetail;
     }
 
-    public Product(long productId, String productName, String subtitle, int price, int productView, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
+    public Product(long productId, String productName, String subtitle, BigDecimal price, int productView, ProductCategory productCategory, ProductStatus productStatus, String thumbnailImageURL, String productDetail){
         this.productId = productId;
         this.productName = productName;
         this.subtitle = subtitle;
