@@ -12,6 +12,7 @@ import MainHeader from '../components/main/MainHeader';
 import logo1 from '../img/logo1.png';
 import axios from 'axios';
 import { useState } from 'react';
+import useLogin from '../components/login/useLogin';
 
 const LoginLayout = styled.div`
   height: 100%;
@@ -120,40 +121,18 @@ const NoUser = styled.div`
 `;
 
 const Login = () => {
-  const [ModalOpen, setModalOpen] = useState(false);
   const {
-    register,
+    ModalOpen,
+    errors,
     handleSubmit,
-    formState: { isSubmitting, isDirty, errors },
-  } = useForm();
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const navigate = useNavigate();
+    isDirty,
+    isSubmitting,
+    onSubmit,
+    register,
+    invalidMessage, // 삼항연산자도 리턴문으로 갖고 오기 가능~~
+  } = useLogin();
 
-  const onSubmit = async (data) => {
-    try {
-      const res = await axios.post(`/members/login`, {
-        email: data.email,
-        password: data.password,
-      });
-      const decodedAccessToken = jwt_decode(res.headers.authorization);
-      const decodedRefreshToken = jwt_decode(res.headers.refresh);
-      const accesseTokenExpire = new Date(decodedAccessToken.exp * 1000);
-      const refreshTokenExpire = new Date(decodedRefreshToken.exp * 1000);
-
-      setCookie('accessToken', res.headers.authorization.slice(7), {
-        expires: accesseTokenExpire,
-      });
-      setCookie('refreshToken', res.headers.refresh, {
-        expires: refreshTokenExpire,
-      });
-      navigate('../product');
-    } catch (error) {
-      if (error.response.status === 401) {
-        setModalOpen(true);
-      }
-    }
-  };
-
+  //비지니스 로직 관심사 분리
   return (
     <Main>
       <MainHeader />
@@ -165,9 +144,7 @@ const Login = () => {
             placeholder="abc@chachapark.com"
             name="email"
             autoComplete="on"
-            aria-invalid={
-              !isDirty ? undefined : errors.email ? 'true' : 'false'
-            }
+            aria-invalid={invalidMessage}
             {...register('email', {
               required: '이메일은 필수 입력입니다.',
               pattern: {
