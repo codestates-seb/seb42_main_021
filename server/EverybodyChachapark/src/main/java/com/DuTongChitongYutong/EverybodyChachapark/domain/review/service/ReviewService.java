@@ -39,16 +39,21 @@ public class ReviewService {
         String imageURL = facadeImage. createImageURL(imageFile);
         review.setImageURL(imageURL);
 
-        review.setMemberId(memberService.findByEmail().getMemberId());
+        Member member = memberService.findByEmail();
+
+        review.setMemberId(member.getMemberId());
         verifyReview(review); // 작성자, 상품 검증
 
         // Todo: ImageURL 생성 처리
+        review = reviewRepository.save(review);
+        review.setMember(member);
 
-        return reviewRepository.save(review);
+        return review;
     }
 
     public Review updateReview(Long reviewId, Review review, MultipartFile imageFile) {
-        review.setMemberId(memberService.findByEmail().getMemberId());
+        Member member = memberService.findByEmail();
+        review.setMemberId(member.getMemberId());
 
         Review foundReview = findReview(reviewId);
         verifyReviewAskedMember(review, foundReview);
@@ -64,6 +69,8 @@ public class ReviewService {
             imageURL = facadeImage.createImageURL(imageFile);
             foundReview.setImageURL(imageURL);
         }
+
+        foundReview.setMember(member);
 
         return foundReview;
     }
