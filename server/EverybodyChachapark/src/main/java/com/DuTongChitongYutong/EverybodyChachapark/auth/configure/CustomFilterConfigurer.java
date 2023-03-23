@@ -1,15 +1,13 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.configure;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.configure;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationFailureHandler;
-import com.DuTongChitongYutong.EverybodyChachapark.security.hendler.MemberAuthenticationSuccessHandler;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtAuthenticationFilter;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtVerificationFilter;
-import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.service.MemberDetailsService;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.hendler.MemberAuthenticationFailureHandler;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.hendler.MemberAuthenticationSuccessHandler;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtAuthenticationFilter;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtVerificationFilter;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.CustomAuthorityUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,4 +1,4 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.configure;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.configure;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

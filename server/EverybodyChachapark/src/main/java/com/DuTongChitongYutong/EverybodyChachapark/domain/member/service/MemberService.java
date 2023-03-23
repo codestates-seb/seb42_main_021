@@ -7,13 +7,11 @@ import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicExcept
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthExceptionCode;
-import com.DuTongChitongYutong.EverybodyChachapark.security.jwt.JwtTokenizer;
-import com.DuTongChitongYutong.EverybodyChachapark.security.repository.RefreshTokenRepository;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.CustomAuthorityUtils;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.jwt.JwtTokenizer;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.repository.RefreshTokenRepository;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,13 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ApplicationEventPublisher publisher;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final FacadeImage facadeImage;
@@ -50,7 +48,6 @@ public class MemberService {
         member.setProfileImg(facadeImage.makeProfileImage());
 
         Member savedMember = memberRepository.save(member);
-        //publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
 
         return savedMember;
     }
@@ -167,9 +164,20 @@ public class MemberService {
         refreshTokenRepository.deleteBy(email);
     }
 
+    @Transactional(readOnly = true)
+    public List<Member> getVerifiedMembers(Set<Long> memberIds) {
+
+        List<Member> members = memberRepository.findAllById(memberIds);
+
+        if (members.size() != memberIds.size()) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
+        return members;
+    }
+
     private String getAccessToken(HttpServletRequest request) {
         return request.getHeader("Authorization").substring(7);
     }
-
 
 }

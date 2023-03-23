@@ -1,7 +1,7 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.hendler;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.hendler;
 
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.ErrorResponder;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.ErrorResponder;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
