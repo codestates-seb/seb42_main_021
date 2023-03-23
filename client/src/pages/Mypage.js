@@ -1,254 +1,33 @@
-import styled from 'styled-components';
-import { useState, useRef, useEffect } from 'react';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import newAxios from '../components/newAxios';
 
 import Footer from '../components/main/Footer';
 import MainLayout from '../components/main/MainLayout';
 import Main from '../components/main/Main';
+import useMypage from '../components/mypage/useMypage';
+import {
+  Circle,
+  ListContainer,
+  NologinUser,
+  ProfileContainer,
+  ProfileImageContainer,
+  Signout,
+  Toggle,
+} from '../components/mypage/Mypage.styled';
 
-const NologinUser = styled.div`
-  font-size: 20px;
-  margin-left: 150px;
-  margin-top: 100px;
-`;
-
-const ProfileImageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  width: 100%;
-  margin-bottom: 30px;
-  > div {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  #imageBox {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-  }
-  button {
-    position: absolute;
-    top: 70px;
-    left: 70px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: var(--blue);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const ProfileContainer = styled.div`
-  height: 150px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 30px;
-  label {
-    width: 100%;
-  }
-  span {
-    color: var(--gray);
-    width: 50%;
-    text-align: right;
-  }
-  input {
-    color: var(--black);
-    width: 50%;
-  }
-  .profileBox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    width: 100%;
-  }
-  .iconCell {
-    margin-left: 5px;
-    width: 20px;
-  }
-`;
-
-const ListContainer = styled.div`
-  width: 100%;
-  h1 {
-    padding-bottom: 5px;
-    border-bottom: 3px solid var(--border);
-  }
-  li {
-    height: 100px;
-    padding: 0 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid var(--border);
-    #price {
-      font-size: x-large;
-      font-weight: bold;
-    }
-    #date {
-      margin-top: 5px;
-      font-size: small;
-      text-align: right;
-      color: var(--gray);
-    }
-  }
-`;
-
-const Toggle = styled.button`
-  width: 50px;
-  height: 25px;
-  border-radius: 30px;
-  border: none;
-  background-color: ${(props) => (!props.toggle ? '#c9c9c9' : '#61a0ff')};
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.5s ease-in-out;
-`;
-
-const Circle = styled.div`
-  background-color: white;
-  width: 20px;
-  height: 20px;
-  border-radius: 50px;
-  position: absolute;
-  left: 5%;
-  transition: all 0.5s ease-in-out;
-  transform: ${(props) => props.toggle && 'translate(22px, 0)'};
-`;
-const Signout = styled.button`
-  margin-top: 300px;
-  /* margin-left: 20px; */
-  font-size: 15px;
-  color: var(--red);
-`;
 const Mypage = () => {
-  const [toggle, setToggle] = useState(false);
-  const [Image, setImage] = useState(null);
-  const [name, setName] = useState(null); //서버에서 받아온 이름 초기값으로 넣기
-  const [comment, setComment] = useState(null); //서버에서 받아온 소개글 초기값으로 넣기
-  const [updateProduct, setUpdateProdcut] = useState(1);
-
-  const [nameEdit, setNameEdit] = useState(false);
-  const [introEdit, setIntroEdit] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies();
-
-  const accesseToken = cookies.accessToken;
-  const refreshToken = cookies.refreshToken;
-
-  const fileInput = useRef();
-
-  const readUserInfomation = async () => {
-    const { data } = await newAxios.get(`/members/mypage`);
-    return data;
-  };
-
-  const readOrderData = async () => {
-    const { data } = await newAxios.get(`/orders/all`);
-    return data;
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await readUserInfomation();
-
-      setName(data.data.nickname);
-      setImage(data.data.profileImg);
-      setComment(data.data.comment || '등록해주세요!');
-    };
-    const orderProduct = async () => {
-      const data = await readOrderData();
-      console.log(data);
-    };
-    fetchData();
-    orderProduct();
-    setUpdateProdcut(1);
-  }, [updateProduct]);
-
-  const clickedToggle = () => {
-    setToggle(!toggle);
-  };
-
-  const handleNameEdit = () => {
-    setNameEdit(!nameEdit);
-  };
-
-  const handleIntroEdit = () => {
-    setIntroEdit(!introEdit);
-  };
-
-  const handleSubmitEditedName = async (event) => {
-    //서버에 수정된 이름 제출하기
-    try {
-      newAxios.patch('/members/info', { nickname: name });
-    } catch (error) {
-      console.log(error);
-    }
-    setUpdateProdcut(0);
-    handleNameEdit();
-  };
-
-  const handleSubmitEditedIntro = (event) => {
-    try {
-      newAxios.patch('/members/info', { comment: comment });
-    } catch (error) {
-      console.log(error);
-    }
-    setUpdateProdcut(0);
-    handleIntroEdit();
-  };
-
-  const handleImage = (event) => {
-    const formData = new FormData();
-    formData.append('profileImageFile', event.target.files[0]);
-
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    newAxios
-      .patch('/members/profile-image', formData, config)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    setUpdateProdcut(0);
-  };
-
-  const handleSignOut = async () => {
-    await newAxios.delete(`/members`);
-    removeCookie('accessToken', { path: '/' });
-    removeCookie('refreshToken', { path: '/' });
-  };
+  const {
+    toggle,
+    Image,
+    nickname,
+    refreshToken,
+    fileInput,
+    doEditName,
+    doEditIntro,
+    componentGroup,
+    clickedToggle,
+    handleImage,
+    handleSignOut,
+  } = useMypage();
   return (
     <Main>
       <MainLayout>
@@ -278,68 +57,11 @@ const Mypage = () => {
                   <FaCamera color="#FFFFFF" />
                 </button>
               </div>
-              <h3>{name}</h3>
+              <h3>{nickname}</h3>
             </ProfileImageContainer>
             <ProfileContainer>
-              {nameEdit ? (
-                <form className="profileBox">
-                  <label>닉네임</label>
-                  <input
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                  <button
-                    type="form"
-                    onClick={() => handleSubmitEditedName(name)}
-                  >
-                    <FaChevronRight
-                      className="iconCell"
-                      color="#c9c9c9"
-                      size="16px"
-                    />
-                  </button>
-                </form>
-              ) : (
-                <div className="profileBox">
-                  <label>닉네임</label>
-                  <span>{name}</span>
-                  <button type="button" onClick={handleNameEdit}>
-                    <FaChevronRight
-                      className="iconCell"
-                      color="#c9c9c9"
-                      size="16px"
-                    />
-                  </button>
-                </div>
-              )}
-              {introEdit ? (
-                <form className="profileBox">
-                  <label>한 줄 소개</label>
-                  <input
-                    value={comment}
-                    onChange={(event) => setComment(event.target.value)}
-                  />
-                  <button type="form" onClick={() => handleSubmitEditedIntro()}>
-                    <FaChevronRight
-                      className="iconCell"
-                      color="#c9c9c9"
-                      size="16px"
-                    />
-                  </button>
-                </form>
-              ) : (
-                <div className="profileBox">
-                  <label>한 줄 소개</label>
-                  <span>{comment}</span>
-                  <button type="button" onClick={handleIntroEdit}>
-                    <FaChevronRight
-                      className="iconCell"
-                      color="#c9c9c9"
-                      size="16px"
-                    />
-                  </button>
-                </div>
-              )}
+              {componentGroup[doEditName]}
+              {componentGroup[doEditIntro]}
               <div className="profileBox">
                 <label>웹사이트 및 SNS</label>
                 <a
