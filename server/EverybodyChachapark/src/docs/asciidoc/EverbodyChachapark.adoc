@@ -300,8 +300,8 @@ include::{snippets}/post-review/request-fields.adoc[]
 .http-response
 include::{snippets}/post-review/http-response.adoc[]
 
-.response-headers
-include::{snippets}/post-review/response-headers.adoc[]
+.response-fields
+include::{snippets}/post-review/response-fields.adoc[]
 
 
 
