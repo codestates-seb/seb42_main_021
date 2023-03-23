@@ -23,6 +23,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,15 +66,15 @@ public class OrderControllerTest {
         Order order = new Order();
 
         List<OrderProduct> orderProducts = List.of(
-                new OrderProduct(order, 1L, "텐트1", 3000, 5),
-                new OrderProduct(order, 2L, "텐트2", 4000, 2),
-                new OrderProduct(order, 3L,"텐트3", 50000, 3)
+                new OrderProduct(order, 1L, "텐트1", BigDecimal.valueOf(3000), 5),
+                new OrderProduct(order, 2L, "텐트2", BigDecimal.valueOf(4000), 2),
+                new OrderProduct(order, 3L,"텐트3", BigDecimal.valueOf(50000), 3)
         );
 
         order.setOrderId(1L);
         order.setMemberId(1L);
         order.setOrderProduct(orderProducts);
-        order.setTotalPrice(173000);
+        order.setTotalPrice(BigDecimal.valueOf(173000));
         order.setProductType(3);
         order.setOrderStatus(OrderStatus.ORDER_WAITING);
 
@@ -214,27 +215,27 @@ public class OrderControllerTest {
         Order order2 = new Order();
 
         List<OrderProduct> orderProducts = List.of(
-                new OrderProduct(order, 1L, "텐트1", 3000, 5),
-                new OrderProduct(order, 2L, "텐트2", 4000, 2),
-                new OrderProduct(order, 3L, "텐트3", 50000, 3)
+                new OrderProduct(order, 1L, "텐트1", BigDecimal.valueOf(3000), 5),
+                new OrderProduct(order, 2L, "텐트2", BigDecimal.valueOf(4000), 2),
+                new OrderProduct(order, 3L, "텐트3", BigDecimal.valueOf(50000), 3)
         );
 
         List<OrderProduct> orderProducts2 = List.of(
-                new OrderProduct(order, 1L, "텐트1", 3000, 3),
-                new OrderProduct(order, 2L, "텐트2", 4000, 1),
-                new OrderProduct(order, 3L, "텐트3", 50000, 4)
+                new OrderProduct(order, 1L, "텐트1", BigDecimal.valueOf(3000), 3),
+                new OrderProduct(order, 2L, "텐트2", BigDecimal.valueOf(4000), 1),
+                new OrderProduct(order, 3L, "텐트3", BigDecimal.valueOf(4000), 4)
         );
 
         order.setOrderId(orderId);
         order.setMemberId(1L);
         order.setOrderProduct(orderProducts);
-        order.setTotalPrice(173000);
+        order.setTotalPrice(BigDecimal.valueOf(173000));
         order.setOrderStatus(OrderStatus.ORDER_WAITING);
 
         order2.setOrderId(2L);
         order2.setMemberId(1L);
         order2.setOrderProduct(orderProducts2);
-        order2.setTotalPrice(213000);
+        order2.setTotalPrice(BigDecimal.valueOf(213000));
         order2.setOrderStatus(OrderStatus.ORDER_COMPLETED);
 
 

@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class CartControllerTest {
         String content = gson.toJson(postCart);
 
         CartDto.Response response = new CartDto.Response(1, 1, 1, "Test상품 1",
-                "[\\\"imageURL\\\"]", 10000, 1, LocalDateTime.now(), LocalDateTime.now());
+                "[\\\"imageURL\\\"]", BigDecimal.valueOf(10000), 1, LocalDateTime.now(), LocalDateTime.now());
 
         given(cartFacade.addCart(Mockito.any(CartDto.Post.class))).willReturn(response);
 
@@ -125,7 +126,7 @@ public class CartControllerTest {
         String content = gson.toJson(patchCart);
 
         CartDto.Response patchResponse = new CartDto.Response(1, 1, 1, "Test상품 1",
-                "[\\\"imageURL\\\"]", 10000, 1, LocalDateTime.now(), LocalDateTime.now());
+                "[\\\"imageURL\\\"]", BigDecimal.valueOf(10000), 1, LocalDateTime.now(), LocalDateTime.now());
 
         given(cartFacade.updateCart(Mockito.anyLong(), Mockito.any(CartDto.Patch.class))).willReturn(patchResponse);
 
@@ -181,11 +182,11 @@ public class CartControllerTest {
 
         List<CartDto.Response> cartList = List.of(
                 new CartDto.Response(1, 1, 1, "Test상품 1",
-                        "[\\\"imageURL\\\"]", 10000, 1, LocalDateTime.now(), LocalDateTime.now()),
+                        "[\\\"imageURL\\\"]", BigDecimal.valueOf(10000), 1, LocalDateTime.now(), LocalDateTime.now()),
                 new CartDto.Response(2, 1, 2, "Test상품 2",
-                        "[\\\"imageURL\\\"]", 30000, 1, LocalDateTime.now(), LocalDateTime.now()),
+                        "[\\\"imageURL\\\"]", BigDecimal.valueOf(30000), 1, LocalDateTime.now(), LocalDateTime.now()),
                 new CartDto.Response(3, 1, 3, "Test상품 3",
-                        "[\\\"imageURL\\\"]", 50000, 1, LocalDateTime.now(), LocalDateTime.now())
+                        "[\\\"imageURL\\\"]", BigDecimal.valueOf(50000), 1, LocalDateTime.now(), LocalDateTime.now())
         );
 
         given(cartFacade.findCarts()).willReturn(cartList);

@@ -5,6 +5,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.entity.Product
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,7 +18,7 @@ public class ProductDto {
 
     private String subtitle;
 
-    private int price;
+    private BigDecimal price;
 
     private int productView;
 

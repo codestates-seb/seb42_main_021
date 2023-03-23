@@ -1,10 +1,12 @@
 package com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto;
 
+import com.DuTongChitongYutong.EverybodyChachapark.audit.BaseTime;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.Order;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class OrderDto {
 
     private Long orderId;
 
-    private int totalPrice;
+    private BigDecimal totalPrice;
 
     private int productType;
 

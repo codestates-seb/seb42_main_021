@@ -33,6 +33,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -73,10 +74,10 @@ public class ProductControllerTest {
 
     @Test
     public void postProductTest() throws Exception{
-        ProductPostDto productPostDto = new ProductPostDto("짱비싼 텐트", "subtitle",500000, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "상품 상세 내용");
+        ProductPostDto productPostDto = new ProductPostDto("짱비싼 텐트", "subtitle", BigDecimal.valueOf(500000), ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "상품 상세 내용");
         String content = gson.toJson(productPostDto);
 
-        ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", "subtitle",500000,  0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultProduct = new ProductDto(1, "짱비싼 텐트", "subtitle",BigDecimal.valueOf(500000),  0, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
 
         given(productFacade.createProduct(Mockito.any(ProductPostDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultProduct);
 
@@ -147,10 +148,10 @@ public class ProductControllerTest {
     @Test
     public void patchProduct() throws Exception{
 
-        ProductPatchDto productPatchDto = new ProductPatchDto("짱비싼 의자", "subtitle", 400000, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT, "상품 상세 내용") ;
+        ProductPatchDto productPatchDto = new ProductPatchDto("짱비싼 의자", "subtitle", BigDecimal.valueOf(400000), ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT, "상품 상세 내용") ;
         String content = gson.toJson(productPatchDto);
 
-        ProductDto mockResultPatchProduct = new ProductDto(2, "짱비싼 의자", "subtitle",400000,  5, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT,"[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultPatchProduct = new ProductDto(2, "짱비싼 의자", "subtitle",BigDecimal.valueOf(400000),  5, ProductCategory.CHAIR, ProductStatus.PRODUCT_SOLD_OUT,"[\"imageURL\"]", "상품 상세 내용", LocalDateTime.now(), LocalDateTime.now());
         given(productFacade.updateProduct(Mockito.anyLong(), Mockito.any(ProductPatchDto.class), Mockito.any(MultipartFile.class))).willReturn(mockResultPatchProduct);
 
         HttpHeaders headers = new HttpHeaders();
@@ -229,7 +230,7 @@ public class ProductControllerTest {
 
         Long productId = 1L;
 
-        ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", "subtitle",0, 0,  ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]","상품 상세 내용" , LocalDateTime.now(), LocalDateTime.now());
+        ProductDto mockResultProductReadDto = new ProductDto(1L, "의자", "subtitle",BigDecimal.ZERO, 0,  ProductCategory.CHAIR, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]","상품 상세 내용" , LocalDateTime.now(), LocalDateTime.now());
 
         given(productFacade.readProduct(Mockito.anyLong())).willReturn(mockResultProductReadDto);
 
@@ -285,11 +286,11 @@ public class ProductControllerTest {
         queryParams.add("size", size);
 
         List<Product> products = List.of(
-                new Product(1, "텐트", "subtitle", 50000, 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(2, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(3, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(4, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(5, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+                new Product(1, "텐트", "subtitle", BigDecimal.valueOf(50000), 5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10), products.size());
@@ -361,11 +362,11 @@ public class ProductControllerTest {
 
 
         List<Product> products = List.of(
-                new Product(1, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(2, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(3, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(4, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(5, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+                new Product(1, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10, Sort.by("productId").ascending()), products.size());
@@ -439,11 +440,11 @@ public class ProductControllerTest {
         queryParams.add("size", size);
 
         List<Product> products = List.of(
-                new Product(1, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(2, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(3, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(4, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
-                new Product(5, "텐트", "subtitle", 50000,  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
+                new Product(1, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(2, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(3, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(4, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용"),
+                new Product(5, "텐트", "subtitle", BigDecimal.valueOf(50000),  5, ProductCategory.TENT, ProductStatus.PRODUCT_FOR_SALE, "[\"imageURL\"]", "상품 상세 내용")
         );
 
         Page<Product> productPage = new PageImpl<>(products, PageRequest.of(1, 10), products.size());
