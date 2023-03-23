@@ -1,11 +1,7 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// import light from '../../img/light.jpg';
-import {
-  findProductByProductId,
-  getProductReviews,
-} from '../../components/api/itemDetailAPI';
+import { findProductByProductId } from '../../components/api/itemDetailAPI';
 
 const ItemListItem = ({ item }) => {
   const navigate = useNavigate();
@@ -14,8 +10,8 @@ const ItemListItem = ({ item }) => {
     const id = item.productId;
     const url = `/product/${id}`;
     const responseProductDetail = await findProductByProductId(id);
-    const responseReviews = await getProductReviews(id);
-    navigate(url, { state: { responseProductDetail, responseReviews } });
+
+    navigate(url, { state: { responseProductDetail } });
   };
 
   return (
