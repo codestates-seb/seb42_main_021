@@ -16,6 +16,9 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.Produc
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +45,7 @@ public class OrderService {
         Long memberId = memberService.findByEmail().getMemberId();
 
         List<Long> cartIdList = cartListDto.getCartList();
+        if(cartIdList.isEmpty()) throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
 
         List<Cart> carts = cartRepository.findCartByCartIdIn(cartIdList);
         // List<OrderProductDto> orderProductDtos = new ArrayList<>();
@@ -103,18 +107,18 @@ public class OrderService {
  */
 
     @Transactional(readOnly = true)
-    public List<OrderDto> readOrders(){
+    public Page<OrderDto> readOrders(Pageable pageable){
 
         Long memberId = memberService.findByEmail().getMemberId();
-        List<Order> orderList = orderRepository.findOrdersByMemberId(memberId);
+        Page<Order> orderList = orderRepository.findOrdersByMemberId(memberId, pageable);
         List<OrderDto> allOrderDto = new ArrayList<>();
 
-        for (Order orders : orderList){
+        for (Order orders : orderList.getContent()){
             List<OrderProductDto> orderProductDtos = orders.getOrderProduct().stream().map(OrderProduct::toDto).collect(Collectors.toList());
             allOrderDto.add(new OrderDto(orders, orderProductDtos));
         }
 
-        return allOrderDto;
+        return new PageImpl<>(allOrderDto, pageable, orderList.getTotalElements());
         //페이징 처리가 필요하지 않을까..?
         // CQRS패턴-> 알아보기, CREATE. UPDATE기능 분리
     }

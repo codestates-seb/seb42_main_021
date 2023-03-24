@@ -4,6 +4,8 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.service.OrderService;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +44,9 @@ public class OrderController {
  */
 
     @GetMapping("/all")
-    public ResponseEntity<SingleResponseDto<List<OrderDto>>> readOrders(){
+    public ResponseEntity<SingleResponseDto<Page<OrderDto>>> readOrders(Pageable pageable){
 
-        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders()), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders(pageable)), HttpStatus.OK);
     }
 
 
