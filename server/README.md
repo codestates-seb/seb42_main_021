@@ -14,12 +14,12 @@ EverybodyChaChapark BackEnd Server 배포 가이드
 <br>
 
 ## Spring Application Start
-``` java -jar EverybodyChachapark-0.0.1-SNAPSHOT.jar ```
+``` sudo nohup java -jar build/libs/EverybodyChachapark-0.0.1-SNAPSHOT.jar &```
 
 <br>
 
 ## Spring Application Profile
-``` java -jar build/libs/EverybodyChachapark-0.0.1-SNAPSHOT.jar --spring.profiles.active=(profileName) ```
+``` sudo nohup java -jar build/libs/EverybodyChachapark-0.0.1-SNAPSHOT.jar --spring.profiles.active=(profileName) & ```
 
 <br>
 
