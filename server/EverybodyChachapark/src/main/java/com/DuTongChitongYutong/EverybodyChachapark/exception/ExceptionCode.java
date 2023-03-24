@@ -13,6 +13,7 @@ public enum ExceptionCode {
 
     // 상품 관련 예외
     PRODUCT_NOT_FOUND(404, "상품이 존재하지 않습니다."),
+    PRODUCT_EXISTS(409, "동일한 상품명이 존재합니다."),
 
     // 장바구니 관련 예외
     CART_PRODUCT_EXISTS(409, "이미 장바구니에 담은 상품 입니다."),
