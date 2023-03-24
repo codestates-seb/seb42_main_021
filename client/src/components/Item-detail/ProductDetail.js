@@ -23,7 +23,7 @@ function ProductDetail({ productDetail, userRole }) {
 
   const handleShoppingBag = () => {
     if (userRole === '') {
-      window.alert('상품을 장바구니에 담기 전에 로그인 해주세요.');
+      alert('상품을 장바구니에 담기 전에 로그인 해주세요.');
       return navigate('/login');
     }
 

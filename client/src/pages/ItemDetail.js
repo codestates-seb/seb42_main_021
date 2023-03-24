@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
+
+import { getProductReviews } from '../components/api/itemDetailAPI';
 
 import Main from '../components/main/Main';
 import MainLayout from '../components/main/MainLayout';
@@ -16,13 +18,13 @@ import { ReviewContainer } from '../components/Item-detail/ItemDetail.styled';
 const ItemDetail = () => {
   const location = useLocation();
   const [cookies] = useCookies();
+  const { id } = useParams();
 
-  const [productReviews, setProductReviews] = useState(
-    location.state.responseReviews
-  );
+  const [productReviews, setProductReviews] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
   const [userRole, setUserRole] = useState('');
+  const [userNickName, setUserNickName] = useState('');
 
   const productDetail = location.state.responseProductDetail;
   const { accessToken } = cookies;
@@ -30,8 +32,15 @@ const ItemDetail = () => {
   useEffect(() => {
     if (Object.keys(cookies).length) {
       setUserRole(jwt_decode(accessToken).roles[0]);
+      setUserNickName(jwt_decode(accessToken).nickname);
     }
   }, [cookies, accessToken]);
+
+  useEffect(() => {
+    getProductReviews(id).then((reviews) => {
+      setProductReviews(reviews);
+    });
+  }, [id]);
 
   return (
     <Main>
@@ -43,11 +52,15 @@ const ItemDetail = () => {
           <h3>상품 리뷰</h3>
           <ReviewForm
             productId={productDetail?.productId}
+            productReviews={productReviews}
+            setProductReviews={setProductReviews}
             isEditClicked={isEditClicked}
             setIsEditClicked={setIsEditClicked}
             editingReview={editingReview}
+            setEditingReview={setEditingReview}
           />
           <ReadReviews
+            userNickName={userNickName}
             productReviews={productReviews}
             setEditingReview={setEditingReview}
             setIsEditClicked={setIsEditClicked}
