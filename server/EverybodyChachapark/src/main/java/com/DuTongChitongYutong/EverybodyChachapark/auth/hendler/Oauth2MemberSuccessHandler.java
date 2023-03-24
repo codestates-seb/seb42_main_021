@@ -86,8 +86,8 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(80)
+                .host("legendpano.codns.com")
+                .port(8085)
                 .path("/receive-token.html")
                 .queryParams(queryParams)
                 .build()
