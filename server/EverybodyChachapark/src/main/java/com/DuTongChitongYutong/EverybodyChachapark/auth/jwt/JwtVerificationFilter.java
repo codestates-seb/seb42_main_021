@@ -1,5 +1,6 @@
 package com.DuTongChitongYutong.EverybodyChachapark.auth.jwt;
 
+import com.DuTongChitongYutong.EverybodyChachapark.domain.member.entity.Member;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.repository.MemberRepository;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.SecurityAuthException;
@@ -59,26 +60,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             throw new SecurityAuthException(SecurityAuthExceptionCode.MEMBER_LOGOUT);
         }
 
-        Claims refreshTokenClaims = null;
-
-        try {
-            refreshTokenClaims = jwtTokenizer.parseClaims(refreshToken);
-            return jwtTokenizer.parseClaims(accessToken);
-        } catch (ExpiredJwtException ee) {
-            // access-token이 만료되면 자동으로 header에 새로운 토큰을 응답해주는 로직, RefreshController 사용 후 활용하지 않는 기능
-            /*if (refreshTokenClaims != null) {
-                String findRefreshToken = refreshTokenRepository.findBy(refreshTokenClaims.getSubject());
-
-                if (refreshToken.equals(findRefreshToken)) {
-                    Member findMember = memberRepository.findByEmail(refreshTokenClaims.getSubject()).orElse(null);
-                    String newAccessToken = jwtTokenizer.generateAccessToken(findMember);
-                    response.setHeader("Authorization", "Bearer " + newAccessToken);
-                    return jwtTokenizer.parseClaims(newAccessToken);
-                }
-            }*/
-            request.setAttribute("exception", ee);
-            return null;
-        }
+        return jwtTokenizer.parseClaims(accessToken);
     }
 
     private void setAuthenticationToContext(Claims claims) {
