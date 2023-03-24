@@ -9,7 +9,7 @@ name: EverybodyChaChaPark Service CI
 
 on:
   push:
-    branches: [ "feat/be/release" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -18,6 +18,9 @@ env:
   S3_BUCKET_NAME: everybodychachapark-server-bucket-deploy
 
 jobs:
+  checkout:
+    runs-on: feat/be/release
+    
   build:
 
     runs-on: ubuntu-latest
