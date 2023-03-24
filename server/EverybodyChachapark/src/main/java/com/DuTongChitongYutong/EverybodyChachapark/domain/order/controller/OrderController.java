@@ -2,6 +2,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.order.controller;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderListPage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.service.OrderService;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import org.springframework.data.domain.Page;
@@ -44,9 +45,11 @@ public class OrderController {
  */
 
     @GetMapping("/all")
-    public ResponseEntity<SingleResponseDto<Page<OrderDto>>> readOrders(Pageable pageable){
+    public ResponseEntity<SingleResponseDto<OrderListPage>> readOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(value = "size", defaultValue = "10") int size)
+    {
 
-        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders(pageable)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders(page, size)), HttpStatus.OK);
     }
 
 
