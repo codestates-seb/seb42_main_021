@@ -118,21 +118,6 @@ public class MemberService {
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.TOKEN_NOT_VALID));
     }
 
-    //테스트
-    public Member findByToken(HttpServletRequest request) {
-        String token = getAccessToken(request);
-        Claims claims = jwtTokenizer.parseClaims(token);
-
-        Date expiration = claims.getExpiration();
-        if (expiration.before(new Date())) {
-            throw new SecurityAuthException(SecurityAuthExceptionCode.TOKEN_NOT_FOUND);
-        }
-
-        String email = claims.get("email", String.class);
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
     public String getCurrentMemberEmail() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
