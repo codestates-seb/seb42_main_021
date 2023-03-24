@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Order extends BaseTime {
 
     private Long memberId;
 
-    private int totalPrice;
+    private BigDecimal totalPrice;
 
     //구매한 상품 종류
     private int productType;
