@@ -143,7 +143,7 @@ const CuratingBodyImg = () => {
   const location = useLocation();
   const { id } = useParams();
   const ID = Number(id);
-  const [curatingContent] = useState([curationList.curatingContent[ID - 1]]);
+  const curatingContent = [curationList.curatingContent[ID - 1]];
 
   return (
     <CuratingBodyImgBox>

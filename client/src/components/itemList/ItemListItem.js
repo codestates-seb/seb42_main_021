@@ -1,11 +1,39 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// import light from '../../img/light.jpg';
-import {
-  findProductByProductId,
-  getProductReviews,
-} from '../../components/api/itemDetailAPI';
+import { findProductByProductId } from '../../components/api/itemDetailAPI';
+
+const ItemListItem = ({ item }) => {
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    const id = item.productId;
+    const url = `/product/${id}`;
+    const responseProductDetail = await findProductByProductId(id);
+
+    navigate(url, { state: { responseProductDetail } });
+  };
+
+  return (
+    <ItemLayoutButton onClick={handleClick}>
+      <ItemImgBox>
+        <img src={item.thumbnailImageURL} alt="" />
+      </ItemImgBox>
+      <ItemBodyContainer>
+        <ItemTitleBox>
+          <p>{item.subtitle}</p>
+          <h2>{item.productName}</h2>
+        </ItemTitleBox>
+        <ItemValueBox>
+          {/* <span>{list.rates} </span> */}
+          <b>{Number(item.price).toLocaleString('ko-KR')}원</b>
+        </ItemValueBox>
+      </ItemBodyContainer>
+    </ItemLayoutButton>
+  );
+};
+
+export default ItemListItem;
 
 const ItemListItem = ({ item }) => {
   const navigate = useNavigate();

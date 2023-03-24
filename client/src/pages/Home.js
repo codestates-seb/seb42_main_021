@@ -1,62 +1,23 @@
-import styled from 'styled-components';
 import MainCarousel from '../components/ui/MainCarousel';
 import MainBoxL from '../components/ui/MainBoxL';
 import MainBoxS from '../components/ui/MainBoxS';
 import Footer from '../components/main/Footer';
-
-const Main = styled.div`
-  height: 100%;
-  width: 530px;
-  max-width: 530px;
-  background-color: var(--white);
-  border-radius: var(--bd-rd);
-  padding-bottom: 90px;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const MainCarouselContentBox = styled.div`
-  width: 100%;
-  height: 35px;
-  margin-top: 20px;
-  margin-bottom: 60px;
-  color: black;
-  text-align: center;
-  vertical-align: center;
-  line-height: 35px;
-  h3 {
-    color: black;
-  }
-`;
-
-const ExplainLayout = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  padding: 0 20px;
-`;
-const ExplainContentContainer = styled.div``;
-const ExplainContent2Container = styled.div``;
-const ExplainContentBox = styled.div`
-  display: flex;
-  margin-bottom: 30px;
-`;
-const ContainerBorderTop = styled.p`
-  margin-top: 5px;
-  margin-bottom: 5px;
-  background-color: #e8dcdc;
-  width: 100%;
-  height: 3px;
-  border-radius: var(--bd-rd);
-`;
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import {
+  ContainerBorderTop,
+  ExplainContent2Container,
+  ExplainContentBox,
+  ExplainContentContainer,
+  ExplainLayout,
+  Main,
+  MainCarouselContentBox,
+} from '../components/homes/Home.styled';
 
 const Home = () => {
   return (
     <>
       <Main>
+        <LoadingSpinner />
         <MainCarousel />
         <MainCarouselContentBox>
           <h3>
