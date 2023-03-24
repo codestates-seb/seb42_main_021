@@ -29,8 +29,6 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Add permission // 추가
-      run: chmod +x gradlew // 추가
       
       # Gradle 빌드
     - name: Build with Gradle
