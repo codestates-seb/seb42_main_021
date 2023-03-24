@@ -13,6 +13,7 @@ public enum ExceptionCode {
 
     // 상품 관련 예외
     PRODUCT_NOT_FOUND(404, "상품이 존재하지 않습니다."),
+    PRODUCT_EXISTS(409, "동일한 상품명이 존재합니다."),
 
     // 장바구니 관련 예외
     CART_PRODUCT_EXISTS(409, "이미 장바구니에 담은 상품 입니다."),
@@ -31,6 +32,8 @@ public enum ExceptionCode {
     // 주문 관련 예외
     ORDER_CANNOT_CANCEL(403, "이미 주문을 완료해서 취소할 수 없습니다."),
     ORDER_ALREADY_CANCELED(403, "이미 취소된 주문입니다"),
+
+    NO_PRODUCT_SELECTED(404, "선택된 상품이 없습니다"),
 
     // 테스트
     TOKEN_NOT_FOUND(401, "토큰을 찾을 수 없습니다");

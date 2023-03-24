@@ -471,6 +471,9 @@ include::{snippets}/read-all-order/http-request.adoc[]
 .request-headers
 include::{snippets}/read-all-order/request-headers.adoc[]
 
+.path-parameters
+include::{snippets}/read-all-order/request-parameters.adoc[]
+
 .http-response
 include::{snippets}/read-all-order/http-response.adoc[]
 

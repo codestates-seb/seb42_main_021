@@ -2,8 +2,13 @@ package com.DuTongChitongYutong.EverybodyChachapark.domain.order.controller;
 
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderListPage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.service.OrderService;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +28,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<SingleResponseDto<OrderDto>> createOrder(@RequestBody CartListDto cartListDto){
 
+        if(cartListDto.getCartList().isEmpty() || cartListDto.getCartList() == null) throw new BusinessLogicException(ExceptionCode.NO_PRODUCT_SELECTED);
 
         return new ResponseEntity<>(new SingleResponseDto<>(orderService.createOrder(cartListDto)),HttpStatus.CREATED);
     }
@@ -42,9 +48,11 @@ public class OrderController {
  */
 
     @GetMapping("/all")
-    public ResponseEntity<SingleResponseDto<List<OrderDto>>> readOrders(){
+    public ResponseEntity<SingleResponseDto<OrderListPage>> readOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(value = "size", defaultValue = "10") int size)
+    {
 
-        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders()), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(orderService.readOrders(page, size)), HttpStatus.OK);
     }
 
 
