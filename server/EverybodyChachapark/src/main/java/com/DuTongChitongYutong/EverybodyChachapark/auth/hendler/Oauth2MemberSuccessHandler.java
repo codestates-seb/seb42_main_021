@@ -41,10 +41,9 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                                         Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
-        List<String> authorities = customAuthorityUtils.createRoles(email);
 
         saveMember(email);
-        redirect(request, response, email, authorities);
+        redirect(request, response, email);
     }
 
     private void saveMember(String email) {
@@ -56,21 +55,19 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         memberService.createMember(member);
     }
 
-    private void redirect(HttpServletRequest request, HttpServletResponse response, String email
-            , List<String> authorities) throws IOException {
+    private void redirect(HttpServletRequest request, HttpServletResponse response, String email) throws IOException {
         Member member = new Member(email);
-        String accessToken = delegateAccessToken(member, authorities);
+
+        String accessToken = delegateAccessToken(member);
         String refreshToken =  delegateRefreshToken(member);
 
         String uri = createURI(accessToken, refreshToken).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
-    private String delegateAccessToken(Member member, List<String> authorities) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member);
-        claims.put("roles", authorities);
-
+    private String delegateAccessToken(Member member) {
+        List<String> roles = List.of("USER");
+        member.setRoles(roles);
         String accessToken = jwtTokenizer.generateAccessToken(member);
         return "Bearer " + accessToken;
     }
