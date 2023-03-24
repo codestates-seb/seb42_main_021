@@ -4,6 +4,8 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderListPage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.service.OrderService;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
+import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import com.DuTongChitongYutong.EverybodyChachapark.response.SingleResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<SingleResponseDto<OrderDto>> createOrder(@RequestBody CartListDto cartListDto){
 
+        if(cartListDto.getCartList().isEmpty() || cartListDto.getCartList() == null) throw new BusinessLogicException(ExceptionCode.NO_PRODUCT_SELECTED);
 
         return new ResponseEntity<>(new SingleResponseDto<>(orderService.createOrder(cartListDto)),HttpStatus.CREATED);
     }

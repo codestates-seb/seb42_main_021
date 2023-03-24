@@ -50,7 +50,6 @@ public class OrderService {
         Long memberId = memberService.findByEmail().getMemberId();
 
         List<Long> cartIdList = cartListDto.getCartList();
-        if(cartIdList.isEmpty()) throw new BusinessLogicException(ExceptionCode.PRODUCT_NOT_FOUND);
 
         List<Cart> carts = cartRepository.findCartByCartIdIn(cartIdList);
         // List<OrderProductDto> orderProductDtos = new ArrayList<>();
@@ -115,7 +114,7 @@ public class OrderService {
     public OrderListPage readOrders(int page, int size){
 
         Long memberId = memberService.findByEmail().getMemberId();
-        Pageable pageable = PageRequest.of(page, size, Sort.unsorted());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Order> orderList = orderRepository.findOrdersByMemberId(memberId, pageable);
         List<OrderDto> allOrderDto = new ArrayList<>();
 

@@ -3,6 +3,7 @@ package com.DuTongChitongYutong.EverybodyChachapark.slice.order;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.controller.OrderController;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderListPage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderProductDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.Order;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderProduct;
@@ -253,7 +254,7 @@ public class OrderControllerTest {
 
         int pageNumber = 1;
         int pageSize = 10;
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
 
@@ -262,14 +263,18 @@ public class OrderControllerTest {
 
         List<OrderDto> AllOrderDto = new ArrayList<>();
 
-        for (Order orders : orderList){
+        for (Order orders : orderPage.getContent()){
             List<OrderProductDto> orderProductDtos = orders.getOrderProduct().stream().map(OrderProduct::toDto).collect(Collectors.toList());
             AllOrderDto.add(new OrderDto(orders, orderProductDtos));
         }
 
-        Page<OrderDto> mockAllOrderReadDtoResult = new PageImpl<>(AllOrderDto, pageable, orderList.size());
+        OrderListPage mockOrderListPage = new OrderListPage();
+        mockOrderListPage.setOrderDtoList(AllOrderDto);
+        mockOrderListPage.setCurrentPage(pageNumber);
+        mockOrderListPage.setTotalPages(1);
+        mockOrderListPage.setTotalElements(2L);
 
-        given(orderService.readOrders(Mockito.any(Pageable.class))).willReturn(mockAllOrderReadDtoResult);
+        given(orderService.readOrders(Mockito.anyInt(), Mockito.anyInt())).willReturn(mockOrderListPage);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer ".concat("adfadf"));
@@ -288,7 +293,7 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.*").exists())
                 .andReturn();
 
-        List list = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.data.content"); // mvcResult.getResponse().getContentAsString()으로 ResponseBody 값을 Json으로 parse하고 "$.data"부분만 가져온다.
+        List list = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.data.orderDtoList"); // mvcResult.getResponse().getContentAsString()으로 ResponseBody 값을 Json으로 parse하고 "$.data"부분만 가져온다.
         assertThat(list.size(), is(2)); // 가져온 Json 배열의 수가 2칸인지 테스트
 
         readAction
@@ -310,39 +315,20 @@ public class OrderControllerTest {
                         responseFields(
                                 List.of(
                                         fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
-                                        fieldWithPath("data.content").type(JsonFieldType.ARRAY).description("조회된 주문 목록"),
-                                        fieldWithPath("data.content[].orderId").type(JsonFieldType.NUMBER).description("주문 식별 ID"),
-                                        fieldWithPath("data.content[].productType").type(JsonFieldType.NUMBER).description("주문한 상품의 종류"),
-                                        fieldWithPath("data.content[].totalPrice").type(JsonFieldType.NUMBER).description("주문한 상품의 총 가격"),
-                                        fieldWithPath("data.content[].orderStatus").type(JsonFieldType.STRING).description("주문 상태"),
-                                        fieldWithPath("data.content[].orderProductDtos[]").type(JsonFieldType.ARRAY).description("주문한 상품 정보"),
-                                        fieldWithPath("data.content[].orderProductDtos[].productId").type(JsonFieldType.NUMBER).description("주문한 상품 식별 ID"),
-                                        fieldWithPath("data.content[].orderProductDtos[].productName").type(JsonFieldType.STRING).description("주문한 상품 이름"),
-                                        fieldWithPath("data.content[].orderProductDtos[].price").type(JsonFieldType.NUMBER).description("주문한 상품 가격"),
-                                        fieldWithPath("data.content[].orderProductDtos[].quantity").type(JsonFieldType.NUMBER).description("주문한 상품 수량"),
-                                        fieldWithPath("data.content[].createdAt").type(JsonFieldType.STRING).description("주문 생성 날짜 및 시간").optional(),
-                                        fieldWithPath("data.pageable").type(JsonFieldType.OBJECT).description("페이지 관련 정보"),
-                                        fieldWithPath("data.pageable.sort").type(JsonFieldType.OBJECT).description("정렬 정보"),
-                                        fieldWithPath("data.pageable.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬이 비어 있는지 여부"),
-                                        fieldWithPath("data.pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬되었는지 여부"),
-                                        fieldWithPath("data.pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않았는지 여부"),
-                                        fieldWithPath("data.pageable.offset").type(JsonFieldType.NUMBER).description("페이지 오프셋"),
-                                        fieldWithPath("data.pageable.pageNumber").type(JsonFieldType.NUMBER).description("페이지 번호"),
-                                        fieldWithPath("data.pageable.pageSize").type(JsonFieldType.NUMBER).description("페이지 크기"),
-                                        fieldWithPath("data.pageable.paged").type(JsonFieldType.BOOLEAN).description("페이징이 활성화되었는지 여부"),
-                                        fieldWithPath("data.pageable.unpaged").type(JsonFieldType.BOOLEAN).description("페이징이 비활성화되었는지 여부"),
-                                        fieldWithPath("data.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지인지 여부"),
-                                        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 요소 수"),
+                                        fieldWithPath("data.orderDtoList").type(JsonFieldType.ARRAY).description("조회된 주문 목록"),
+                                        fieldWithPath("data.orderDtoList[].orderId").type(JsonFieldType.NUMBER).description("주문 식별 ID"),
+                                        fieldWithPath("data.orderDtoList[].totalPrice").type(JsonFieldType.NUMBER).description("주문한 상품의 총 가격"),
+                                        fieldWithPath("data.orderDtoList[].productType").type(JsonFieldType.NUMBER).description("주문한 상품의 종류"),
+                                        fieldWithPath("data.orderDtoList[].orderStatus").type(JsonFieldType.STRING).description("주문 상태"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[]").type(JsonFieldType.ARRAY).description("주문한 상품 정보"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].productId").type(JsonFieldType.NUMBER).description("주문한 상품 식별 ID"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].productName").type(JsonFieldType.STRING).description("주문한 상품 이름"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].price").type(JsonFieldType.NUMBER).description("주문한 상품 가격"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].quantity").type(JsonFieldType.NUMBER).description("주문한 상품 수량"),
+                                        fieldWithPath("data.orderDtoList[].createdAt").type(JsonFieldType.STRING).description("주문 생성 날짜 및 시간").optional(),
+                                        fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                         fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
-                                        fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("페이지 크기"),
-                                        fieldWithPath("data.number").type(JsonFieldType.NUMBER).description("페이지 번호"),
-                                        fieldWithPath("data.sort").type(JsonFieldType.OBJECT).description("정렬 정보"),
-                                        fieldWithPath("data.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬이 비어 있는지 여부"),
-                                        fieldWithPath("data.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬되었는지 여부"),
-                                        fieldWithPath("data.sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않았는지 여부"),
-                                        fieldWithPath("data.first").type(JsonFieldType.BOOLEAN).description("첫 페이지인지 여부"),
-                                        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description("페이지의 요소 수"),
-                                        fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어 있는지 여부")
+                                        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 요소 수")
                                 )
                         )
 
