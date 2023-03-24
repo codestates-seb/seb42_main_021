@@ -35,9 +35,8 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity postReview(@Valid @RequestPart(name = "requestBody") ReviewDto.Post requestBody, @RequestPart(name = "imageFile", required = false) MultipartFile imageFile) {
         Review review = reviewService.createReview(mapper.reviewPostDtoToReview(requestBody), imageFile);
-        URI location = UriCreator.createUri(REVIEW_DEFAULT_URL, review.getReviewId());
 
-        return ResponseEntity.created(location).build();
+        return new ResponseEntity(new SingleResponseDto<>(mapper.reviewToReviewResponseDto(review)), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{review-id}")

@@ -75,10 +75,12 @@ public class ReviewControllerTest {
 
         given(reviewMapper.reviewPostDtoToReview(Mockito.any(ReviewDto.Post.class))).willReturn(new Review());
 
-        Review mockResultReview = new Review();
-        mockResultReview.setReviewId(1L);
+        given(reviewService.createReview(Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(new Review());
 
-        given(reviewService.createReview(Mockito.any(Review.class), Mockito.any(MultipartFile.class))).willReturn(mockResultReview);
+        ReviewDto.Response response =  new ReviewDto.Response(1L,"Stub 리뷰 수정합니다!", 5, "imageUrl", LocalDateTime.now(), LocalDateTime.now(),
+                new ReviewDto.Response.ReviewMember(1L, "legendpaino", "imageUrl"));
+
+        given(reviewMapper.reviewToReviewResponseDto(Mockito.any(Review.class))).willReturn(response);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer ".concat("adfadf"));
@@ -91,7 +93,7 @@ public class ReviewControllerTest {
                                 .file(GetMockMultipartFile.getMockMultipartJson("requestBody", content))
                                 .file(GetMockMultipartFile.getMockMultipartFile("imageFile"))
                                 .content(content)
-                                .accept(MediaType.MULTIPART_FORM_DATA)
+                                .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .headers(headers)
                 );
@@ -99,7 +101,7 @@ public class ReviewControllerTest {
         // then
         postAction
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", is(startsWith("/reviews/"))))
+                .andExpect(jsonPath("$.data.score").value(response.getScore()))
                 .andDo(document(
                         "post-review",
                         getRequestPreProcessor(),
@@ -122,8 +124,19 @@ public class ReviewControllerTest {
                                         fieldWithPath("score").type(JsonFieldType.NUMBER).description("리뷰 별점 점수")
                                 )
                         ),
-                        responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리뷰의 URI")
+                        responseFields(
+                                List.of(fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+                                        fieldWithPath("data.reviewId").type(JsonFieldType.NUMBER).description("리뷰 식별 ID"),
+                                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("리뷰 내용"),
+                                        fieldWithPath("data.score").type(JsonFieldType.NUMBER).description("리뷰 점수"),
+                                        fieldWithPath("data.imageURL").type(JsonFieldType.STRING).description("리뷰 이미지 URL"),
+                                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("리뷰 생성 날짜"),
+                                        fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("리뷰 수정 날짜"),
+                                        fieldWithPath("data.reviewMember").type(JsonFieldType.OBJECT).description("리뷰 작성자 데이터"),
+                                        fieldWithPath("data.reviewMember.memberId").type(JsonFieldType.NUMBER).description("회원 식별 ID"),
+                                        fieldWithPath("data.reviewMember.nickname").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                        fieldWithPath("data.reviewMember.memberImageURL").type(JsonFieldType.STRING).description("회원 프로필 이미지 URL")
+                                )
                         )
                 ));
 

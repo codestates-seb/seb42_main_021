@@ -210,9 +210,6 @@ include::{snippets}/get-category-products/curl-request.adoc[]
 .http-request
 include::{snippets}/get-category-products/http-request.adoc[]
 
-.path-parameters
-include::{snippets}/get-category-products/path-parameters.adoc[]
-
 .request-parameters
 include::{snippets}/get-category-products/request-parameters.adoc[]
 
@@ -303,8 +300,8 @@ include::{snippets}/post-review/request-fields.adoc[]
 .http-response
 include::{snippets}/post-review/http-response.adoc[]
 
-.response-headers
-include::{snippets}/post-review/response-headers.adoc[]
+.response-fields
+include::{snippets}/post-review/response-fields.adoc[]
 
 
 
@@ -457,25 +454,11 @@ include::{snippets}/create-order/request-headers.adoc[]
 .http-response
 include::{snippets}/create-order/http-response.adoc[]
 
+.request-body
+include::{snippets}/create-order/request-body.adoc[]
+
 .response-fields
 include::{snippets}/create-order/response-fields.adoc[]
-
-
-=== 단일 주문 조회
-.curl-request
-include::{snippets}/read-order/curl-request.adoc[]
-
-.http-request
-include::{snippets}/read-order/http-request.adoc[]
-
-.path-parameters
-include::{snippets}/read-order/path-parameters.adoc[]
-
-.http-response
-include::{snippets}/read-order/http-response.adoc[]
-
-.response-fields
-include::{snippets}/read-order/response-fields.adoc[]
 
 
 === 전체 주문 조회
@@ -485,11 +468,15 @@ include::{snippets}/read-all-order/curl-request.adoc[]
 .http-request
 include::{snippets}/read-all-order/http-request.adoc[]
 
+.request-headers
+include::{snippets}/read-all-order/request-headers.adoc[]
+
 .http-response
 include::{snippets}/read-all-order/http-response.adoc[]
 
 .response-fields
 include::{snippets}/read-all-order/response-fields.adoc[]
+
 
 === 주문 취소
 .curl-request
@@ -506,6 +493,7 @@ include::{snippets}/cancel-order/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/cancel-order/http-response.adoc[]
+
 
 == ImageController
 === 이미지 업로드

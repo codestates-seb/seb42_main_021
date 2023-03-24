@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @NoArgsConstructor
@@ -27,21 +28,25 @@ public class OrderProduct extends BaseTime {
     private Long productId;
 
     @Column(nullable = false)
-    private int price;
+    private String productName;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 
     @Column(nullable = false)
     private int quantity;
 
-    public OrderProduct(Order order, Long productId, int price, int quantity)
+    public OrderProduct(Order order, Long productId, String productName, BigDecimal price, int quantity)
     {
         this.order = order;
         this.productId = productId;
+        this.productName = productName;
         this.price = price;
         this.quantity = quantity;
     }
 
     public static OrderProductDto toDto(OrderProduct orderProduct){
-        return new OrderProductDto(orderProduct.getProductId(), orderProduct.getPrice(), orderProduct.getQuantity());
+        return new OrderProductDto(orderProduct.getProductId(), orderProduct.getProductName(), orderProduct.getPrice(), orderProduct.getQuantity());
     }
 
 }

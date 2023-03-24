@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,10 @@ public class Order extends BaseTime {
 
     private Long memberId;
 
-    private int totalPrice;
+    private BigDecimal totalPrice;
+
+    //구매한 상품 종류
+    private int productType;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.ORDER_WAITING;
@@ -32,8 +36,5 @@ public class Order extends BaseTime {
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderProduct> orderProduct = new ArrayList<>();
 
-    public static OrderDto.Response toDto(Order order){
-        return new OrderDto.Response(order.getOrderId(), order.getTotalPrice(), order.getOrderStatus(), order.getCreatedAt());
-    }
 
     }

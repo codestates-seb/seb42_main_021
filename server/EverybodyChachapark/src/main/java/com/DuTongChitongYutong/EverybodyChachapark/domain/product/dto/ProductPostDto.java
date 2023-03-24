@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class ProductPostDto {
     private String subtitle;
 
     @PositiveOrZero
-    private int price;
+    private BigDecimal price;
 
     private ProductCategory productCategory;
 

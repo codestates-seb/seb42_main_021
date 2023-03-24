@@ -1,6 +1,6 @@
-package com.DuTongChitongYutong.EverybodyChachapark.security.hendler;
+package com.DuTongChitongYutong.EverybodyChachapark.auth.hendler;
 
-import com.DuTongChitongYutong.EverybodyChachapark.security.utils.ErrorResponder;
+import com.DuTongChitongYutong.EverybodyChachapark.auth.utils.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
