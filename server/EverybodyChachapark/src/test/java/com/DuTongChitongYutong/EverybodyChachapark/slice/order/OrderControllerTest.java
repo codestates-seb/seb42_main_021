@@ -3,12 +3,14 @@ package com.DuTongChitongYutong.EverybodyChachapark.slice.order;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.controller.OrderController;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderListPage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderProductDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.Order;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderProduct;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderStatus;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.service.OrderService;
 import com.google.gson.Gson;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,16 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,6 +36,8 @@ import java.util.stream.Collectors;
 
 import static com.DuTongChitongYutong.EverybodyChachapark.util.ApiDocumentUtils.getRequestPreProcessor;
 import static com.DuTongChitongYutong.EverybodyChachapark.util.ApiDocumentUtils.getResponsePreProcessor;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -38,8 +46,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -238,17 +245,36 @@ public class OrderControllerTest {
         order2.setTotalPrice(BigDecimal.valueOf(213000));
         order2.setOrderStatus(OrderStatus.ORDER_COMPLETED);
 
+        String page = "1";
+        String size = "10";
+
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("page", page);
+        queryParams.add("size", size);
+
+        int pageNumber = 1;
+        int pageSize = 10;
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
 
         List<Order> orderList = List.of(order, order2);
+        Page<Order> orderPage = new PageImpl<>(orderList, pageable, orderList.size());
 
-        List<OrderDto> mockAllOrderReadDtoResult = new ArrayList<>();
+        List<OrderDto> AllOrderDto = new ArrayList<>();
 
-        for (Order orders : orderList){
+        for (Order orders : orderPage.getContent()){
             List<OrderProductDto> orderProductDtos = orders.getOrderProduct().stream().map(OrderProduct::toDto).collect(Collectors.toList());
-            mockAllOrderReadDtoResult.add(new OrderDto(orders, orderProductDtos));
+            AllOrderDto.add(new OrderDto(orders, orderProductDtos));
         }
 
-        given(orderService.readOrders()).willReturn(mockAllOrderReadDtoResult);
+        OrderListPage mockOrderListPage = new OrderListPage();
+        mockOrderListPage.setOrderDtoList(AllOrderDto);
+        mockOrderListPage.setCurrentPage(pageNumber);
+        mockOrderListPage.setTotalPages(1);
+        mockOrderListPage.setTotalElements(2L);
+
+        given(orderService.readOrders(Mockito.anyInt(), Mockito.anyInt())).willReturn(mockOrderListPage);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer ".concat("adfadf"));
@@ -257,13 +283,20 @@ public class OrderControllerTest {
         ResultActions readAction = mockMvc.perform(
                 get(ORDER_DEFAULT_URL + "/all")
                         .accept(MediaType.APPLICATION_JSON)
+                        .params(queryParams)
                         .headers(headers)
 
         );
 
-        readAction
+        MvcResult mvcResult = readAction
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].orderId").value(mockAllOrderReadDtoResult.get(0).getOrderId()))
+                .andExpect(jsonPath("$.data.*").exists())
+                .andReturn();
+
+        List list = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.data.orderDtoList"); // mvcResult.getResponse().getContentAsString()으로 ResponseBody 값을 Json으로 parse하고 "$.data"부분만 가져온다.
+        assertThat(list.size(), is(2)); // 가져온 Json 배열의 수가 2칸인지 테스트
+
+        readAction
                 .andDo(document(
                         "read-all-order",
                         getRequestPreProcessor(),
@@ -275,19 +308,27 @@ public class OrderControllerTest {
                                                 "Refresh Token (Ex. eyJhbG...)")
                                 )
                         ),
+                        requestParameters(
+                                List.of(parameterWithName("page").description("Page 번호"),
+                                        parameterWithName("size").description("Size 크기"))
+                        ),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("결과 데이터"),
-                                        fieldWithPath("data[].orderId").type(JsonFieldType.NUMBER).description("주문 식별 ID"),
-                                        fieldWithPath("data[].productType").type(JsonFieldType.NUMBER).description("주문한 상품의 종류"),
-                                        fieldWithPath("data[].totalPrice").type(JsonFieldType.NUMBER).description("주문한 상품의 총 가격"),
-                                        fieldWithPath("data[].orderStatus").type(JsonFieldType.STRING).description("주문 상태"),
-                                        fieldWithPath("data[].orderProductDtos[]").type(JsonFieldType.ARRAY).description("주문한 상품 정보"),
-                                        fieldWithPath("data[].orderProductDtos[].productId").type(JsonFieldType.NUMBER).description("주문한 상품 식별 ID"),
-                                        fieldWithPath("data[].orderProductDtos[].productName").type(JsonFieldType.STRING).description("주문한 상품 이름"),
-                                        fieldWithPath("data[].orderProductDtos[].price").type(JsonFieldType.NUMBER).description("주문한 상품 가격"),
-                                        fieldWithPath("data[].orderProductDtos[].quantity").type(JsonFieldType.NUMBER).description("주문한 상품 수량"),
-                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("주문 생성 날짜 및 시간").optional()
+                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+                                        fieldWithPath("data.orderDtoList").type(JsonFieldType.ARRAY).description("조회된 주문 목록"),
+                                        fieldWithPath("data.orderDtoList[].orderId").type(JsonFieldType.NUMBER).description("주문 식별 ID"),
+                                        fieldWithPath("data.orderDtoList[].totalPrice").type(JsonFieldType.NUMBER).description("주문한 상품의 총 가격"),
+                                        fieldWithPath("data.orderDtoList[].productType").type(JsonFieldType.NUMBER).description("주문한 상품의 종류"),
+                                        fieldWithPath("data.orderDtoList[].orderStatus").type(JsonFieldType.STRING).description("주문 상태"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[]").type(JsonFieldType.ARRAY).description("주문한 상품 정보"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].productId").type(JsonFieldType.NUMBER).description("주문한 상품 식별 ID"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].productName").type(JsonFieldType.STRING).description("주문한 상품 이름"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].price").type(JsonFieldType.NUMBER).description("주문한 상품 가격"),
+                                        fieldWithPath("data.orderDtoList[].orderProductDtos[].quantity").type(JsonFieldType.NUMBER).description("주문한 상품 수량"),
+                                        fieldWithPath("data.orderDtoList[].createdAt").type(JsonFieldType.STRING).description("주문 생성 날짜 및 시간").optional(),
+                                        fieldWithPath("data.currentPage").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                        fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수"),
+                                        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description("전체 요소 수")
                                 )
                         )
 
