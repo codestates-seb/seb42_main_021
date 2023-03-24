@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import styled from 'styled-components';
 
-import newAxios from '../newAxios';
+import instance from '../newAxios';
 
 const ShoppingItemLayout = styled.div`
   border-bottom: 1px solid rgb(201, 201, 201);
@@ -101,52 +101,55 @@ const ItemNumberChangeContainer = styled.div`
   }
 `;
 
-const ShoppingItems = ({ setOrderPrice }) => {
+const ShoppingItems = ({ setOrderPrice, setCartId }) => {
   const [product, setProduct] = useState([]);
   const [counts, setCounts] = useState({});
   const [checkedItem, setCheckedItem] = useState([]);
   //delete나 patch 시 화면에 반영되도록 하는 state 값
   const [updateProduct, setUpdateProdcut] = useState(1);
 
-  const [cookies, setCookie, removeCookie] = useCookies();
-
-  const accesseToken = cookies.accessToken;
-  const refreshToken = cookies.refreshToken;
   const doneAllCheckd = product.length === checkedItem.length ? true : false;
 
-  //수량 변화가 있을 때마다 서버에 저장(post) => 다시 get해서 내용 뿌려주기 => 비효율적
-  //화면에서 벗어났을 때만 변경 내용을 서버에 저장하고싶음
-  //마운트 언마운트 ???
-  // useEffect winddow.location.path로 현재 경로페이지 확인하기
-
   const readProductList = async () => {
-    const { data } = await newAxios.get(`/carts`);
-
+    const { data } = await instance.get(`/carts`);
     return data;
   };
 
   const sendCountInformation = async (cartId, quantity) => {
-    await newAxios.patch(`/carts/${cartId}`, { quantity });
+    await instance.patch(`/carts/${cartId}`, { quantity });
     setUpdateProdcut(0);
   };
 
+  //장바구니 목록을 서버에서 가져오기
   useEffect(() => {
     const getProduct = async () => {
       const data = await readProductList();
-      setProduct(data.data);
-
-      setCheckedItem(data.data.map((element) => element.productId));
-
-      data.data.forEach((element) => {
-        setCounts((previosCount) => ({
-          ...previosCount,
-          [element.productId]: element.quantity,
-        }));
-      });
+      syncProductList(data);
     };
     getProduct();
     setUpdateProdcut(1);
   }, [updateProduct]);
+
+  useEffect(() => {
+    const checkedProduct = product.filter((items) =>
+      checkedItem.includes(items.productId)
+    );
+    const checkedCartId = checkedProduct.map((item) => item.cartId);
+    setCartId(checkedCartId);
+  }, [checkedItem]);
+
+  const syncProductList = (data) => {
+    setProduct(data.data);
+
+    setCheckedItem(data.data.map((element) => element.productId));
+
+    data.data.forEach((element) => {
+      setCounts((previosCount) => ({
+        ...previosCount,
+        [element.productId]: element.quantity,
+      }));
+    });
+  };
 
   const handleIncreaseCount = ({ productId, cartId }) => {
     setCounts((previosCount) => ({
@@ -180,7 +183,7 @@ const ShoppingItems = ({ setOrderPrice }) => {
   };
 
   const handleDelte = async (cartId) => {
-    await newAxios.delete(`/carts/${cartId}`);
+    await instance.delete(`/carts/${cartId}`);
     setUpdateProdcut(0);
   };
 
