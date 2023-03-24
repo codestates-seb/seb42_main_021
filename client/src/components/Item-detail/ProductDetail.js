@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReactHtmlParser from 'react-html-parser';
 import instance from '../newAxios';
 
 import AdminButtonGroup from './AdminButtonGroup';
@@ -82,9 +83,9 @@ function ProductDetail({ productDetail, userRole }) {
       <ProductDescription color="#8e8e8e">
         {productDetail.subtitle}
       </ProductDescription>
-      <ProductDescription
-        dangerouslySetInnerHTML={{ __html: productDetail.productDetail }} // html 그대로 사용하지 않는 방법 연구하기
-      ></ProductDescription>
+      <ProductDescription>
+        {ReactHtmlParser(productDetail.productDetail)}
+      </ProductDescription>
     </div>
   );
 }
