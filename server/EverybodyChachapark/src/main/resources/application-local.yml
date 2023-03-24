@@ -12,3 +12,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+image:
+  local-path: src/main/resources/file/
+  server-url: http://localhost:8080/images/
+  profileImage-name: profile-
+  dummyImage-name: not-found
+
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
