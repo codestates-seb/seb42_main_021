@@ -105,6 +105,8 @@ public class LocalStorageService implements StorageService, ApplicationEventPubl
     public byte[] load(String imageURL) {
         String fileName = imageURL.replaceFirst(serverUrl, "");
 
+        // Todo: 이미지 명이 static으로 정해져 있으면 localPath + staticDirectory
+
         Path destination = Path.of(localPath, fileName).normalize(); // 경로 설정
 
         byte[] imageByteArray = null;

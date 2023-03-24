@@ -24,3 +24,12 @@ jwt:
   key: kim1234123412341234567895678956789567895678956789
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 420
+
+image:
+  local-path: src/main/resources/file/
+  server-url: http://localhost:8080/images/
+  profileImage-name: profile-
+  dummyImage-name: not-found
+
+config:
+  domain: http://localhost:3000

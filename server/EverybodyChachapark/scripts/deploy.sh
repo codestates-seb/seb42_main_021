@@ -30,6 +30,5 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 SPRING_PROFILE=--spring.profiles.active=server
-PATH_VALUE=-Dserver-url='EC2 서버 주소' # 꼭 배포서버 DNS가 바뀌면 수정할 것!
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/action/deploy.log
-sudo nohup java -jar $PATH_VALUE $DEPLOY_JAR $SPRING_PROFILE >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &
+sudo nohup java -jar $DEPLOY_JAR $SPRING_PROFILE >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &
