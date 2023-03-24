@@ -37,6 +37,7 @@ const ShoppingCartLayout = styled.div`
 const ShoppingCart = () => {
   const [orderPrice, setOrderPrice] = useState(0);
   const [cookies, setCookie, removeCookie] = useCookies();
+  const [cartId, setCartId] = useState(null);
 
   const refreshToken = cookies.refreshToken;
   return (
@@ -47,8 +48,11 @@ const ShoppingCart = () => {
           <div className="nologin">로그인 후 이용해 주세요</div>
         ) : (
           <>
-            <ShoppingItems setOrderPrice={setOrderPrice} />
-            <ShippingInformation orderPrice={orderPrice} />
+            <ShoppingItems
+              setOrderPrice={setOrderPrice}
+              setCartId={setCartId}
+            />
+            <ShippingInformation orderPrice={orderPrice} cartId={cartId} />
           </>
         )}
         <Footer />

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import DaumPostCode from './DaumPostCode';
-import newAxios from '../newAxios';
+import instance from '../newAxios';
+import { useNavigate } from 'react-router-dom';
 
 const ShippingLayout = styled.div`
   display: flex;
@@ -101,12 +102,14 @@ const PopupText = styled.p`
   margin-bottom: 30px;
 `;
 
-const ShippingInformation = ({ orderPrice }) => {
+const ShippingInformation = ({ orderPrice, cartId }) => {
   const [receiver, setReceiver] = useState('');
   const [address, setAddress] = useState('');
   const [popAddress, setPopAddress] = useState(false);
   const [alarmPop, setAlarmPop] = useState(false);
   const [popContent, setPopContent] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleReceiver = (event) => {
     event.preventDefault();
@@ -130,21 +133,21 @@ const ShippingInformation = ({ orderPrice }) => {
 
   const handleSubmit = async () => {
     if (!address && !receiver) {
-      popupOpen('받는 사람과 주소를 입력해주세요');
+      return popupOpen('받는 사람과 주소를 입력해주세요');
     }
     if (address && !receiver) {
-      popupOpen('받는 사람을 입력해주세요');
+      return popupOpen('받는 사람을 입력해주세요');
     }
     if (!address && receiver) {
-      popupOpen('주소를 입력해주세요');
+      return popupOpen('주소를 입력해주세요');
     }
-    if (orderPrice === 0) {
-      popupOpen('주문할 상품이 없습니다');
+    if (orderPrice === '0') {
+      return popupOpen('주문할 상품이 없습니다');
     }
     try {
-      newAxios.post(`/orders`);
+      instance.post(`/orders`, { cartList: cartId });
       popupOpen('주문이 완료되었습니다');
-      //장바구니 리셋 => 다시 get해 오는 함수 필요
+      navigate('/mypage');
     } catch (error) {
       console.log(error);
     }
@@ -161,6 +164,7 @@ const ShippingInformation = ({ orderPrice }) => {
             placeholder="  홍길동"
             value={receiver}
             onChange={handleReceiver}
+            required
           />
         </WriteNameContainer>
         <WriteAddressContainer>
@@ -170,6 +174,7 @@ const ShippingInformation = ({ orderPrice }) => {
             placeholder=" 서울 강남구 영동대로 513 "
             value={address}
             onChange={handleAdress}
+            required
           />
           <button
             className="find-adress"
@@ -187,7 +192,7 @@ const ShippingInformation = ({ orderPrice }) => {
 
         <OrderContainer>
           <button className="order-price" onClick={handleSubmit}>
-            {orderPrice}원 주문하기
+            {orderPrice.toLocaleString('ko-KR')}원 주문하기
           </button>
         </OrderContainer>
         {alarmPop && (
