@@ -31,7 +31,7 @@ const MainPageContentBorderTop = styled.p`
   border-radius: var(--bd-rd);
 `;
 
-const MainBoxS = ({ children, backgroundColor, color }) => {
+const MainBoxSmall = ({ children, backgroundColor, color }) => {
   return (
     <MainBoxSLayout>
       <MainPageContentBorderTop backgroundColor={backgroundColor} />
@@ -42,4 +42,4 @@ const MainBoxS = ({ children, backgroundColor, color }) => {
   );
 };
 
-export default MainBoxS;
+export default MainBoxSmall;

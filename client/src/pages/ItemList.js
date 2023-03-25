@@ -6,9 +6,10 @@ import Main from '../components/main/Main';
 import Footer from '../components/main/Footer';
 
 import CategoryContainer from '../components/itemList/CategoryContainer';
-import ItemListItem from '../components/itemList/ItemListItem';
+import ItemListSingle from '../components/itemList/ItemListSingle';
 import useItemList from '../components/itemList/useItemList';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+
 import {
   AdminButton,
   ItemBodyContainer,
@@ -59,7 +60,7 @@ const ItemList = () => {
             </ItemHeaderContainer>
             <ItemBodyContainer>
               {items?.map((item) => (
-                <ItemListItem key={item.productId} item={item} />
+                <ItemListSingle key={item.productId} item={item} />
               ))}
             </ItemBodyContainer>
             <Paging page={page} count={count} setPage={setPage} />

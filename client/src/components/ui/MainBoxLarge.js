@@ -27,7 +27,7 @@ const MainPageContent = styled.p`
     `};
 `;
 
-const MainBoxL = ({ children, width }) => {
+const MainBoxLarge = ({ children, width }) => {
   return (
     <>
       <MainPageBox width={width}>
@@ -37,4 +37,4 @@ const MainBoxL = ({ children, width }) => {
   );
 };
 
-export default MainBoxL;
+export default MainBoxLarge;
