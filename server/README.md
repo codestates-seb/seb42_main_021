@@ -3,13 +3,29 @@ EverybodyChaChapark BackEnd Server 배포 가이드
 
 <br>
 
+## Spring Application Start Guide
+1. openJDK 설치  
+``` $ sudo apt update ```  
+``` $ sudo apt install openjdk-11-jre-headless ```  
+2. 프로젝트 가져오기 -> Spring Application Install 참고
+3. 빌드 -> Spring Application Build 참고
+4. 실행 -> EverybodyChaChaPark Server auto booting start 참고
+
+<br>
+
 ## Spring Application Install
 ``` $ git clone https://github.com/codestates-seb/seb42_main_021.git ```
 
 <br>
 
 ## Spring Application Build
-```$ ./gradlew build```
+```$ sudo ./gradlew build```
+
+<br>
+
+## EverybodyChaChaPark Server auto booting start
+```$ chmod 777 /home/ubuntu/seb42_main_021/server/scripts/deploy.sh```
+```$ /home/ubuntu/seb42_main_021/server/scripts/deploy.sh```
 
 <br>
 
