@@ -11,7 +11,7 @@ DEPLOY_PATH=/home/ubuntu/action/
 LOG_PATH=/home/ubuntu/logs
 cp $BUILD_JAR $DEPLOY_PATH
 
-if [! -d $LOG_PATH ]
+if [ ! -d $LOG_PATH ]
 then
   mkdir /home/ubuntu/logs
 fi
