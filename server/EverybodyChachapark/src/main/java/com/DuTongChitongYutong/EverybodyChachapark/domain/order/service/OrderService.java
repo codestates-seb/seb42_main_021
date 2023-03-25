@@ -6,6 +6,7 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.cart.repository.CartRe
 import com.DuTongChitongYutong.EverybodyChachapark.domain.member.service.MemberService;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.CartListDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderDto;
+import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderListPage;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.dto.OrderProductDto;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.Order;
 import com.DuTongChitongYutong.EverybodyChachapark.domain.order.entity.OrderProduct;
@@ -16,7 +17,13 @@ import com.DuTongChitongYutong.EverybodyChachapark.domain.product.service.Produc
 import com.DuTongChitongYutong.EverybodyChachapark.exception.BusinessLogicException;
 import com.DuTongChitongYutong.EverybodyChachapark.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,18 +111,30 @@ public class OrderService {
  */
 
     @Transactional(readOnly = true)
-    public List<OrderDto> readOrders(){
+    public OrderListPage readOrders(int page, int size){
 
         Long memberId = memberService.findByEmail().getMemberId();
-        List<Order> orderList = orderRepository.findOrdersByMemberId(memberId);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Order> orderList = orderRepository.findOrdersByMemberId(memberId, pageable);
         List<OrderDto> allOrderDto = new ArrayList<>();
 
-        for (Order orders : orderList){
+        for (Order orders : orderList.getContent()){
             List<OrderProductDto> orderProductDtos = orders.getOrderProduct().stream().map(OrderProduct::toDto).collect(Collectors.toList());
             allOrderDto.add(new OrderDto(orders, orderProductDtos));
         }
 
-        return allOrderDto;
+        Long totalElements = orderRepository.countOrdersByMemberId(memberId);
+        int totalPages = (int) Math.ceil((double) totalElements / size);
+
+
+        OrderListPage orderListPage = new OrderListPage();
+        orderListPage.setOrderDtoList(allOrderDto);
+        orderListPage.setCurrentPage(page);
+        orderListPage.setTotalElements(totalElements);
+        orderListPage.setTotalPages(totalPages);
+
+        return orderListPage;
+
         //페이징 처리가 필요하지 않을까..?
         // CQRS패턴-> 알아보기, CREATE. UPDATE기능 분리
     }

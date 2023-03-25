@@ -56,6 +56,9 @@ public class SecurityConfiguration {
     @Value("${spring.security.oauth2.client.registration.google.clientSecret}")
     private String clientSecret;
 
+    @Value("${config.domain}") // client Endpoint
+    private String domain;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -108,7 +111,8 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.addAllowedOrigin(domain); // client Endpoint 허용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization", "Refresh"));

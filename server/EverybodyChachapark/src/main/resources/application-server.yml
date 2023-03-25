@@ -1,15 +1,23 @@
+server:
+  port: 8085
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ #everybodychachaparktest
-    username: root
-    password: #**
+    url: jdbc:mysql://dutongchitongyutong-db.chitfhbpfxmo.ap-northeast-2.rds.amazonaws.com:3355/EverybodyChaChaPark?useSSL=false&characterEncoding=UTF-8
+    username: admin
+    password: eogus442
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update # 서버 실행시 스키마를 자동으로 생성해주지만 서버 종료시 그대로 유지함
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
+
+image:
+  local-path: src/main/resources/file/
+  server-url: http://52.78.56.205/  # EC2 주소 입력
+  profileImage-name: profile-
+  dummyImage-name: not-found
+
+config:
+  domain: http://everybodychachapark-client-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com
