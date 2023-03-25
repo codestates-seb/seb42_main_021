@@ -47,15 +47,15 @@ export const LocationApiContainer = styled.div`
     width: 25px;
     height: 25px;
   }
-`;
-export const LocationTextBox = styled.div`
-  display: flex;
-  margin: 20px 10px;
-  img {
-    margin-right: 10px;
-  }
-  p {
-    font-size: 16px;
+  div {
+    display: flex;
+    margin: 20px 10px;
+    img {
+      margin-right: 10px;
+    }
+    p {
+      font-size: 16px;
+    }
   }
 `;
 
@@ -67,24 +67,14 @@ export const CuratingBodyTitleBox = styled.div`
     margin: 20px 0;
     font-size: 20px;
   }
-`;
-export const BodyTitleTextBox = styled.ul`
-  display: flex;
-  margin: 10px 0;
-  gap: 100px;
-  li {
-    :nth-child(2) {
-      color: var(--midgray);
-    }
-  }
-`;
-export const BodyTitle2TextBox = styled.ul`
-  display: flex;
-  margin: 10px 0;
-  gap: 68px;
-  li {
-    :nth-child(2) {
-      color: var(--midgray);
+  ul {
+    display: flex;
+    margin: 10px 0;
+    gap: 65px;
+    li {
+      :nth-child(2) {
+        color: var(--midgray);
+      }
     }
   }
 `;
@@ -95,13 +85,16 @@ export const CuratingBodyCotentBox = styled.div`
     margin: 20px 0;
     font-size: 20px;
   }
-`;
-export const BodyContentTextBox = styled.div`
-  p {
-    color: var(--midgray);
-    margin-bottom: 15px;
+  div {
+    p {
+      color: var(--midgray);
+      margin-bottom: 15px;
+      font-weight: bold;
+      line-height: 200%;
+    }
   }
 `;
+
 export const BodyContentImgBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -122,6 +115,8 @@ export const BodyContentImgBox = styled.div`
   p {
     text-align: center;
     margin: 10px;
+    font-weight: 1000;
+    color: black !important;
   }
 `;
 export const ContainerBorderTop = styled.p`
@@ -130,5 +125,5 @@ export const ContainerBorderTop = styled.p`
   background-color: #e8dcdc;
   width: 100%;
   height: 3px;
-  border-radius: var(--bd-rd);
+  border-radius: var(--bd-rd) !important;
 `;

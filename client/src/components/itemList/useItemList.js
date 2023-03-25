@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import jwt_decode from 'jwt-decode';
@@ -10,45 +10,74 @@ import {
 
 const useItemList = () => {
   const navigate = useNavigate();
-  const [cookies, , removeCookie] = useCookies();
+  const [cookies] = useCookies();
+  const { accessToken } = cookies;
 
-  const isSubmitClicked = true;
   const size = 10;
 
   const [items, setItems] = useState([]);
-
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
-
   const [searchValue, setSearchValue] = useState('');
   const [keyword, setKeyword] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
-
   const [adminAccess, setAdminAccess] = useState();
-  const { accessToken } = cookies;
 
   const [upDate, setUpDate] = useState(0);
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (!searchValue) {
-        const getProductListFilter = async () => {
-          const response = await getProductList(page, size);
-          setItems(response.data.data);
-          setCount(response.data.pageInfo.totalElements);
-        };
-        getProductListFilter();
+  const handleKeyDown = useCallback(
+    (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (!searchValue) {
+          getProductListFilter(page, size);
+        }
+        setKeyword(searchValue);
       }
-      setKeyword(searchValue);
-    }
-  };
+    },
+    [searchValue, page, size]
+  );
   const handleChange = (e) => {
     setSearchValue(e.target.value);
   };
   const handleAdmin = () => {
-    navigate('/admin-item/0', { state: isSubmitClicked });
+    navigate('/admin-item/0', { state: true });
   };
+
+  const getProductListFilter = async (page, size) => {
+    const response = await getProductList(page, size);
+    setItems(response.data.data);
+    setCount(response.data.pageInfo.totalElements);
+    setUpDate(0);
+  };
+  const categoryProductListFilter = async (categoryFilter) => {
+    const response = await categoryProductList(categoryFilter);
+    setItems(response.data.data);
+    setCount(response.data.data.length);
+  };
+
+  const searchProductListFilter = async (keyword) => {
+    const response = await searchProductList(keyword);
+    setItems(response.data.data);
+    setCount(response.data.data.length);
+  };
+
+  useEffect(() => {
+    getProductListFilter(page, size, upDate);
+  }, [page, size, upDate]);
+
+  useEffect(() => {
+    if (!categoryFilter) return;
+    if (categoryFilter === 'NO_CATEGORY') {
+      setUpDate(1);
+    }
+    categoryProductListFilter(categoryFilter);
+  }, [categoryFilter]);
+
+  useEffect(() => {
+    if (!keyword) return;
+    searchProductListFilter(keyword);
+  }, [keyword]);
 
   useEffect(() => {
     if (Object.keys(cookies).length) {
@@ -61,39 +90,6 @@ const useItemList = () => {
     }
   }, [accessToken, cookies]);
 
-  useEffect(() => {
-    const getProductListFilter = async () => {
-      const response = await getProductList(page, size);
-      setItems(response.data.data);
-      setCount(response.data.pageInfo.totalElements);
-    };
-    getProductListFilter();
-    setUpDate(0);
-  }, [page, size, upDate]);
-
-  useEffect(() => {
-    if (!categoryFilter) return;
-    if (categoryFilter === 'NO_CATEGORY') {
-      setUpDate(1);
-    }
-    const categoryProductListFilter = async () => {
-      const response = await categoryProductList(categoryFilter);
-      setItems(response.data.data);
-      setCount(response.data.data.length);
-    };
-    categoryProductListFilter();
-  }, [categoryFilter]);
-
-  useEffect(() => {
-    if (!keyword) return;
-    const searchProductListFilter = async () => {
-      const response = await searchProductList(keyword);
-      console.log(response.data.data);
-      setItems(response.data.data);
-      setCount(response.data.data.length);
-    };
-    searchProductListFilter();
-  }, [keyword]);
   return {
     handleChange,
     handleKeyDown,

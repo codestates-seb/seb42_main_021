@@ -34,8 +34,7 @@ export const ExplainLayout = styled.div`
   margin-top: 20px;
   padding: 0 20px;
 `;
-export const ExplainContentContainer = styled.div``;
-export const ExplainContent2Container = styled.div``;
+
 export const ExplainContentBox = styled.div`
   display: flex;
   margin-bottom: 30px;
