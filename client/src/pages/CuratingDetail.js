@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-
 import Location from '../components/mapApi/Location';
 import SubCarousel from '../components/ui/SubCarousel';
 
@@ -7,12 +6,8 @@ import Footer from '../components/main/Footer';
 import CuratingBodyImg from '../components/curating/CuratingBodyImg';
 
 import { curationList } from '../assets/curationState';
-import locationImg from '../img/location.png';
 import {
   BodyContentImgBox,
-  BodyContentTextBox,
-  BodyTitle2TextBox,
-  BodyTitleTextBox,
   ContainerBorderTop,
   CuratingBodyContainer,
   CuratingBodyCotentBox,
@@ -20,9 +15,9 @@ import {
   CuratingDetailLayout,
   CuratingTitleContainer,
   LocationApiContainer,
-  LocationTextBox,
   Main,
 } from '../components/curating/CuratingDetail.styled';
+import locationImg from '../img/location.png';
 
 const CuratingDetail = () => {
   const { id } = useParams();
@@ -43,30 +38,32 @@ const CuratingDetail = () => {
         <LocationApiContainer>
           <h4>위치</h4>
           <Location location={location} />
-          <LocationTextBox>
+          <div>
             <img src={locationImg} alt="" />
             <p>{location[0].location}</p>
-          </LocationTextBox>
+          </div>
           <ContainerBorderTop />
         </LocationApiContainer>
         <CuratingBodyContainer>
           <CuratingBodyImg />
           <CuratingBodyTitleBox>
             <h4>기본정보</h4>
-            <BodyTitleTextBox>
+            <ul>
               <li>환경</li>
-              <li>{curatingContent[0].titleText1}</li>
-            </BodyTitleTextBox>
-            <BodyTitle2TextBox>
+              <li style={{ marginLeft: '30px' }}>
+                {curatingContent[0].titleText1}
+              </li>
+            </ul>
+            <ul>
               <li>매너타임</li>
               <li>{curatingContent[0].titleText2}</li>
-            </BodyTitle2TextBox>
+            </ul>
           </CuratingBodyTitleBox>
           <CuratingBodyCotentBox>
             <h4>캠핑장 소개</h4>
-            <BodyContentTextBox>
+            <div>
               <p>{curatingContent[0].contentText}</p>
-            </BodyContentTextBox>
+            </div>
             <ContainerBorderTop />
             <BodyContentImgBox>
               <p>{curatingContent[0].contentText2}</p>
