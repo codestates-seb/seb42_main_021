@@ -19,7 +19,10 @@ EverybodyChaChapark BackEnd Server 배포 가이드
 <br>
 
 ## Spring Application Build
-```$ sudo ./gradlew build```
+1. 빌드 실행    
+```$ sudo ./gradlew build```  
+2. 빌드 삭제   
+```$ sudo ./gradlew clean```  
 
 <br>
 
