@@ -13,9 +13,9 @@ const useMypage = () => {
 
   const [memberInformation, setMemberInformation] = useState({
     id: 1,
-    nickname: null,
-    comment: null,
-    image: null,
+    nickname: 'nickname',
+    comment: 'comment',
+    image: 'image',
   });
 
   const { nickname, comment, image } = memberInformation;
@@ -29,26 +29,16 @@ const useMypage = () => {
     return data;
   };
 
-  const readOrderData = async () => {
-    const { data } = await instance.get(`/orders/all`);
-    return data;
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const data = await readUserInfomation();
       setMemberInformation((previous) => ({
         ...previous,
-        nickname: data.data.nickname,
-        comment: data.data.comment,
-        image: data.data.profileImg,
+        [nickname]: data.data.nickname,
+        [comment]: data.data.comment || '등록해주세요',
+        [image]: data.data.profileImg,
       }));
     };
-    // const orderProduct = async () => {
-    //   const data = await readOrderData();
-    //   console.log(data);
-    // };
-    // orderProduct();
     fetchData();
     setUpdateProdcut(1);
   }, [updateProduct]);

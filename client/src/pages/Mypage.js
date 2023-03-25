@@ -1,9 +1,10 @@
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
+import Paging from '../components/ui/Pagination';
 
 import Footer from '../components/main/Footer';
 import MainLayout from '../components/main/MainLayout';
 import Main from '../components/main/Main';
-import useMypage from '../components/mypage/useMypage';
+import useMemberInfomation from '../components/mypage/useMemberInfomation';
 import {
   Circle,
   ListContainer,
@@ -13,6 +14,7 @@ import {
   Signout,
   Toggle,
 } from '../components/mypage/Mypage.styled';
+import useMypageOrderItems from '../components/mypage/useMypageOrderItems';
 
 const Mypage = () => {
   const {
@@ -27,7 +29,10 @@ const Mypage = () => {
     clickedToggle,
     handleImage,
     handleSignOut,
-  } = useMypage();
+  } = useMemberInfomation();
+
+  const { orderProdcut, page, setPage, count } = useMypageOrderItems();
+
   return (
     <Main>
       <MainLayout>
@@ -86,14 +91,30 @@ const Mypage = () => {
             <ListContainer>
               <h1>최근 주문내역</h1>
               <ul>
-                <li>
-                  <div>공기청정기 외 5건</div>
-                  <div>
-                    <div id="price">58,000원</div>
-                    <div id="date">2023.03.15(수)</div>
-                  </div>
-                </li>
+                {orderProdcut?.map((items) => (
+                  <li key={items.id}>
+                    {items.orederProductCounts !== 0 ? (
+                      <>
+                        <div className="product-name">
+                          {items.productName}
+                          <span className="another-product">
+                            외 {items.orederProductCounts}건
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="product-name">{items.productName}</div>
+                    )}
+                    <div>
+                      <div id="price">
+                        {items.totalPrice.toLocaleString('ko-KR')}원
+                      </div>
+                      <div id="date">{items.createdAt}</div>
+                    </div>
+                  </li>
+                ))}
               </ul>
+              <Paging page={page} count={count} setPage={setPage} />
             </ListContainer>
             <Signout onClick={handleSignOut}>회원탈퇴</Signout>
           </>
