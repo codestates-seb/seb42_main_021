@@ -107,6 +107,17 @@ export const ListContainer = styled.div`
       color: var(--gray);
     }
   }
+  .delete-order {
+    font-size: 20px;
+  }
+  .product-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .another-product {
+    margin-left: 10px;
+    font-size: 15px;
+  }
 `;
 
 export const Toggle = styled.button`
