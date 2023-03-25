@@ -1,19 +1,26 @@
 #!/bin/bash
 BUILD_JAR=$(ls /home/ubuntu/seb42_main_021/server/EverybodyChachapark/build/libs/EverybodyChachapark-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
+DEPLOY_PATH=/home/ubuntu/action/
+
+if [ ! -d $DEPLOY_PATH ]
+then
+  mkdir $DEPLOY_PATH
+fi
 
 echo "> 현재 시간: $(date)" >> /home/ubuntu/action/deploy.log
 
 echo "> build 파일명: $JAR_NAME" >> /home/ubuntu/action/deploy.log
 
 echo "> build 파일 복사" >> /home/ubuntu/action/deploy.log
-DEPLOY_PATH=/home/ubuntu/action/
-LOG_PATH=/home/ubuntu/logs
+
 cp $BUILD_JAR $DEPLOY_PATH
+
+LOG_PATH=/home/ubuntu/logs
 
 if [ ! -d $LOG_PATH ]
 then
-  mkdir /home/ubuntu/logs
+  mkdir $LOG_PATH
 fi
 
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ubuntu/action/deploy.log
