@@ -20,5 +20,5 @@ image:
   dummyImage-name: not-found
 
 config:
-#  domain: http://everybodychachapark-client-bucket-deploy.s3-website.ap-northeast-2.amazonaws.com # S3 호스팅 주소
-  domain: http://localhost:3000 # 임시 주소
+  domain: http://everybodychachapark-client.s3-website.ap-northeast-2.amazonaws.com # S3 호스팅 주소
+#  domain: http://localhost:3000 # 임시 주소
