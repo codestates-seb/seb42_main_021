@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import instance from '../newAxios';
 
 const useMypageOrderItems = () => {
   const [orderProdcut, setOrderProduct] = useState([]);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  const refreshToken = cookies.refreshToken;
 
   const readOrderData = async () => {
     const { data } = await instance.get(`/orders/all?page=${page}&size=10`);
@@ -17,7 +21,9 @@ const useMypageOrderItems = () => {
       const data = await readOrderData();
       setItmes(data);
     };
-    orderProduct();
+    if (refreshToken) {
+      orderProduct();
+    }
   }, [page, count]);
 
   const setItmes = (data) => {
