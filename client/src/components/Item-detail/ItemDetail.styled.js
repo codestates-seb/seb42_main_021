@@ -31,7 +31,7 @@ export const ProductInformation = styled.div`
   }
 `;
 
-export const ProductDescription = styled.p`
+export const ProductDescription = styled.div`
   margin: 10px 0 50px 0;
   word-break: break-all;
   color: ${(props) => props.color};
