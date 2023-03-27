@@ -1,10 +1,12 @@
 import axios from 'axios';
 
+const URI = process.env.REACT_APP_SERVER_URI;
+
 export const getProductList = async (page, size) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `/products/all?page=${page}&size=${size}`,
+      url: `${URI}/products/all?page=${page}&size=${size}`,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -22,7 +24,7 @@ export const categoryProductList = async (categoryFilter) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `/products/category?category=${categoryFilter}&page=0&size=10`,
+      url: `${URI}/products/category?category=${categoryFilter}&page=0&size=10`,
     });
     console.log('categoryProductList 받아오기 성공');
     // console.log(response);
@@ -37,7 +39,7 @@ export const searchProductList = async (keyword) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `/products/search?searchKeyword=${keyword}&page=0&size=10`,
+      url: `${URI}/products/search?searchKeyword=${keyword}&page=0&size=10`,
       headers: {
         'Content-Type': 'application/json',
       },
