@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Main from '../components/main/Main';
@@ -36,7 +35,7 @@ const ShoppingCartLayout = styled.div`
 
 const ShoppingCart = () => {
   const [orderPrice, setOrderPrice] = useState(0);
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies] = useCookies();
   const [cartId, setCartId] = useState(null);
 
   const refreshToken = cookies.refreshToken;

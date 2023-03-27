@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
@@ -9,10 +8,9 @@ const useMypageOrderItems = () => {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(1);
 
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies] = useCookies();
 
   const refreshToken = cookies.refreshToken;
-
 
   const readOrderData = async () => {
     const { data } = await instance.get(`/orders/all?page=${page}&size=10`);

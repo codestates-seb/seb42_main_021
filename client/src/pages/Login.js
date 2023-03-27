@@ -1,8 +1,4 @@
 import styled from 'styled-components';
-import jwt_decode from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -10,8 +6,6 @@ import { Link } from 'react-router-dom';
 import Main from '../components/main/Main';
 import MainHeader from '../components/main/MainHeader';
 import logo1 from '../img/logo1.png';
-import axios from 'axios';
-import { useState } from 'react';
 import useLogin from '../components/login/useLogin';
 
 const LoginLayout = styled.div`
@@ -129,10 +123,9 @@ const Login = () => {
     isSubmitting,
     onSubmit,
     register,
-    invalidMessage, // 삼항연산자도 리턴문으로 갖고 오기 가능~~
+    invalidMessage,
   } = useLogin();
 
-  //비지니스 로직 관심사 분리
   return (
     <Main>
       <MainHeader />
@@ -168,8 +161,8 @@ const Login = () => {
             {...register('password', {
               required: '비밀번호는 필수 입력입니다.',
               minLength: {
-                value: 1,
-                message: '8자리 이상 비밀번호를 사용하세요.',
+                value: 4,
+                message: '4자리 이상 비밀번호를 사용하세요.',
               },
             })}
           />

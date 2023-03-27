@@ -12,7 +12,7 @@ const useLogin = () => {
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [, setCookie] = useCookies();
   const navigate = useNavigate();
 
   const invalidMessage = !isDirty ? undefined : errors.email ? 'true' : 'false';
