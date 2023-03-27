@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ReactHtmlParser from 'react-html-parser';
+import parse from 'html-react-parser';
 import instance from '../newAxios';
 
 import AdminButtonGroup from './AdminButtonGroup';
@@ -16,6 +16,8 @@ function ProductDetail({ productDetail, userRole }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  const parse = require('html-react-parser');
 
   const handleModal = () => {
     setIsModalOpen((isOpen) => !isOpen);
@@ -84,7 +86,7 @@ function ProductDetail({ productDetail, userRole }) {
         {productDetail.subtitle}
       </ProductDescription>
       <ProductDescription>
-        {ReactHtmlParser(productDetail.productDetail)}
+        {parse(productDetail.productDetail)}
       </ProductDescription>
     </div>
   );
