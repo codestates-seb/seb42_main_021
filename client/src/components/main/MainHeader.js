@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import jwt_decode from 'jwt-decode';
 import instance from '../newAxios';
-import axios from 'axios';
 
 import logolast3 from '../../img/logolast3.png';
 import back from '../../img/back.svg';
