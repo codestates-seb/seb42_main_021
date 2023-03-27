@@ -1,0 +1,10 @@
+|===
+|Name|Description
+
+|`+Authorization+`
+|Undefined 문자열 또는 null 처리 가능.
+
+|`+Refresh+`
+|토큰 재발급에 필요한 Refresh Token (Ex. eyJhbG...)
+
+|===
