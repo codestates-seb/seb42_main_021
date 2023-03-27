@@ -22,7 +22,7 @@ export const ItemInformationBox = styled.div`
     width: 100%;
     > label {
       display: block;
-      width: 20%;
+      width: 22%;
     }
     select {
       :focus {
