@@ -4,8 +4,6 @@ import instance from '../newAxios';
 import { FaCamera, FaChevronRight } from 'react-icons/fa';
 
 const useMypage = () => {
-  const [updateProduct, setUpdateProdcut] = useState(1);
-
   const [toggle, setToggle] = useState(false);
   const [nameEdit, setNameEdit] = useState(false);
   const [introEdit, setIntroEdit] = useState(false);
@@ -39,9 +37,15 @@ const useMypage = () => {
         [image]: data.data.profileImg,
       }));
     };
-    fetchData();
-    setUpdateProdcut(1);
-  }, [updateProduct]);
+
+
+    if (refreshToken) {
+      fetchData();
+    }
+  }, [comment, image, nickname]);
+
+
+
 
   const handleInformationChange = (event) => {
     const { value, name } = event.target;
@@ -65,14 +69,12 @@ const useMypage = () => {
   };
 
   const handleSubmitEditedName = async (event) => {
-    //서버에 수정된 이름 제출하기
     try {
       instance.patch('/members/info', { nickname: nickname });
     } catch (error) {
       console.log(error);
     }
     handleNameEdit();
-    setUpdateProdcut(0);
     removeCookie('accessToken');
   };
 
@@ -83,7 +85,6 @@ const useMypage = () => {
       console.log(error);
     }
     handleIntroEdit();
-    setUpdateProdcut(0);
   };
 
   const handleImage = (event) => {
@@ -104,7 +105,8 @@ const useMypage = () => {
       .catch((error) => {
         console.error(error);
       });
-    setUpdateProdcut(0);
+    window.history.go(0);
+
   };
 
   const handleSignOut = async () => {
