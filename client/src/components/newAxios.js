@@ -1,12 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
-
-//라이브러리 이름 수정 =>axios말고
-//instance
+const URL = process.env.REACT_APP_SERVER_URI;
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://15.164.5.43',
 });
 
 instance.interceptors.request.use(function (config) {
@@ -35,7 +33,7 @@ instance.interceptors.response.use(
 
       try {
         const response = await axios.post(
-          `/api/refresh`,
+          `${URL}/api/refresh`,
           {},
           {
             headers: {
