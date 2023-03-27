@@ -1,12 +1,12 @@
 import { useRef, useMemo } from 'react';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
+import instance from 'axios';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 function ProductEditor({ text, handleText }) {
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies] = useCookies();
   const QuillRef = useRef();
 
   const accessToken = cookies.accessToken;
@@ -24,7 +24,7 @@ function ProductEditor({ text, handleText }) {
       formData.append('imageFile', imageFile);
 
       const getImageURL = async (formData) => {
-        const response = axios.post('/images/upload', formData, {
+        const response = instance.post(`/images/upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${accessToken}`,
