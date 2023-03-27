@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import instance from '../newAxios';
-import { FaCamera, FaChevronRight } from 'react-icons/fa';
+import { FaChevronRight } from 'react-icons/fa';
 
 const useMypage = () => {
   const [toggle, setToggle] = useState(false);
   const [nameEdit, setNameEdit] = useState(false);
   const [introEdit, setIntroEdit] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, , removeCookie] = useCookies();
 
   const [memberInformation, setMemberInformation] = useState({
     id: 1,
@@ -38,14 +38,10 @@ const useMypage = () => {
       }));
     };
 
-
     if (refreshToken) {
       fetchData();
     }
   }, [comment, image, nickname]);
-
-
-
 
   const handleInformationChange = (event) => {
     const { value, name } = event.target;
@@ -106,7 +102,6 @@ const useMypage = () => {
         console.error(error);
       });
     window.history.go(0);
-
   };
 
   const handleSignOut = async () => {

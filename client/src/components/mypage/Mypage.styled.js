@@ -145,7 +145,6 @@ export const Circle = styled.div`
 `;
 export const Signout = styled.button`
   margin-top: 300px;
-  /* margin-left: 20px; */
   font-size: 15px;
   color: var(--red);
 `;

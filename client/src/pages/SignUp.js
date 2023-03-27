@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -17,8 +16,6 @@ import {
   SignUpLayout,
   SignUpSubmitBox,
 } from '../components/signup/Signup.styled';
-//관심사 분리 커맨드 + i로 임포트 하기
-//3~5개 정도, 가독성이 떨어진다면 분리하기
 
 const SignUp = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -37,7 +34,6 @@ const SignUp = () => {
         password: data.password,
         nickname: data.name,
       });
-      console.log('성공');
       navigate('../login');
     } catch (error) {
       if (error.response.status === 409) {

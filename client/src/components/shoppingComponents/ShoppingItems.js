@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
-import axios from 'axios';
 import styled from 'styled-components';
 
 import instance from '../newAxios';
@@ -105,8 +103,6 @@ const ShoppingItems = ({ setOrderPrice, setCartId }) => {
   const [product, setProduct] = useState([]);
   const [counts, setCounts] = useState({});
   const [checkedItem, setCheckedItem] = useState([]);
-  //delete나 patch 시 화면에 반영되도록 하는 state 값
-  const [updateProduct, setUpdateProdcut] = useState(1);
 
   const doneAllCheckd = product.length === checkedItem.length ? true : false;
 
@@ -117,10 +113,8 @@ const ShoppingItems = ({ setOrderPrice, setCartId }) => {
 
   const sendCountInformation = async (cartId, quantity) => {
     await instance.patch(`/carts/${cartId}`, { quantity });
-    // setUpdateProdcut(0);
   };
 
-  //장바구니 목록을 서버에서 가져오기
   useEffect(() => {
     const getProduct = async () => {
       const data = await readProductList();
