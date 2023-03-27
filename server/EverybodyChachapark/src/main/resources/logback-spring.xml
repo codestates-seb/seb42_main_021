@@ -15,7 +15,7 @@
         <rollingPolicy class = "ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 파일 위치 및 파일명 -->
             <!-- /home/ubuntu/action/logs -->
-            <fileNamePattern>/home/spring/logs/application.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>/home/ubuntu/logs/application.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <!-- 파일 보관 시간 최대 2일(넘어가면 다음 파일 생성) -->
             <maxHistory>2</maxHistory>
             <!-- 파일 크기 (넘어가면 다음파일 생성) -->
