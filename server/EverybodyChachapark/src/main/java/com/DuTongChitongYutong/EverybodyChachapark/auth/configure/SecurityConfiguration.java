@@ -116,7 +116,9 @@ public class SecurityConfiguration {
         configuration.addAllowedOriginPattern(domain); // client Endpoint 허용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setExposedHeaders(List.of("Authorization", "Refresh"));
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Refresh");
+        configuration.addExposedHeader("Access-Control-Expose-Headers");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
