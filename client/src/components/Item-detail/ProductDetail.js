@@ -17,8 +17,6 @@ function ProductDetail({ productDetail, userRole }) {
 
   const navigate = useNavigate();
 
-  const parse = require('html-react-parser');
-
   const handleModal = () => {
     setIsModalOpen((isOpen) => !isOpen);
     navigate('/shoppingcart');
