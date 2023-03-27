@@ -38,10 +38,14 @@ const useMypage = () => {
       }));
     };
 
+
     if (refreshToken) {
       fetchData();
     }
   }, [comment, image, nickname]);
+
+
+
 
   const handleInformationChange = (event) => {
     const { value, name } = event.target;
@@ -102,6 +106,7 @@ const useMypage = () => {
         console.error(error);
       });
     window.history.go(0);
+
   };
 
   const handleSignOut = async () => {
