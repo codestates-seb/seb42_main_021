@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 
 const useLogin = () => {
+  const URL = process.env.REACT_APP_SERVER_URI;
+
   const [modalOpen, setModalOpen] = useState(false);
   const {
     register,
@@ -19,7 +21,7 @@ const useLogin = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post(`/members/login`, {
+      const res = await axios.post(`${URL}/members/login`, {
         email: data.email,
         password: data.password,
       });
