@@ -17,9 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -86,8 +84,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("legendpano.codns.com")
-                .port(8085)
+                .host("15.164.5.43")
                 .path("/receive-token.html")
                 .queryParams(queryParams)
                 .build()
