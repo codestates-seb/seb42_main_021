@@ -118,7 +118,6 @@ public class SecurityConfiguration {
         configuration.setAllowedHeaders(List.of("*"));
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");
-        configuration.addExposedHeader("Access-Control-Expose-Headers");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
