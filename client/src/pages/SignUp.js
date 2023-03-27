@@ -16,7 +16,6 @@ import {
   SignUpLayout,
   SignUpSubmitBox,
 } from '../components/signup/Signup.styled';
-
 const SignUp = () => {
   const URL = process.env.REACT_APP_SERVER_URI;
 
@@ -28,14 +27,13 @@ const SignUp = () => {
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
   const navigate = useNavigate();
-
   const onSubmit = async (data) => {
     try {
-      await axios.post(`${URL}/members/signup`, {
+      await axios.post(`http://15.164.5.43/members/signup`, {
         email: data.email,
         password: data.password,
         nickname: data.name,
-      });
+      }, { headers: {  withCredentials: true } });
       navigate('../login');
     } catch (error) {
       if (error.response.status === 409) {
