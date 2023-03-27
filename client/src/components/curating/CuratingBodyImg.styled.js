@@ -74,7 +74,7 @@ export const CuratingImg = styled.div`
   .fourTheme2 {
     z-index: 1000;
     position: absolute;
-    width: 180px;
+    width: 200px;
     height: 100px;
     border-radius: var(--bd-rd);
     border: 2px solid var(--border);

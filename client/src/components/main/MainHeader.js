@@ -10,7 +10,7 @@ import logolast3 from '../../img/logolast3.png';
 import back from '../../img/back.svg';
 
 const MainHeaderLayout = styled.div`
-  z-index: 1000;
+  z-index: 10000;
   width: 100%;
   max-width: 530px;
   height: 80px;
