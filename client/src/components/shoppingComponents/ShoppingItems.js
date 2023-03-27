@@ -117,7 +117,7 @@ const ShoppingItems = ({ setOrderPrice, setCartId }) => {
 
   const sendCountInformation = async (cartId, quantity) => {
     await instance.patch(`/carts/${cartId}`, { quantity });
-    setUpdateProdcut(0);
+    // setUpdateProdcut(0);
   };
 
   //장바구니 목록을 서버에서 가져오기
@@ -127,8 +127,7 @@ const ShoppingItems = ({ setOrderPrice, setCartId }) => {
       syncProductList(data);
     };
     getProduct();
-    setUpdateProdcut(1);
-  }, [updateProduct]);
+  }, []);
 
   useEffect(() => {
     const checkedProduct = product.filter((items) =>
@@ -182,9 +181,16 @@ const ShoppingItems = ({ setOrderPrice, setCartId }) => {
     return setCheckedItem([...checkedItem, id]);
   };
 
-  const handleDelte = async (cartId) => {
+  const handleDelte = async ({ cartId, productId }) => {
+    const deleteProduct = product.filter(
+      (element) => element.productId !== productId
+    );
+    const deleteCheckdItem = checkedItem.filter(
+      (element) => element !== productId
+    );
+    setProduct(deleteProduct);
+    setCheckedItem(deleteCheckdItem);
     await instance.delete(`/carts/${cartId}`);
-    setUpdateProdcut(0);
   };
 
   const totalPrice = () => {
@@ -252,7 +258,7 @@ const ShoppingItems = ({ setOrderPrice, setCartId }) => {
               <div
                 className="cancel"
                 onClick={() => {
-                  handleDelte(element.cartId);
+                  handleDelte(element);
                 }}
               >
                 x
