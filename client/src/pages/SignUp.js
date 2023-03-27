@@ -18,6 +18,8 @@ import {
 } from '../components/signup/Signup.styled';
 
 const SignUp = () => {
+  const URL = process.env.REACT_APP_SERVER_URI;
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const {
@@ -29,7 +31,7 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.post(`/members/signup`, {
+      await axios.post(`${URL}/members/signup`, {
         email: data.email,
         password: data.password,
         nickname: data.name,
