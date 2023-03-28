@@ -38,11 +38,12 @@ const MainHeaderContainer = styled.div`
 const LogoBox = styled.div`
   transform: translateX(5px);
   cursor: pointer;
-
   .logoF1 {
     margin-left: 70px;
+    @media (max-width: 768px) {
+      margin-left: 10px;
+    }
   }
-
   margin-top: 1px;
 `;
 
@@ -83,6 +84,7 @@ const LoginLink = styled(Link)`
   color: var(--white);
   font-size: 12px;
 `;
+
 const Logout = styled.button`
   display: inline-block;
   text-align: center;
@@ -114,7 +116,7 @@ const MainHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [cookies, , removeCookie] = useCookies(); //셋쿠키 공백
+  const [cookies, , removeCookie] = useCookies();
   const refreshToken = cookies.refreshToken;
 
   const [profileImage, setProfileImage] = useState();
@@ -143,8 +145,6 @@ const MainHeader = () => {
     removeCookie('refreshToken');
     navigate('/');
   };
-
-  // object mapper pattern
 
   const getPathNameType = (pathName) => {
     if (pathName.includes(`/curation/`)) {
