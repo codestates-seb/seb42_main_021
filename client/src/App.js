@@ -23,12 +23,22 @@ const MainLayout = styled.div`
     margin: 0 auto;
     padding: 16px 32px;
   }
+  @media (max-width: 768px) {
+    margin: 0 auto;
+    padding: 0;
+    transform: none;
+    height: calc(var(--vh, 1vh) * 100);
+  }
 `;
+
 const TitleContainer = styled.div`
   width: 50%;
   justify-content: center;
   align-content: center;
   @media (max-width: 950px) {
+    display: none;
+  }
+  @media (max-width: 768px) {
     display: none;
   }
 `;
@@ -51,10 +61,18 @@ const TitleContainerBox = styled.div`
     margin-left: 120px;
     line-height: 200%;
   }
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
+
 const MainContainer = styled.div`
   max-width: 50%;
   margin: 0 auto;
+  @media (max-width: 768px) {
+    max-width: 100%;
+    max-height: 100%;
+  }
 `;
 
 const MainBox = styled.div`
@@ -63,9 +81,20 @@ const MainBox = styled.div`
   margin: 0 auto;
   border: 1px solid var(--border);
   border-radius: var(--bd-rd);
+  @media (max-width: 768px) {
+    max-width: 100%;
+    max-height: 100%;
+  }
 `;
 
 function App() {
+  const setScreenSize = () => {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+
+  window.addEventListener('resize', () => setScreenSize());
+
   return (
     <BrowserRouter>
       <MainLayout>
