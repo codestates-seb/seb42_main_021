@@ -28,6 +28,7 @@ const MainLayout = styled.div`
     padding: 0;
     transform: none;
     height: calc(var(--vh, 1vh) * 100);
+    width: 100%;
   }
 `;
 
