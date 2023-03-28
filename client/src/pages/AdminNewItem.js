@@ -105,7 +105,9 @@ const AdminNewItem = () => {
     newItem.append('thumbnailImageFile', image);
 
     try {
-      instance.post('/products', newItem);
+      instance.post('/products', newItem).then(() => {
+        navigate('/product');
+      });
     } catch (error) {
       console.error(error);
     }
@@ -129,7 +131,9 @@ const AdminNewItem = () => {
     );
     editedItem.append('thumbnailImageFile', image);
     try {
-      instance.patch(`/products/${state.productId}`, editedItem);
+      instance.patch(`/products/${state.productId}`, editedItem).then(() => {
+        navigate('/product');
+      });
     } catch (error) {
       console.log(error);
     }
@@ -146,8 +150,6 @@ const AdminNewItem = () => {
 
     initializeImageState();
     initializeTextState();
-
-    return navigate('/product');
   };
 
   const categoryOptions = [
