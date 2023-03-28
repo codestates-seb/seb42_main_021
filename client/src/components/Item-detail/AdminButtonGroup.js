@@ -20,8 +20,9 @@ export default function AdminButtonGroup({ productDetail }) {
   };
 
   const handleDeleteProductDetail = () => {
-    instance.delete(`../products/${productDetail.productId}`);
-    navigate('/product');
+    instance.delete(`../products/${productDetail.productId}`).then(() => {
+      navigate('/product');
+    });
   };
 
   return (
