@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 
+axios.defaults.withCredentials = true;
+
 const useLogin = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const {
@@ -22,7 +24,7 @@ const useLogin = () => {
       const res = await axios.post(`http://15.164.5.43/members/login`, {
         email: data.email,
         password: data.password,
-      }, headers);
+      });
       console.log(res);
       const headers = res.headers.get();
       console.log(headers);
