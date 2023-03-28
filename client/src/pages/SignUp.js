@@ -76,7 +76,7 @@ const SignUp = () => {
             {...register('name', {
               required: '닉네임은 필수 입력입니다.',
               minLength: {
-                value: 1,
+                value: 2,
                 message: '닉네임 형식에 맞지 않습니다.',
               },
             })}
@@ -115,8 +115,8 @@ const SignUp = () => {
             {...register('password', {
               required: '비밀번호는 필수 입력입니다.',
               minLength: {
-                value: 1,
-                message: '8자리 이상 비밀번호를 사용하세요.',
+                value: 4,
+                message: '4자리 이상 비밀번호를 사용하세요.',
               },
             })}
           />
