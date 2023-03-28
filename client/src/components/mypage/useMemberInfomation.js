@@ -66,7 +66,7 @@ const useMypage = () => {
 
   const handleSubmitEditedName = async (event) => {
     try {
-      instance.patch('/members/info', { nickname: nickname });
+      await instance.patch('/members/info', { nickname: nickname });
     } catch (error) {
       console.log(error);
     }
@@ -74,16 +74,16 @@ const useMypage = () => {
     removeCookie('accessToken');
   };
 
-  const handleSubmitEditedIntro = (event) => {
+  const handleSubmitEditedIntro = async (event) => {
     try {
-      instance.patch('/members/info', { comment: comment });
+      await instance.patch('/members/info', { comment: comment });
     } catch (error) {
       console.log(error);
     }
     handleIntroEdit();
   };
 
-  const handleImage = (event) => {
+  const handleImage = async (event) => {
     const formData = new FormData();
     formData.append('profileImageFile', event.target.files[0]);
 
@@ -93,7 +93,7 @@ const useMypage = () => {
       },
     };
 
-    instance
+    await instance
       .patch('/members/profile-image', formData, config)
       .then((response) => {
         console.log(response.data);
@@ -106,9 +106,11 @@ const useMypage = () => {
 
   const handleSignOut = async () => {
     alert('탈퇴하시겠습니까?');
-    await instance.delete(`/members`);
-    removeCookie('accessToken', { path: '/' });
-    removeCookie('refreshToken', { path: '/' });
+    const data = await instance.delete(`/members`);
+    if (data.status === 204) {
+      removeCookie('accessToken', { path: '/' });
+      removeCookie('refreshToken', { path: '/' });
+    }
   };
 
   const getEditType = (isEdited, typeIfEdited, typeIfNotEdited) => {
