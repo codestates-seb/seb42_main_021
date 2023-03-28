@@ -84,7 +84,6 @@ const useItemList = () => {
       const decodedAccessToken = jwt_decode(accessToken);
 
       if (decodedAccessToken.roles[0] === 'ADMIN') {
-        console.log(String(decodedAccessToken.roles));
         setAdminAccess(String(decodedAccessToken.roles[0]));
       }
     }

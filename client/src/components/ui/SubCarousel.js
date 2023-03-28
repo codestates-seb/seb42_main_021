@@ -53,7 +53,6 @@ const Image = styled.img`
 `;
 
 export default function SubCarousel({ carousel }) {
-  console.log(carousel);
   const settings = {
     dots: true,
     infinite: true,
