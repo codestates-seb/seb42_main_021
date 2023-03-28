@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import DaumPostCode from './DaumPostCode';
 import instance from '../newAxios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ShippingLayout = styled.div`
   display: flex;
@@ -126,12 +126,18 @@ const ShippingInformation = ({ orderPrice, cartId }) => {
     setPopContent(
       <>
         <PopupText>{content}</PopupText>
-        <PopupButton onClick={() => setAlarmPop(false)}>확인</PopupButton>
+        {content === '주문이 완료되었습니다' ? (
+          <PopupButton>
+            <Link to="/mypage">확인</Link>
+          </PopupButton>
+        ) : (
+          <PopupButton onClick={() => setAlarmPop(false)}>확인</PopupButton>
+        )}
       </>
     );
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!address && !receiver) {
       return popupOpen('받는 사람과 주소를 입력해주세요');
     }
@@ -144,14 +150,21 @@ const ShippingInformation = ({ orderPrice, cartId }) => {
     if (orderPrice === '0') {
       return popupOpen('주문할 상품이 없습니다');
     }
+    sendData();
+  };
+
+  const sendData = async () => {
     try {
-      instance.post(`/orders`, { cartList: cartId });
-      popupOpen('주문이 완료되었습니다');
-      navigate('/mypage');
+      const data = await instance.post(`/orders`, { cartList: cartId });
+
+      if (data.status === 201) {
+        popupOpen('주문이 완료되었습니다');
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <>
       <h2 className="wirteInformation"> 배송지 정보</h2>
@@ -185,7 +198,11 @@ const ShippingInformation = ({ orderPrice, cartId }) => {
           </button>
           {popAddress && (
             <div>
-              <DaumPostCode setAddress={setAddress} />
+              <DaumPostCode
+                setAddress={setAddress}
+                popAddress={popAddress}
+                setPopAddress={setPopAddress}
+              />
             </div>
           )}
         </WriteAddressContainer>
