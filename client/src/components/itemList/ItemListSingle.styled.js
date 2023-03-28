@@ -5,7 +5,9 @@ export const ItemLayoutButton = styled.button`
   height: 40%;
   :nth-child(2n + 1) {
     margin-right: 30px;
+    margin-bottom: 35px;
   }
+
   margin-bottom: 5px;
 `;
 export const ItemImgBox = styled.div`
@@ -27,10 +29,10 @@ export const ItemTitleBox = styled.div`
   margin-bottom: 10px;
   text-align: left;
   p {
-    font-size: 16px;
+    font-size: 14px;
   }
   h2 {
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 7px;
   }
 `;

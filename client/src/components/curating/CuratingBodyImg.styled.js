@@ -114,7 +114,7 @@ export const CuratingImg = styled.div`
   }
   .twoTheme1 {
     top: 150px;
-    left: 120px;
+    left: 100px;
   }
   .twoTheme2 {
     top: -20px;
