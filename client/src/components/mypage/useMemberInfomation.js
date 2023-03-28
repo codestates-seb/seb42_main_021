@@ -105,6 +105,7 @@ const useMypage = () => {
   };
 
   const handleSignOut = async () => {
+    alert('탈퇴하시겠습니까?');
     await instance.delete(`/members`);
     removeCookie('accessToken', { path: '/' });
     removeCookie('refreshToken', { path: '/' });
