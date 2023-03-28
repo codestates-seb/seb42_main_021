@@ -6,11 +6,15 @@ const spin = keyframes`
     transform: rotate(360deg);
   }
 `;
+
 const LoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  @media (max-width: 768px) {
+    height: calc(var(--vh, 1vh) * 100);
+  }
 `;
 
 const Loader = styled.div`

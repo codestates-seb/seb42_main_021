@@ -61,9 +61,10 @@ export const ItemBodyContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   position: relative;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   height: 80%;
   margin-top: 20px;
+  margin-left: 20px;
 `;
 
 export const AdminButton = styled.button``;

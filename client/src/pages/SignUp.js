@@ -20,26 +20,47 @@ const SignUp = () => {
   const URL = process.env.REACT_APP_SERVER_URI;
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [popContent, setPopContent] = useState(null);
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
-  const navigate = useNavigate();
+  
   const onSubmit = async (data) => {
     try {
-      await axios.post(`http://15.164.5.43/members/signup`, {
-        email: data.email,
-        password: data.password,
-        nickname: data.name,
-      }, { headers: {  withCredentials: true } });
-      navigate('../login');
+      await axios.post(
+        `${URL}/members/signup`,
+        {
+          email: data.email,
+          password: data.password,
+          nickname: data.name,
+        },
+        { headers: { withCredentials: true } }
+      );
+      popupOpen('가입이 완료되었습니다');
+
+
     } catch (error) {
       if (error.response.status === 409) {
-        setModalOpen(true);
+        popupOpen('이미 존재하는 회원입니다');
       }
     }
+  };
+
+  const popupOpen = (content) => {
+    setModalOpen(true);
+    setPopContent(
+      <>
+        <div>{content}</div>
+        <button className="confirm">
+          <Link to="/login" className="moveLogin">
+            확인
+          </Link>
+        </button>
+      </>
+    );
   };
   return (
     <Main>
@@ -107,16 +128,7 @@ const SignUp = () => {
             회원가입
           </SignUpSubmitBox>
         </SignUpContainer>
-        {modalOpen && (
-          <HaveUser>
-            <div>이미 가입된 회원입니다</div>
-            <button className="confirm">
-              <Link to="/login" className="moveLogin">
-                확인
-              </Link>
-            </button>
-          </HaveUser>
-        )}
+        {modalOpen && <HaveUser>{popContent}</HaveUser>}
       </SignUpLayout>
     </Main>
   );

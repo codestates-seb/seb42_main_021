@@ -48,12 +48,12 @@ export const UserInformation = styled.div`
     height: 40px;
   }
   #user-nickname {
-    width: 70%;
+    width: 60%;
   }
   #review-edit {
     display: flex;
     justify-content: center;
-    width: 15%;
+    width: 20%;
     margin-right: 0;
     > button {
       color: var(--gray);

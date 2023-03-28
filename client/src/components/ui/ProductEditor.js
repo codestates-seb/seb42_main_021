@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { useCookies } from 'react-cookie';
-import instance from 'axios';
+import instance from '../newAxios';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
