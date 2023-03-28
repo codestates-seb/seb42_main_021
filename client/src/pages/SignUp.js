@@ -16,7 +16,6 @@ import {
   SignUpLayout,
   SignUpSubmitBox,
 } from '../components/signup/Signup.styled';
-
 const SignUp = () => {
   const URL = process.env.REACT_APP_SERVER_URI;
 
@@ -28,7 +27,7 @@ const SignUp = () => {
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
-
+  
   const onSubmit = async (data) => {
     try {
       await axios.post(
@@ -41,6 +40,8 @@ const SignUp = () => {
         { headers: { withCredentials: true } }
       );
       popupOpen('가입이 완료되었습니다');
+
+
     } catch (error) {
       if (error.response.status === 409) {
         popupOpen('이미 존재하는 회원입니다');

@@ -1,0 +1,24 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dutongchitongyutong-db.chitfhbpfxmo.ap-northeast-2.rds.amazonaws.com:3355/EverybodyChaChaPark?useSSL=false&characterEncoding=UTF-8
+    username: admin
+    password: eogus442
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update # 서버 실행시 스키마를 자동으로 생성해주지만 서버 종료시 그대로 유지함
+
+image:
+  local-path: /home/ubuntu/seb42_main_021/server/EverybodyChachapark/src/main/resources/file/
+  server-url: http://15.164.5.43/images/ # EC2 주소 입력
+  profileImage-name: profile-
+  dummyImage-name: not-found
+
+config:
+  domain: http://everybodychachapark-client.s3-website.ap-northeast-2.amazonaws.com # S3 호스팅 주소
+#  domain: http://localhost:3000 # 임시 주소

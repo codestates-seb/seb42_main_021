@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="30 second">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 하나의 파일로 로그를 저장하는 것이 아닌 여러개의 파일로 저장(즉, 시간이 지나면 다음 파일로) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <!-- 파일 저장 방법 -->
+        <rollingPolicy class = "ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 파일 위치 및 파일명 -->
+            <!-- /home/ubuntu/action/logs -->
+            <fileNamePattern>/home/ubuntu/logs/application.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- 파일 보관 시간 최대 2일(넘어가면 다음 파일 생성) -->
+            <maxHistory>2</maxHistory>
+            <!-- 파일 크기 (넘어가면 다음파일 생성) -->
+            <totalSizeCap>10MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 로깅 레벨 -->
+    <root level="INFO">
+        <!-- 로그 출력 방식 -->
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
