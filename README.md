@@ -1,7 +1,7 @@
 # 🚀 두통 치통 유통
 
 <br/>
-![initial](https://user-images.githubusercontent.com/115647131/228704208-ad511c8b-72da-4f1c-af4b-bb2a96d01d2e.PNG)
+<img src ="https://user-images.githubusercontent.com/115647131/228704513-bdb5ad53-ab34-492f-919f-2241e8dc3ac7.PNG"
 <br/>
 <br/>
 
