@@ -1,7 +1,7 @@
 # 🚀 두통 치통 유통
 
 <br/>
-{프로젝트 메인페이지 이미지}
+<img src ="https://user-images.githubusercontent.com/115647131/228704513-bdb5ad53-ab34-492f-919f-2241e8dc3ac7.PNG"
 <br/>
 <br/>
 
