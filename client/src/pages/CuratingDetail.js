@@ -25,7 +25,7 @@ const CuratingDetail = () => {
   const carousel = curationList.SubCarouselImg[ID - 1];
   const location = [curationList.mapLocation[ID - 1]];
   const curatingContent = [curationList.curatingContent[ID - 1]];
-
+  // 배열 안에 객체 리스트들로 처리
   return (
     <CuratingDetailLayout>
       <Main>

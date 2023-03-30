@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useCallback } from 'react';
 
+import useItemList from './useItemList';
+
 import tent from '../../img/tent.png';
 import chair from '../../img/chair.jpg';
 import table from '../../img/table.jpg';
@@ -35,13 +37,26 @@ const ImgButton = styled.button`
   }
 `;
 
-const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
-  const handleCategoryClick = useCallback(
-    (category) => {
-      setCategoryFilter(category);
-    },
-    [setCategoryFilter]
-  );
+const CategoryContainer = ({ setCategoryFilter }) => {
+  const {
+    categoryFilter,
+    page,
+    size,
+    getProductListFilter,
+    categoryProductListFilter,
+  } = useItemList();
+
+  const handleClick = (event) => {
+    event.prevetDefault();
+
+    const category = event.currentTarget.value;
+
+    if (category === 'NO_CATEGORY') {
+      return getProductListFilter(page, size);
+    }
+
+    return categoryProductListFilter(categoryFilter);
+  };
 
   const categoryItems = [
     { category: 'NO_CATEGORY', imgSrc: allView, text: '전체보기' },
@@ -55,7 +70,7 @@ const CategoryContainer = ({ categoryFilter, setCategoryFilter }) => {
   return (
     <CategoryContainerDiv>
       {categoryItems.map(({ category, imgSrc, text }) => (
-        <ImgButton key={category} onClick={() => handleCategoryClick(category)}>
+        <ImgButton key={category} value={category} onClick={handleClick}>
           <img
             src={imgSrc}
             alt={text}
