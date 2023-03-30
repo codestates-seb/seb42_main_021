@@ -9,6 +9,7 @@
 - 프로젝트 이름 : 다함께 차차박
 - 프로젝트 기간 : 2023.03.04 ~ 2023.03.29
 - 프로젝트 배포 : http://everybodychachapark-client.s3-website.ap-northeast-2.amazonaws.com/
+- 프로젝트 설명 : 나에게 맞는 차박 용품을 한 눈에! 차박 장소까지 한 번에 결정하세요. 다함께 차차박
 
 </br>
 
