@@ -5,8 +5,8 @@ import { FaChevronRight } from 'react-icons/fa';
 
 const useMypage = () => {
   const [toggle, setToggle] = useState(false);
-  const [nameEdit, setNameEdit] = useState(false);
-  const [introEdit, setIntroEdit] = useState(false);
+  const [isEditedName, setIsEditedName] = useState(false);
+  const [isEditedIntro, setIsEditedIntro] = useState(false);
   const [cookies, , removeCookie] = useCookies();
 
   const [memberInformation, setMemberInformation] = useState({
@@ -57,11 +57,11 @@ const useMypage = () => {
   };
 
   const handleNameEdit = () => {
-    setNameEdit(!nameEdit);
+    setIsEditedName(!isEditedName);
   };
 
   const handleIntroEdit = () => {
-    setIntroEdit(!introEdit);
+    setIsEditedIntro(!isEditedIntro);
   };
 
   const handleSubmitEditedName = async (event) => {
@@ -117,54 +117,69 @@ const useMypage = () => {
     return isEdited ? typeIfEdited : typeIfNotEdited;
   };
 
-  const doEditName = getEditType(nameEdit, 'yesNameEdit', 'noEditName');
-  const doEditIntro = getEditType(introEdit, 'yesIntroEdit', 'noIntroEdit');
+  const doEditName = getEditType(isEditedName, 'yesNameEdit', 'noEditName');
+
+  const getMode = (isEdited) => {
+    return isEdited ? 'edit' : 'normal';
+  };
+  const doEditIntro = getEditType(isEditedIntro, 'yesIntroEdit', 'noIntroEdit');
+
+  const nameMode = getMode(isEditedName); // edit or normal
+  const introMode = getMode(isEditedIntro); // edit or normal
 
   const componentGroup = {
-    yesNameEdit: (
-      <form className="profileBox">
-        <label>닉네임</label>
-        <input
-          value={nickname}
-          name="nickname"
-          onChange={handleInformationChange}
-        />
-        <button type="form" onClick={() => handleSubmitEditedName(nickname)}>
-          <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
-        </button>
-      </form>
-    ),
-    noEditName: (
-      <div className="profileBox">
-        <label>닉네임</label>
-        <span>{nickname}</span>
-        <button type="button" onClick={handleNameEdit}>
-          <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
-        </button>
-      </div>
-    ),
-    yesIntroEdit: (
-      <form className="profileBox">
-        <label>한 줄 소개</label>
-        <input
-          value={comment}
-          name="comment"
-          onChange={handleInformationChange}
-        />
-        <button type="form" onClick={() => handleSubmitEditedIntro()}>
-          <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
-        </button>
-      </form>
-    ),
-    noIntroEdit: (
-      <div className="profileBox">
-        <label>한 줄 소개</label>
-        <span>{comment}</span>
-        <button type="button" onClick={handleIntroEdit}>
-          <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
-        </button>
-      </div>
-    ),
+    name: {
+      normal: (
+        <div className="profileBox">
+          <label>닉네임</label>
+          <span>{nickname}</span>
+          <button type="button" onClick={handleNameEdit}>
+            <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
+          </button>
+        </div>
+      ),
+      edit: (
+        <form className="profileBox">
+          <label>닉네임</label>
+          <input
+            value={nickname}
+            name="nickname"
+            onChange={handleInformationChange}
+          />
+          <button type="form" onClick={() => handleSubmitEditedName(nickname)}>
+            <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
+          </button>
+        </form>
+      ),
+    },
+    intro: {
+      normal: (
+        <div className="profileBox">
+          <label>한 줄 소개</label>
+          <span>{comment}</span>
+          <button type="button" onClick={handleIntroEdit}>
+            <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
+          </button>
+        </div>
+      ),
+      edit: (
+        <form className="profileBox">
+          <label>한 줄 소개</label>
+          <input
+            value={comment}
+            name="comment"
+            onChange={handleInformationChange}
+          />
+          <button type="form" onClick={() => handleSubmitEditedIntro()}>
+            <FaChevronRight className="iconCell" color="#c9c9c9" size="16px" />
+          </button>
+        </form>
+      ),
+    },
+  };
+
+  const createComponent = (type, mode) => {
+    return componentGroup[type][mode];
   };
 
   return {
@@ -174,12 +189,15 @@ const useMypage = () => {
     comment,
     refreshToken,
     fileInput,
-    doEditName,
-    doEditIntro,
-    componentGroup,
+    // doEditName,
+    // doEditIntro,
+    // componentGroup,
     clickedToggle,
     handleImage,
     handleSignOut,
+    createComponent,
+    nameMode,
+    introMode,
   };
 };
 
