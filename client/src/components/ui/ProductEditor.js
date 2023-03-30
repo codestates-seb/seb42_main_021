@@ -12,7 +12,7 @@ function ProductEditor({ text, handleText }) {
   const accessToken = cookies.accessToken;
   const refreshToken = cookies.refreshToken;
 
-  const imageHandler = () => {
+  const handleImage = () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -72,7 +72,7 @@ function ProductEditor({ text, handleText }) {
           ],
         ],
         handlers: {
-          image: imageHandler,
+          image: handleImage,
         },
       },
     }),
