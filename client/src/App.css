@@ -1,6 +1,16 @@
 * {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+html {
+  /* ************************************************************
+		종류:overflow(가로,세로)/overflow-x(가로)/overflow-y(세로)
+		표현방식:auto/scroll/hidden 
+	    ************************************************************ */
+  overflow-y: hidden; /* 문서전체에 세로 스크롤바자국 항상 표시 */
+  overflow-x: hidden; /* 문서전체에 가로 스크롤바자국 항상 숨김 */
 }
 
 body {
@@ -12,6 +22,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
 a,
 input,
 textarea,
@@ -29,7 +40,7 @@ input,
 textarea {
   padding: 0;
   outline: none;
-  border: 1px solid #000000;
+  border: 1px solid rgb(201, 201, 201);
   border-radius: 0;
   box-shadow: none;
 }
@@ -41,4 +52,33 @@ button {
   box-shadow: none;
   background-color: inherit;
   cursor: pointer;
+}
+
+img {
+  vertical-align: top; /*이미지에 원치 않는 여백이 생성되는 브라우저 오류가 발생하는 경우가 있음*/
+  font-size: 0; /*폰트 크기 초기화*/
+  border: 0; /* 이미지 링크시 기본적으로 나타나는 테두리 제거 */
+}
+
+li {
+  list-style-type: none;
+}
+
+:root {
+  /* border-radius */
+  --bd-rd: 10px;
+
+  /* color */
+  --blue: #61a0ff;
+  --blue200: #b8cbd9;
+  --grayblue: #83a6c4;
+  --white: #ffffff;
+  --whitegray: #f6f6f6;
+  --whitegray200: #ece7e7;
+  --graywhite: #e0eaf6;
+  --midgray: #8e8e8e;
+  --gray: #4e4e4e;
+  --black: #000000;
+  --border: #c9c9c9;
+  --red: #ff0000;
 }
