@@ -4,9 +4,11 @@ import {
   ItemInformationBox,
   ContentInput,
   ItemDescriptionBox,
-  ProductEditor,
+  // ProductEditor,
   ButtonBox,
 } from './AdminNewItem.styled';
+
+import ProductEditor from '../ui/ProductEditor';
 
 import { CATEGORY_OPTIONS } from './useAdminNewItem';
 

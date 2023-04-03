@@ -5,7 +5,7 @@ const URL = process.env.REACT_APP_SERVER_URI;
 axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-  baseURL: `${URL}`,
+  baseURL: `http://15.164.5.43`,
 });
 
 instance.interceptors.request.use(function (config) {

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
-import instance from '../components/newAxios';
+// import instance from '../components/newAxios';
 import { useNavigate } from 'react-router-dom';
+import instance from '../newAxios';
 
 export const CATEGORY_OPTIONS = [
   { value: 'TENT', label: '텐트' },
